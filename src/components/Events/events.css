@@ -50,6 +50,9 @@
 .events-container .event-item.cursor-pointer {
   cursor: pointer;
 }
+.events-container .event-item.emphasize {
+  animation: enlarge 1s infinite, pulse 1s infinite;
+}
 
 .create-edit-event-dialog {
   width: 400px;

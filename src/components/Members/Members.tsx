@@ -168,10 +168,8 @@ export default function Members() {
 function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
   const { isAdmin, meta } = useAppContext();
 
-  let membersRef: HTMLDivElement;
+  let memberContainer: HTMLDivElement;
   let timeOut: any;
-
-  // const { isAdmin, members } = useAppContext();
 
   onMount(() => {
     if (isAdmin()) {
@@ -192,13 +190,13 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
   });
 
   async function scroll() {
-    await scrollBottomAnimation(membersRef, 2000);
+    await scrollBottomAnimation(memberContainer, 2000);
     timeOut = setTimeout(scroll, 5000);
   }
 
   return (
     <Scrollable
-      ref={(el) => (membersRef = el)}
+      ref={(el) => (memberContainer = el)}
       direction={"vertical"}
       hideScrollbar={true}
       class={"members-container"}

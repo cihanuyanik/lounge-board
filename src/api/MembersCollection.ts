@@ -10,8 +10,10 @@ export default class MembersCollection extends Collection<Member> {
 
   async add(data: Omit<Member, "id" | "createdAt">): Promise<string> {
     try {
-      // Upload member image
-      data.image = await API.uploadImage(`member-${data.name}`, data.image);
+      if (data.image) {
+        // Upload member image
+        data.image = await API.uploadImage(`member-${data.name}`, data.image);
+      }
 
       return super.add(data);
     } catch (e) {

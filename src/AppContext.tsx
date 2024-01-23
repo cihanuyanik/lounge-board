@@ -54,7 +54,7 @@ export const AppContext = createContext<AppContextType>();
 export function AppContextProvider(props: any) {
   const isAdmin = createMemo<boolean>(() => {
     const url = useLocation();
-    return url.pathname === "/admin";
+    return url.pathname.startsWith("/admin");
   });
 
   const { busyDialog, mutateBusyDialog } = createBusyDialogStore();
@@ -118,6 +118,7 @@ export function useDataLoader() {
     news,
     researchGroups,
     members,
+    meta,
     mutateMeta,
   } = useAppContext();
 

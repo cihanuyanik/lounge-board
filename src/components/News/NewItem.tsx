@@ -2,7 +2,7 @@ import "./news.scss";
 import CalendarDate from "~/assets/icons/CalendarDate";
 import Clock from "~/assets/icons/Clock";
 import { CreateNewsDialogResult } from "~/components/News/CreateEditNews";
-import { createMemo } from "solid-js";
+import { Accessor, createMemo } from "solid-js";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
@@ -10,6 +10,7 @@ import { API } from "~/api/Firebase";
 
 type Props = {
   id: string;
+  index: Accessor<number>;
   editDialog?: HTMLDialogElement;
 };
 
@@ -73,6 +74,7 @@ export default function NewItem(props: Props) {
       classList={{
         "item-selected": news.entities[props.id]?.isSelected,
         "cursor-pointer": isAdmin(),
+        emphasize: props.index() === 0,
       }}
       onClick={isAdmin() ? onClick : undefined}
       ondblclick={isAdmin() ? onDoubleClick : undefined}

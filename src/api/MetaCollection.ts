@@ -8,7 +8,7 @@ export default class MetaCollection extends Collection<Meta> {
     super("meta", db);
   }
 
-  async add(data: Omit<Meta, "id" | "createdAt">): Promise<void> {
+  async add(data: Omit<Meta, "id" | "createdAt">): Promise<string> {
     try {
       // Generate a new document id
       const dataWithId = data as Meta;
@@ -19,6 +19,21 @@ export default class MetaCollection extends Collection<Meta> {
     } catch (e) {
       throw e;
     }
+  }
+
+  async update(data: {
+    original: Meta;
+    changes: Partial<Meta>;
+  }): Promise<void> {
+    // Update database
+    const meta = {
+      ...data.original,
+      ...data.changes,
+    };
+
+    await super.add(meta);
+
+    // return super.update(data);
   }
 
   async delete(): Promise<void> {

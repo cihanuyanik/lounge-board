@@ -136,8 +136,22 @@ object {
   0% {
     opacity: 0.5;
   }
-  100% {
+  50% {
     opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+@keyframes enlarge {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 .flex-1 {

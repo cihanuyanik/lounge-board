@@ -34,24 +34,31 @@ export default function Events() {
   }
 
   async function dueTimeCheckTimeoutHandler() {
-    const nowDate = new Date();
-    // Go through all upcoming events and check if they are due
-    for (const id of upcomingEvents.ids) {
-      if (!nowDate.isLessThan(upcomingEvents.entities[id].startsAt)) {
-        // remove from upcoming events
-        await API.UpcomingEvents.delete(upcomingEvents.entities[id]);
-        // add to past events
-        await API.PastEvents.add(upcomingEvents.entities[id]);
+    try {
+      const nowDate = new Date();
+      // Go through all upcoming events and check if they are due
+      for (const id of upcomingEvents.ids) {
+        if (!nowDate.isLessThan(upcomingEvents.entities[id].startsAt)) {
+          const copyEvent = { ...upcomingEvents.entities[id] };
+
+          // remove from upcoming events
+          await API.UpcomingEvents.delete(copyEvent);
+
+          // add to past events
+          await API.PastEvents.add(copyEvent);
+        }
       }
+    } catch (e) {
+      // ignore
     }
 
-    dueTimeCheckTimeout = setTimeout(dueTimeCheckTimeoutHandler, 60000);
+    dueTimeCheckTimeout = setTimeout(dueTimeCheckTimeoutHandler, 5000);
   }
 
   onMount(() => {
     if (isAdmin()) return;
     scrollTimeout = setTimeout(scrollAnimate, 5000);
-    dueTimeCheckTimeout = setTimeout(dueTimeCheckTimeoutHandler, 60000);
+    dueTimeCheckTimeout = setTimeout(dueTimeCheckTimeoutHandler, 5000);
   });
 
   onCleanup(() => {
@@ -150,9 +157,10 @@ export default function Events() {
           class={"upcoming-events-container"}
         >
           <For each={upcomingEvents.ids}>
-            {(id) => (
+            {(id, index) => (
               <EventItem
                 id={id}
+                index={index}
                 isPast={false}
                 editDialog={createEventDialog}
               />
@@ -175,8 +183,13 @@ export default function Events() {
           class={"past-events-container"}
         >
           <For each={pastEvents.ids}>
-            {(id) => (
-              <EventItem id={id} isPast={true} editDialog={createEventDialog} />
+            {(id, index) => (
+              <EventItem
+                id={id}
+                index={index}
+                isPast={true}
+                editDialog={createEventDialog}
+              />
             )}
           </For>
         </Scrollable>

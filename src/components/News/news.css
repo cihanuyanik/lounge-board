@@ -43,6 +43,9 @@
   width: 20px;
   height: 20px;
 }
+.news-container .emphasize {
+  animation: enlarge 1s infinite, pulse 1s infinite;
+}
 
 .create-news-dialog {
   width: 600px;

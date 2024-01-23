@@ -1,6 +1,6 @@
 import "./events.scss";
 import { CreateEventDialogResult } from "~/components/Events/CreateEditEvent";
-import { createMemo, Show } from "solid-js";
+import { Accessor, createMemo, Show } from "solid-js";
 import DateInput from "~/components/common/DateInput";
 import TimeInput from "~/components/common/TimeInput";
 import { toDate } from "~/utils/utils";
@@ -12,6 +12,7 @@ import { API } from "~/api/Firebase";
 
 type Props = {
   id: string;
+  index: Accessor<number>;
   isPast: boolean;
   editDialog?: HTMLDialogElement;
 };
@@ -124,6 +125,7 @@ export default function EventItem(props: Props) {
           pastEvents.entities[props.id]?.isSelected ||
           upcomingEvents.entities[props.id]?.isSelected,
         "cursor-pointer": isAdmin(),
+        emphasize: !props.isPast && props.index() === 0,
       }}
       onclick={isAdmin() ? onClick : undefined}
       ondblclick={isAdmin() ? onDoubleClick : undefined}

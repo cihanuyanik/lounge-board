@@ -79,10 +79,24 @@ function _EditResearchGroups(props: { ref: DialogRef }) {
       state.ids = [];
       state.entities = {};
 
-      // Copy from researchGroups to dialogStore
-      for (const id of researchGroups.ids) {
+      if (researchGroups.ids.length === 0) {
+        const id = uuid();
         state.ids.push(id);
-        state.entities[id] = { ...researchGroups.entities[id] };
+        state.entities[id] = {
+          id: id,
+          name: "New Research Group",
+          bannerImage: "",
+          image: "",
+          // @ts-ignore
+          createdAt: new Date(),
+        };
+        state.selectedId = id;
+      } else {
+        // Copy from researchGroups to dialogStore
+        for (const id of researchGroups.ids) {
+          state.ids.push(id);
+          state.entities[id] = { ...researchGroups.entities[id] };
+        }
       }
 
       if (state.ids.length > 0) state.selectedId = state.ids[0];
@@ -284,7 +298,22 @@ function ResearchGroupSelector() {
     mutate((state) => {
       state.ids = state.ids.filter((id) => id !== state.selectedId);
       delete state.entities[state.selectedId];
-      state.selectedId = state.ids[0];
+
+      if (state.ids.length === 0) {
+        const id = uuid();
+        state.ids.push(id);
+        state.entities[id] = {
+          id: id,
+          name: "New Research Group",
+          bannerImage: "",
+          image: "",
+          // @ts-ignore
+          createdAt: new Date(),
+        };
+        state.selectedId = id;
+      } else {
+        state.selectedId = state.ids[0];
+      }
     });
   }
 

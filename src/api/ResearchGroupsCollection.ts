@@ -11,7 +11,7 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
   async add(group: Omit<ResearchGroup, "id" | "createdAt">): Promise<string> {
     try {
       // Upload banner image
-      if (!group.bannerImage) {
+      if (group.bannerImage) {
         group.bannerImage = await API.uploadImage(
           `banner-${group.name}`,
           group.bannerImage,
@@ -19,7 +19,7 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
       }
 
       // Upload group image
-      if (!group.image) {
+      if (group.image) {
         group.image = await API.uploadImage(
           `research-group-${group.name}`,
           group.image,

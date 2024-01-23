@@ -63,7 +63,7 @@ export default function (props: DragToReorderProps) {
 // IMPLEMENTATION
 /////////////////////////////////////////////////////////////////////////////////
 
-class DragManager {
+export class DragManager {
   private listContainer!: HTMLElement;
   private draggableItem!: HTMLElement | null | undefined;
   private dragStartPos = { x: 0, y: 0 };

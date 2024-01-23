@@ -3,7 +3,7 @@ import { MetaProvider, Title } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start";
 import { Suspense } from "solid-js";
-import "./app.css";
+import "./app.scss";
 
 export default function App() {
   return (

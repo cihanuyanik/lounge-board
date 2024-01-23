@@ -55,6 +55,12 @@
     &.cursor-pointer {
       cursor: pointer;
     }
+
+    &.emphasize {
+      animation:
+        enlarge 1s infinite,
+        pulse 1s infinite;
+    }
   }
 }
 

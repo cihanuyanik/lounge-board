@@ -48,6 +48,12 @@
       height: 20px;
     }
   }
+
+  .emphasize {
+    animation:
+      enlarge 1s infinite,
+      pulse 1s infinite;
+  }
 }
 
 .create-news-dialog {

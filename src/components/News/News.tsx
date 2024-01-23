@@ -84,7 +84,9 @@ export default function News() {
         class={"news-container"}
       >
         <For each={news.ids}>
-          {(id) => <NewItem id={id} editDialog={createNewDialog} />}
+          {(id, index) => (
+            <NewItem id={id} index={index} editDialog={createNewDialog} />
+          )}
         </For>
       </Scrollable>
       <Show when={isAdmin()}>

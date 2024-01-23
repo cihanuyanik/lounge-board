@@ -3,5 +3,4 @@
 /src/api/config.ts
 /.vinxi/
 /dist/
-
-
+/.firebase/
