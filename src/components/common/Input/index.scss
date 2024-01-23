@@ -1,0 +1,76 @@
+.input-container {
+  --container-height: 70px;
+  --label-height: 26px;
+
+  position: relative;
+  isolation: isolate;
+  height: var(--container-height);
+
+  > label {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--space-4);
+    z-index: 1;
+    transition: all 0.2s ease-in-out;
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+
+    font-weight: bold;
+    font-size: var(--font-sizes-md);
+    background: var(--color-tertiary-lighter);
+    color: var(--color-darkgray);
+    border-radius: var(--radii-xl);
+  }
+
+  > svg {
+    position: absolute;
+    top: var(--label-height);
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    transition: all 0.2s ease-in-out;
+    height: calc(var(--container-height) - var(--label-height));
+    color: white;
+    padding: var(--space-2);
+    background: var(--color-tertiary);
+    border-top-left-radius: var(--radii-3xl);
+    border-bottom-left-radius: var(--radii-3xl);
+  }
+
+  > input {
+    position: absolute;
+    top: var(--label-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+
+    text-align: center;
+    border: none;
+    outline: none;
+    align-self: stretch;
+    font-size: var(--font-sizes-lg);
+    font-weight: bold;
+    background: var(--color-secondary);
+    border-radius: var(--radii-3xl);
+
+    box-shadow: 0 0 10px 5px var(--color-tertiary-lighter);
+
+    transition: all 0.2s ease-in-out;
+    &:focus {
+      box-shadow: 0 0 10px 10px var(--color-tertiary);
+      background: var(--color-secondary-lighter);
+
+      & + label {
+        background: var(--color-tertiary);
+        color: white;
+        scale: 1.1;
+      }
+
+      & ~ svg {
+        background: var(--color-tertiary-lighter);
+      }
+    }
+  }
+}

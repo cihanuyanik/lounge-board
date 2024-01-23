@@ -1,0 +1,6 @@
+@mixin debug($color, $enableBackground: false) {
+  outline: 2px solid $color;
+  @if $enableBackground {
+    background: rgba($color, 0.1);
+  }
+}

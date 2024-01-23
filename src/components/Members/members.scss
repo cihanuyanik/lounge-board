@@ -1,0 +1,138 @@
+.members-container {
+  flex: 1 0 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-primary-darker);
+  border-radius: var(--radii-2xl);
+  padding: var(--space-2);
+  gap: var(--space-3);
+  color: var(--color-text);
+
+  .member-item {
+    height: 120px;
+    min-height: 120px;
+    width: 100%;
+    background-image: url(~/assets/images/texture/papyrus.jpg);
+    box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
+    border-radius: var(--radii-xl);
+    padding: var(--space-2);
+    gap: var(--space-2);
+    user-select: none;
+
+    &.item-selected {
+      outline: 5px solid green;
+    }
+
+    &.cursor-pointer {
+      cursor: pointer;
+    }
+
+    .avatar {
+      height: 100px;
+      width: 85px;
+
+      img {
+        flex: 1;
+        border-radius: 50% 50%;
+        box-shadow: 0 0 10px 4px var(--color-primary-darker);
+      }
+    }
+
+    .name-role {
+      flex: 1;
+      gap: var(--space-2);
+      font-weight: bold;
+      text-align: center;
+
+      .name {
+        word-break: break-word;
+        color: black;
+        font-size: var(--font-sizes-lg);
+        width: 100%;
+        border-bottom: 3px solid var(--color-primary);
+      }
+
+      .role {
+        word-break: break-word;
+        color: var(--color-darkgray);
+        font-size: var(--font-sizes-md);
+      }
+    }
+  }
+}
+
+.create-edit-member-dialog {
+  width: 400px;
+  overflow: visible;
+
+  .member-item {
+    height: 120px;
+    min-height: 120px;
+    width: 100%;
+    background-image: url(~/assets/images/texture/papyrus.jpg);
+    box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
+    border-radius: var(--radii-xl);
+    padding: var(--space-2);
+    gap: var(--space-2);
+    user-select: none;
+
+    .avatar {
+      height: 100px;
+      width: 85px;
+      position: relative;
+
+      img {
+        flex: 1;
+        border-radius: 50% 50%;
+        box-shadow: 0 0 10px 4px var(--color-primary-darker);
+      }
+
+      button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 40px;
+        width: 40px;
+        padding: var(--space-1);
+        background: transparent;
+        opacity: 0;
+      }
+    }
+
+    .name-role {
+      flex: 1;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      font-weight: bold;
+      text-align: center;
+
+      .name {
+        color: black;
+        font-size: var(--font-sizes-lg);
+        width: 100%;
+        text-align: center;
+        background: transparent;
+        outline: none;
+        border: none;
+
+        &::placeholder {
+          color: var(--color-darkgray);
+        }
+      }
+
+      .role {
+        color: var(--color-darkgray);
+        font-size: var(--font-sizes-md);
+        width: 100%;
+        text-align: center;
+        background: transparent;
+        outline: none;
+        border: none;
+        &::placeholder {
+          color: var(--color-darkgray);
+        }
+      }
+    }
+  }
+}

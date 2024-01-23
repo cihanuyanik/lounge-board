@@ -1,0 +1,28 @@
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  background: var(--color-primary);
+  color: var(--color-text);
+  width: 100%;
+  font-size: var(--font-sizes-xl);
+  gap: var(--space-2);
+  border-radius: var(--radii-xl);
+  animation: pulse 1s ease-in-out infinite alternate;
+
+  span {
+    text-decoration: underline;
+  }
+
+  a {
+    text-decoration: underline;
+    color: var(--color-tertiary);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}

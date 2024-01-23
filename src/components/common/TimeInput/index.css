@@ -1,0 +1,27 @@
+.time-input {
+  gap: var(--space-1);
+  background: white;
+  color: inherit;
+  pointer-events: auto;
+}
+.time-input > input {
+  flex: 1;
+  outline: none;
+  border: none;
+  background: white;
+}
+.time-input > input::before {
+  content: attr(data-value);
+  text-align: center;
+  font-size: inherit;
+  font-weight: inherit;
+  color: var(--color-darkgray);
+}
+.time-input > input::-webkit-datetime-edit {
+  display: none;
+}
+.time-input > input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/*# sourceMappingURL=index.css.map */

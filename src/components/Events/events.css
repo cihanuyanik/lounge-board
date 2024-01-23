@@ -1,0 +1,95 @@
+.events-container {
+  width: 400px;
+  height: 100%;
+  gap: var(--space-2);
+}
+.events-container .upcoming-events-container,
+.events-container .past-events-container {
+  flex: 1 0 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-primary-darker);
+  border-radius: var(--radii-2xl);
+  padding: var(--space-2);
+  gap: var(--space-3);
+  color: var(--color-text);
+}
+.events-container .event-item {
+  width: 100%;
+  box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
+  border-radius: var(--radii-2xl);
+  padding: var(--space-2);
+  user-select: none;
+  align-items: flex-start;
+  gap: var(--space-2);
+  position: relative;
+  background: url("~/assets/images/texture/papyrus.jpg");
+}
+.events-container .event-item .text {
+  flex: 1;
+  font-size: var(--font-sizes-lg);
+  font-weight: bold;
+  color: black;
+}
+.events-container .event-item .time {
+  font-size: var(--font-sizes-md);
+  font-weight: bold;
+  color: var(--color-darkgray);
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+.events-container .event-item.past-event-item-background {
+  background: url("~/assets/images/texture/white-marble.jpg");
+}
+.events-container .event-item.item-selected {
+  outline: 5px solid green;
+}
+.events-container .event-item.cursor-pointer {
+  cursor: pointer;
+}
+
+.create-edit-event-dialog {
+  width: 400px;
+  overflow: visible;
+}
+.create-edit-event-dialog .content {
+  width: 100%;
+  box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
+  border-radius: var(--radii-2xl);
+  padding: var(--space-2);
+  user-select: none;
+  align-items: flex-start;
+  gap: var(--space-2);
+  position: relative;
+  background: url("~/assets/images/texture/papyrus.jpg");
+}
+.create-edit-event-dialog .background-past {
+  background: url("~/assets/images/texture/white-marble.jpg");
+}
+.create-edit-event-dialog .text {
+  width: 100%;
+  background: transparent;
+  color: black;
+  font-size: var(--font-sizes-lg);
+  text-align: left;
+  outline: none;
+  border: none;
+  height: fit-content;
+}
+.create-edit-event-dialog .text::placeholder {
+  color: var(--color-darkgray);
+}
+.create-edit-event-dialog .start-date-container,
+.create-edit-event-dialog .end-date-container {
+  font-size: var(--font-sizes-md);
+  color: var(--color-darkgray);
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+/*# sourceMappingURL=events.css.map */

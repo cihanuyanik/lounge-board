@@ -1,0 +1,111 @@
+.research-groups-container {
+  flex: 1 1 0;
+  width: 100%;
+  position: relative;
+
+  .btn-edit-res-groups {
+    height: 40px;
+    width: 40px;
+    padding: var(--space-1);
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-4);
+    color: var(--color-text);
+  }
+
+  .res-group-image-container {
+    flex: 1 1 0;
+    width: 100%;
+    background: var(--color-primary-darker);
+    border-radius: var(--radii-2xl);
+    overflow: hidden;
+    padding: var(--space-1);
+    transform-origin: 50% 50%;
+    perspective: 30em;
+    perspective-origin: center top;
+
+    > img {
+      border-radius: 10px;
+    }
+  }
+}
+
+.edit-research-groups-dialog {
+  width: 800px;
+
+  .content {
+    background: var(--color-primary);
+    gap: var(--space-1);
+
+    .title {
+      width: 100%;
+      height: 40px;
+      background: var(--color-primary-darker);
+      border-bottom: 5px solid var(--color-primary-darker);
+    }
+
+    .research-group-selector {
+      width: 100%;
+      padding: var(--space-2);
+      gap: var(--space-2);
+
+      > button {
+        height: 40px;
+        width: 40px;
+        padding: var(--space-1);
+      }
+    }
+
+    .selected-group {
+      width: 100%;
+      padding: var(--space-2) var(--space-4);
+      gap: var(--space-4);
+      border-top: 5px solid var(--color-primary-darker);
+      border-bottom: 5px solid var(--color-primary-darker);
+
+      .research-group-name {
+        flex: 1;
+        font-size: var(--font-sizes-2xl);
+        font-weight: bold;
+        text-align: left;
+        text-decoration: underline;
+        outline: none;
+        background: transparent;
+        color: var(--color-text);
+      }
+
+      .banner-image {
+        height: 75px;
+        width: 75px;
+        cursor: pointer;
+
+        > img {
+          border-radius: var(--radii-2xl);
+          box-shadow: 0 0 var(--space-4) var(--color-primary-lighter);
+        }
+      }
+    }
+
+    .research-group-team-image {
+      height: 300px;
+      width: calc(100% - 2rem);
+      background: var(--color-primary-darker);
+      border-radius: var(--radii-2xl);
+      overflow: hidden;
+      padding: var(--space-1);
+      margin-left: var(--space-4);
+      margin-right: var(--space-4);
+      cursor: pointer;
+
+      > img {
+        border-radius: 10px;
+      }
+    }
+
+    .controls {
+      margin: var(--space-2);
+      width: calc(100% - var(--space-4));
+      gap: var(--space-2);
+    }
+  }
+}

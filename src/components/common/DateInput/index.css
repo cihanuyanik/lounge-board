@@ -1,0 +1,30 @@
+.date-input {
+  gap: var(--space-1);
+  background: white;
+  pointer-events: auto;
+}
+.date-input > svg {
+  width: 20px;
+  height: 20px;
+}
+.date-input > input {
+  flex: 1;
+  outline: none;
+  border: none;
+  background: white;
+}
+.date-input > input::before {
+  content: attr(data-value);
+  text-align: center;
+  font-size: inherit;
+  font-weight: inherit;
+  color: var(--color-darkgray);
+}
+.date-input > input::-webkit-datetime-edit {
+  display: none;
+}
+.date-input > input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/*# sourceMappingURL=index.css.map */

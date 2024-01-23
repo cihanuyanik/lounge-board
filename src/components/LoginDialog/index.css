@@ -1,0 +1,11 @@
+#login-dialog .title {
+  height: 50px;
+}
+
+.login-dialog {
+  background: var(--color-secondary-darker);
+  gap: var(--space-4);
+  padding: var(--space-3);
+}
+
+/*# sourceMappingURL=index.css.map */

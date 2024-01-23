@@ -1,0 +1,49 @@
+.dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  outline: none;
+  border: none;
+  border-radius: var(--radii-xl);
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 0 10px 8px var(--color-primary-lighter);
+  font-weight: bold;
+  font-size: 18px;
+  z-index: 100;
+  color: var(--color-text);
+  background: transparent;
+}
+.dialog::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+.dialog .title {
+  height: 40px;
+  background: var(--color-primary-darker);
+  border-bottom: 5px solid var(--color-primary-darker);
+}
+.dialog .control-btn {
+  position: absolute;
+  right: 0;
+  padding: var(--space-2);
+}
+.dialog .accept {
+  bottom: 0;
+  background: lawngreen;
+  transform: translate(50%, 50%);
+}
+.dialog .accept:hover {
+  background: green;
+}
+.dialog .cancel {
+  top: 0;
+  background: crimson;
+  transform: translate(50%, -50%);
+}
+.dialog .cancel:hover {
+  background: red;
+}
+
+/*# sourceMappingURL=index.css.map */

@@ -9,8 +9,9 @@
     "jsx": "preserve",
     "strict": true,
     "baseUrl": "./",
+
     "paths": {
       "~/*": ["./src/*"]
     }
-  }
+  },
 }

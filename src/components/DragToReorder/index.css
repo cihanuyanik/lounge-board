@@ -1,0 +1,47 @@
+.drag-container {
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+}
+
+.drag-item {
+  position: relative;
+  transition: transform 200ms ease-in-out;
+  will-change: transform;
+}
+
+.drag-item:hover .drag-handle {
+  opacity: 1;
+}
+
+.drag-handle {
+  position: absolute;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  cursor: grab;
+  color: white;
+  background: transparent;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 0 black;
+  transition: all 200ms ease-in-out;
+  opacity: 0;
+}
+.drag-handle > svg {
+  user-select: none;
+  pointer-events: none;
+}
+.drag-handle:hover, .drag-handle:focus, .drag-handle:active, .drag-handle:visited {
+  box-shadow: 0 0 10px 3px #d30000;
+  opacity: 1;
+}
+
+.dragging {
+  z-index: 10;
+  transition: none !important;
+  cursor: grabbing !important;
+  isolation: isolate;
+}
+
+/*# sourceMappingURL=index.css.map */

@@ -1,0 +1,35 @@
+.date-input {
+  gap: var(--space-1);
+  background: white;
+  pointer-events: auto;
+
+  > svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  > input {
+    flex: 1;
+    outline: none;
+    border: none;
+    background: white;
+    //background: props.background || "white",
+
+    &::before {
+      content: attr(data-value);
+      text-align: center;
+      font-size: inherit;
+      font-weight: inherit;
+      color: var(--color-darkgray);
+    }
+
+    //noinspection ALL
+    &::-webkit-datetime-edit {
+      display: none;
+    }
+
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+  }
+}
