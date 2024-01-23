@@ -1,9 +1,9 @@
-import { Title } from "solid-start";
+import { Title } from "@solidjs/meta";
 import Events from "~/components/Events/Events";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
 import News from "~/components/News/News";
 import { onCleanup, onMount } from "solid-js";
-import { useDataLoader } from "~/AppContext";
+import { AppContextProvider, useDataLoader } from "~/AppContext";
 import Members from "~/components/Members/Members";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
@@ -15,6 +15,14 @@ import { isServer } from "solid-js/web";
 import { sleep } from "~/utils/utils";
 
 export default function Home() {
+  return (
+    <AppContextProvider>
+      <_Home />
+    </AppContextProvider>
+  );
+}
+
+function _Home() {
   const { loadData, unSubList } = useDataLoader();
 
   onMount(async () => {

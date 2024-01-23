@@ -28,7 +28,7 @@
 }
 
 .edit-research-groups-dialog {
-  width: 800px;
+  width: 800px !important;
 }
 .edit-research-groups-dialog .content {
   background: var(--color-primary);

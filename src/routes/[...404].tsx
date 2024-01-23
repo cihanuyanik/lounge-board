@@ -1,5 +1,5 @@
-import { Title } from "solid-start";
-import { HttpStatusCode } from "solid-start/server";
+import { Title } from "@solidjs/meta";
+import { HttpStatusCode } from "@solidjs/start";
 import Img from "~/components/common/Img";
 import NotFoundImage from "~/assets/images/notfound.webp";
 

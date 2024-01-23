@@ -1,10 +1,10 @@
-import { Title } from "solid-start";
+import { Title } from "@solidjs/meta";
 import Members from "~/components/Members/Members";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
 import News from "~/components/News/News";
 import Events from "~/components/Events/Events";
 import { createEffect, onCleanup, onMount } from "solid-js";
-import { useAppContext, useDataLoader } from "~/AppContext";
+import { AppContextProvider, useAppContext, useDataLoader } from "~/AppContext";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import Banner from "~/components/Banner";
@@ -17,7 +17,15 @@ import { sleep } from "~/utils/utils";
 import LoginDialog from "~/components/LoginDialog";
 import { User } from "~/api/types";
 
-export default function Admin() {
+export default function Home() {
+  return (
+    <AppContextProvider>
+      <_Admin />
+    </AppContextProvider>
+  );
+}
+
+function _Admin() {
   const { busyDialog, user, setUser } = useAppContext();
   const { loadData, unSubList } = useDataLoader();
 

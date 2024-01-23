@@ -1,4 +1,3 @@
-"use client";
 import "./members.scss";
 import { emptyMember } from "~/components/Members/store";
 import { createStore } from "solid-js/store";
