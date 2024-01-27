@@ -25,6 +25,16 @@
     height: 100%;
     width: 100%;
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover {
+    box-shadow: 0 0 10px 0 black;
+    background: transparent;
+  }
 }
 
 .button-rect {
@@ -39,6 +49,10 @@
 
   &:hover {
     background: var(--color-tertiary);
+  }
+
+  &:disabled:hover {
+    background: var(--color-tertiary-darker);
   }
 
   svg {

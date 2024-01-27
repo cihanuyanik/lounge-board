@@ -8,13 +8,12 @@ import { DialogResult } from "~/components/MessageBox/store";
 import Scrollable from "~/components/common/Scrollable";
 import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
-import { API } from "~/api/Firebase";
 import CreateEditNews, {
   CreateNewsDialogResult,
 } from "~/components/News/CreateEditNews";
 
 export default function News() {
-  const { isAdmin, messageBox, news } = useAppContext();
+  const { isAdmin, messageBox, news, API } = useAppContext();
 
   let newsRef: HTMLDivElement;
   let timeOut: any;

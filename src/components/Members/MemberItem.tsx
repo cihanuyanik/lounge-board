@@ -7,7 +7,6 @@ import { Show } from "solid-js";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
-import { API } from "~/api/Firebase";
 
 type MemberItemProps = {
   id: string;
@@ -15,7 +14,7 @@ type MemberItemProps = {
 };
 
 export default function MemberItem(props: MemberItemProps) {
-  const { isAdmin, busyDialog, messageBox, members } = useAppContext();
+  const { isAdmin, busyDialog, messageBox, members, API } = useAppContext();
 
   function onClick() {
     const memberItem = members.entities[props.id];

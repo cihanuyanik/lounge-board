@@ -1,7 +1,7 @@
 import { Title } from "@solidjs/meta";
 import Members from "~/components/Members/Members";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
-import News from "~/components/News/News";
+import News from "~/components/News2/News";
 import Events from "~/components/Events/Events";
 import { createEffect, onCleanup, onMount } from "solid-js";
 import { AppContextProvider, useAppContext, useDataLoader } from "~/AppContext";
@@ -11,7 +11,6 @@ import Banner from "~/components/Banner";
 import BusyDialog from "~/components/BusyDialog";
 import MessageBox from "~/components/MessageBox";
 import Footer from "~/components/Footer";
-import { API } from "~/api/Firebase";
 import { isServer } from "solid-js/web";
 import { sleep } from "~/utils/utils";
 import LoginDialog from "~/components/LoginDialog";
@@ -26,7 +25,7 @@ export default function Home() {
 }
 
 function _Admin() {
-  const { busyDialog, user, setUser } = useAppContext();
+  const { busyDialog, user, setUser, API } = useAppContext();
   const { loadData, unSubList } = useDataLoader();
 
   onMount(async () => {
@@ -48,7 +47,7 @@ function _Admin() {
       // Wait for 100ms to let BusyDialog object to be created
       await sleep(100);
       busyDialog.show("Signing in...");
-      await sleep(2000);
+      await sleep(1000);
       busyDialog.close();
     } catch (e) {
       busyDialog.close();

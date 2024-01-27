@@ -14,10 +14,10 @@ import DragToReorder from "~/components/DragToReorder";
 import MembersHeader from "~/assets/images/members-header.png";
 import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
-import { API } from "~/api/Firebase";
 
 export default function Members() {
-  const { isAdmin, busyDialog, messageBox, members, meta } = useAppContext();
+  const { isAdmin, busyDialog, messageBox, members, meta, API } =
+    useAppContext();
 
   let createEditMemberDialog: HTMLDialogElement = null!;
 
@@ -147,7 +147,7 @@ export default function Members() {
       titleIcon={icon}
       onAddNewItem={isAdmin() ? onAddNew : undefined}
       onDeleteSelectedItems={isAdmin() ? onDeleteSelectedMembers : undefined}
-      style={{ height: "100%", width: "400px" }}
+      style={{ height: "100%", width: "20%" }}
     >
       <Show
         when={isAdmin()}

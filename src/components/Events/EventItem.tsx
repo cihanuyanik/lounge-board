@@ -8,7 +8,6 @@ import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
 import { Event } from "~/api/types";
-import { API } from "~/api/Firebase";
 
 type Props = {
   id: string;
@@ -18,7 +17,8 @@ type Props = {
 };
 
 export default function EventItem(props: Props) {
-  const { isAdmin, pastEvents, upcomingEvents, messageBox } = useAppContext();
+  const { isAdmin, pastEvents, upcomingEvents, messageBox, API } =
+    useAppContext();
 
   const startDate = createMemo(() => {
     const startsAt = props.isPast

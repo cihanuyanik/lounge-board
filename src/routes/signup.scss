@@ -1,0 +1,68 @@
+.sign-up-container {
+  background-color: var(--color-secondary-lighter);
+  min-height: 100vh;
+  gap: var(--space-3);
+
+  //display: flex;
+  //flex-direction: column;
+
+  > .title {
+    height: 100px;
+    width: 100%;
+    background: var(--color-primary);
+    border-bottom: var(--space-3) solid var(--color-primary-darker);
+    box-shadow: 0 0 10px 5px var(--color-secondary-darker);
+    //border-radius: var(--radii-2xl);
+    border-bottom-left-radius: var(--radii-2xl);
+    border-bottom-right-radius: var(--radii-2xl);
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+
+    p {
+      color: var(--color-text);
+      font-weight: 900;
+      font-size: 2rem;
+      text-align: center;
+      flex: 1;
+    }
+  }
+
+  > .input-form {
+    background-color: var(--color-primary);
+    border-radius: var(--radii-3xl);
+    padding: var(--space-4);
+    flex: 1;
+    width: 100%;
+    max-width: 500px;
+    gap: var(--space-3);
+  }
+
+  .profile-image {
+    height: 200px;
+    width: 170px;
+    position: relative;
+
+    img {
+      flex: 1;
+      border-radius: 50% 50%;
+      box-shadow: 0 0 10px 4px var(--color-primary-darker);
+    }
+
+    button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 40px;
+      width: 40px;
+      padding: var(--space-1);
+      background: transparent;
+      opacity: 0;
+    }
+
+    &:hover {
+      button {
+        opacity: 1;
+      }
+    }
+  }
+}

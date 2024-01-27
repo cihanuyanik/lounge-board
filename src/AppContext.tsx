@@ -19,12 +19,13 @@ import { createMessageBoxStore } from "~/components/MessageBox/store";
 import { createStore } from "solid-js/store";
 import { Meta, User } from "~/api/types";
 import { createMutator } from "~/utils/utils";
-import { API } from "~/api/Firebase";
+import { Firebase } from "~/api/Firebase";
 
 type AppContextType = {
   isAdmin: Accessor<boolean>;
   user: Accessor<User>;
   setUser: Setter<User>;
+  API: Firebase;
 } & ReturnType<typeof createPastEventStore> &
   ReturnType<typeof createUpcomingEventStore> &
   ReturnType<typeof createNewsStore> &
@@ -75,6 +76,8 @@ export function AppContextProvider(props: any) {
 
   const [user, setUser] = createSignal<User>(null!);
 
+  const API = new Firebase();
+
   return (
     <AppContext.Provider
       value={{
@@ -97,6 +100,7 @@ export function AppContextProvider(props: any) {
         mutateMessageBox,
         user,
         setUser,
+        API,
       }}
     >
       {props.children}
@@ -120,6 +124,7 @@ export function useDataLoader() {
     members,
     meta,
     mutateMeta,
+    API,
   } = useAppContext();
 
   const unSubList: Unsubscribe[] = [];

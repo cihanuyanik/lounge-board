@@ -1,9 +1,9 @@
 import Collection from "~/api/Collection";
-import { Firestore } from "firebase/firestore";
 import { Event } from "~/api/types";
+import { Firebase } from "~/api/Firebase";
 
 export default class UpcomingEventsCollection extends Collection<Event> {
-  constructor(db: Firestore) {
-    super("upcoming-events", db);
+  constructor(fb: Firebase) {
+    super("upcoming-events", fb);
   }
 }

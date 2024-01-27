@@ -1,18 +1,17 @@
 import Collection from "~/api/Collection";
-import { Firestore } from "firebase/firestore";
 import { ResearchGroup } from "~/api/types";
-import { API } from "~/api/Firebase";
+import { Firebase } from "~/api/Firebase";
 
 export default class ResearchGroupsCollection extends Collection<ResearchGroup> {
-  constructor(db: Firestore) {
-    super("research-groups", db);
+  constructor(fb: Firebase) {
+    super("research-groups", fb);
   }
 
   async add(group: Omit<ResearchGroup, "id" | "createdAt">): Promise<string> {
     try {
       // Upload banner image
       if (group.bannerImage) {
-        group.bannerImage = await API.uploadImage(
+        group.bannerImage = await this._fb.uploadImage(
           `banner-${group.name}`,
           group.bannerImage,
         );
@@ -20,7 +19,7 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
 
       // Upload group image
       if (group.image) {
-        group.image = await API.uploadImage(
+        group.image = await this._fb.uploadImage(
           `research-group-${group.name}`,
           group.image,
         );
@@ -42,9 +41,9 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
       data.changes.bannerImage &&
       data.original.bannerImage !== data.changes.bannerImage
     ) {
-      await API.deleteImage(data.original.bannerImage);
+      await this._fb.deleteImage(data.original.bannerImage);
 
-      data.changes.bannerImage = await API.uploadImage(
+      data.changes.bannerImage = await this._fb.uploadImage(
         `banner-${data.original.name}`,
         data.changes.bannerImage,
       );
@@ -52,8 +51,8 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
 
     // Update group image
     if (data.changes.image && data.original.image !== data.changes.image) {
-      await API.deleteImage(data.original.image);
-      data.changes.image = await API.uploadImage(
+      await this._fb.deleteImage(data.original.image);
+      data.changes.image = await this._fb.uploadImage(
         `research-group-${data.original.name}`,
         data.changes.image,
       );
@@ -67,12 +66,12 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
     try {
       // Delete banner image
       if (data.bannerImage) {
-        await API.deleteImage(data.bannerImage);
+        await this._fb.deleteImage(data.bannerImage);
       }
 
       // Delete group image
       if (data.image) {
-        await API.deleteImage(data.image);
+        await this._fb.deleteImage(data.image);
       }
 
       // Delete from database

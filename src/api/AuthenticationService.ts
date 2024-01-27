@@ -3,15 +3,19 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  updateProfile,
   User,
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
+import { Firebase } from "~/api/Firebase";
 
 export class AuthenticationService {
   private readonly _app: FirebaseApp;
   private readonly _auth: Auth;
-  constructor(app: FirebaseApp) {
-    this._app = app;
+  private readonly _fb: Firebase;
+  constructor(fb: Firebase) {
+    this._fb = fb;
+    this._app = fb.app;
     this._auth = getAuth(this._app);
     if (!this._auth) {
       throw new Error("Firebase Authentication cannot be initialized");
@@ -36,5 +40,18 @@ export class AuthenticationService {
 
   async signOut() {
     return await this._auth.signOut();
+  }
+
+  async updateProfile(name: string, profileImage: string) {
+    if (!this.user) {
+      throw new Error("User is not logged in");
+    }
+
+    profileImage = await this._fb.uploadImage(`profile-${name}`, profileImage);
+
+    return await updateProfile(this.user, {
+      displayName: name,
+      photoURL: profileImage,
+    });
   }
 }

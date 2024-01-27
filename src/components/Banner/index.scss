@@ -13,16 +13,29 @@
     padding-left: var(--space-4);
     padding-right: var(--space-4);
 
+    img {
+      padding: 5px;
+      border-radius: 50% 50%;
+    }
+
     p {
       padding-left: var(--space-4);
       padding-right: var(--space-4);
     }
 
     button {
-      height: 24px;
+      height: 20px;
       border-radius: var(--radii-full);
-      padding: 0;
+      padding: 0 5px;
+      width: auto;
+
       color: lawngreen;
+      font-size: 13px;
+      white-space: nowrap;
+
+      svg {
+        height: 18px;
+      }
     }
   }
   .name {

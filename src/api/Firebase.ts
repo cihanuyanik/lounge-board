@@ -47,13 +47,21 @@ export class Firebase {
       throw new Error("Firebase Storage cannot be initialized");
     }
 
-    this.News = new NewsCollection(this._db);
-    this.UpcomingEvents = new UpcomingEventsCollection(this._db);
-    this.PastEvents = new PastEventsCollection(this._db);
-    this.ResearchGroups = new ResearchGroupsCollection(this._db);
-    this.Members = new MembersCollection(this._db);
-    this.Meta = new MetaCollection(this._db);
-    this.AuthService = new AuthenticationService(this._app);
+    this.News = new NewsCollection(this);
+    this.UpcomingEvents = new UpcomingEventsCollection(this);
+    this.PastEvents = new PastEventsCollection(this);
+    this.ResearchGroups = new ResearchGroupsCollection(this);
+    this.Members = new MembersCollection(this);
+    this.Meta = new MetaCollection(this);
+    this.AuthService = new AuthenticationService(this);
+  }
+
+  get app() {
+    return this._app;
+  }
+
+  get db() {
+    return this._db;
   }
 
   async uploadImage(readableName: string, base64UrlStr: string) {
@@ -81,5 +89,3 @@ export class Firebase {
     }
   }
 }
-
-export const API = new Firebase();

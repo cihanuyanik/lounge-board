@@ -151,10 +151,6 @@ function Avatar() {
         const editButton = document.getElementById("edit-member-image");
         if (editButton) editButton.style.opacity = "1";
       }}
-      onMouseLeave={() => {
-        const editButton = document.getElementById("edit-member-image");
-        if (editButton) editButton.style.opacity = "0";
-      }}
     >
       <Img src={state.member.image || MemberImagePlaceholder} />
 

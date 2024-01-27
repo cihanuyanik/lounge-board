@@ -1,18 +1,20 @@
 import Collection from "~/api/Collection";
-import { API } from "~/api/Firebase";
 import { Member } from "~/api/types";
-import { Firestore } from "firebase/firestore";
+import { Firebase } from "~/api/Firebase";
 
 export default class MembersCollection extends Collection<Member> {
-  constructor(db: Firestore) {
-    super("members", db);
+  constructor(fb: Firebase) {
+    super("members", fb);
   }
 
   async add(data: Omit<Member, "id" | "createdAt">): Promise<string> {
     try {
       if (data.image) {
         // Upload member image
-        data.image = await API.uploadImage(`member-${data.name}`, data.image);
+        data.image = await this._fb.uploadImage(
+          `member-${data.name}`,
+          data.image,
+        );
       }
 
       return super.add(data);
@@ -28,9 +30,9 @@ export default class MembersCollection extends Collection<Member> {
     try {
       // Update member image
       if (data.changes.image && data.original.image !== data.changes.image) {
-        await API.deleteImage(data.original.image);
+        await this._fb.deleteImage(data.original.image);
 
-        data.changes.image = await API.uploadImage(
+        data.changes.image = await this._fb.uploadImage(
           `member-${data.original.name}`,
           data.changes.image,
         );
@@ -46,7 +48,7 @@ export default class MembersCollection extends Collection<Member> {
   async delete(data: Member): Promise<void> {
     // Delete member image
     if (data.image) {
-      await API.deleteImage(data.image);
+      await this._fb.deleteImage(data.image);
     }
 
     // Update database

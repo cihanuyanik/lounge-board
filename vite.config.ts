@@ -7,6 +7,12 @@ export default defineConfig({
     server: {
       preset: "static",
 
+      routeRules: {
+        "/test": {
+          cors: false,
+        },
+      },
+
       prerender: {
         routes: ["/", "/admin", "/404"],
         crawlLinks: true,

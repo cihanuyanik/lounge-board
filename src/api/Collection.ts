@@ -12,16 +12,20 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
+import { Firebase } from "~/api/Firebase";
 
 export default class Collection<
   T extends { id: string; createdAt: Timestamp },
 > {
   protected readonly _name: string;
+  protected readonly _fb: Firebase;
   protected readonly _db: Firestore;
+
   protected _batch: WriteBatch | undefined = undefined;
-  constructor(name: string, db: Firestore) {
+  constructor(name: string, fb: Firebase) {
     this._name = name;
-    this._db = db;
+    this._fb = fb;
+    this._db = fb.db;
   }
 
   get collection() {

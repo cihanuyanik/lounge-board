@@ -6,7 +6,6 @@ import { Accessor, createMemo } from "solid-js";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
-import { API } from "~/api/Firebase";
 
 type Props = {
   id: string;
@@ -15,7 +14,7 @@ type Props = {
 };
 
 export default function NewItem(props: Props) {
-  const { isAdmin, busyDialog, messageBox, news } = useAppContext();
+  const { isAdmin, busyDialog, messageBox, news, API } = useAppContext();
 
   const dateStr = createMemo(() => {
     const date = news.entities[props.id].createdAt.toDate();

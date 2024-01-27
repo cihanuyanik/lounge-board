@@ -1,11 +1,12 @@
 import { Meta } from "~/api/types";
 import Collection from "~/api/Collection";
-import { Firestore, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
+import { Firebase } from "~/api/Firebase";
 
 export default class MetaCollection extends Collection<Meta> {
   private fixedId = "meta";
-  constructor(db: Firestore) {
-    super("meta", db);
+  constructor(fb: Firebase) {
+    super("meta", fb);
   }
 
   async add(data: Omit<Meta, "id" | "createdAt">): Promise<string> {

@@ -9,10 +9,10 @@ import EditResearchGroups, {
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
-import { API } from "~/api/Firebase";
 
 export default function ResearchGroups() {
-  const { isAdmin, researchGroups, busyDialog, messageBox } = useAppContext();
+  const { isAdmin, researchGroups, busyDialog, messageBox, API } =
+    useAppContext();
 
   let resGroupImageRef: HTMLImageElement;
   let editResearchGroupsDialog: HTMLDialogElement = null!;

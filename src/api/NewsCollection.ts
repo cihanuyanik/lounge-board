@@ -1,9 +1,9 @@
 import Collection from "~/api/Collection";
-import { Firestore } from "firebase/firestore";
 import { New } from "~/api/types";
+import { Firebase } from "~/api/Firebase";
 
 export default class NewsCollection extends Collection<New> {
-  constructor(db: Firestore) {
-    super("news", db);
+  constructor(fb: Firebase) {
+    super("news", fb);
   }
 }

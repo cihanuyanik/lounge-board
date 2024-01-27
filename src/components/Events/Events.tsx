@@ -12,11 +12,11 @@ import Column from "~/components/common/Column";
 import Scrollable from "~/components/common/Scrollable";
 import BlockContainer from "~/components/common/BlockContainer";
 import { useAppContext } from "~/AppContext";
-import { API } from "~/api/Firebase";
 import { Event } from "~/api/types";
 
 export default function Events() {
-  const { isAdmin, messageBox, pastEvents, upcomingEvents } = useAppContext();
+  const { isAdmin, messageBox, pastEvents, upcomingEvents, API } =
+    useAppContext();
 
   let upcomingEventsRef: HTMLDivElement;
   let pastEventsRef: HTMLDivElement;
