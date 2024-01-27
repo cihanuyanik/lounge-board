@@ -147,7 +147,7 @@ export default function Members() {
       titleIcon={icon}
       onAddNewItem={isAdmin() ? onAddNew : undefined}
       onDeleteSelectedItems={isAdmin() ? onDeleteSelectedMembers : undefined}
-      style={{ height: "100%", width: "20%" }}
+      style={{ height: "100%", width: "20%", "min-width": "20%" }}
     >
       <Show
         when={isAdmin()}

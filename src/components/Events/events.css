@@ -1,5 +1,6 @@
 .events-container {
   width: 20%;
+  min-width: 20%;
   height: 100%;
   gap: var(--space-2);
 }

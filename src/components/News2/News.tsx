@@ -92,8 +92,6 @@ function IFrame(props: { src: string; minHeight: string }) {
         src={props.src}
         height="100%"
         width="100%"
-        // height={"992px"}
-
         title="Embedded post"
       ></iframe>
     </div>
