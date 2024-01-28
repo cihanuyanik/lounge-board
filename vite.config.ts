@@ -45,26 +45,20 @@ function getRoutes() {
 getRoutes();
 
 export default defineConfig({
-  // start: {
-  //   ssr: true,
-  //
-  //   server: {
-  //     preset: "static",
-  //
-  //     routeRules: {
-  //       "/test": {
-  //         cors: false,
-  //       },
-  //     },
-  //
-  //     prerender: {
-  //       routes: getRoutes(),
-  //       crawlLinks: true,
-  //     },
-  //
-  //     output: {
-  //       dir: "dist",
-  //     },
-  //   },
-  // },
+  start: {
+    ssr: true,
+
+    server: {
+      preset: "static",
+
+      prerender: {
+        routes: getRoutes(),
+        crawlLinks: true,
+      },
+
+      output: {
+        dir: "dist",
+      },
+    },
+  },
 });

@@ -16,6 +16,7 @@ import Tick from "~/assets/icons/Tick";
 import Cross from "~/assets/icons/Cross";
 import { ResearchGroup } from "~/api/types";
 import Dialog, { DialogRef } from "~/components/common/Dialog";
+import Dropdown, { DropdownItem } from "~/components/common/Dropdown";
 
 export type EditResearchGroupsDialogResult = {
   result: "Accept" | "Cancel";
@@ -319,19 +320,24 @@ function ResearchGroupSelector() {
 
   return (
     <Row class={"research-group-selector"}>
-      <ComboBox
-        value={state.selectedId}
+      <Dropdown
         rootStyle={{ flex: "1", height: "40px" }}
-        onInput={(e) => {
+        value={state.selectedId}
+        onValueChanged={(ev) => {
           mutate((state) => {
-            state.selectedId = e.currentTarget.value;
+            state.selectedId = ev.value;
           });
         }}
       >
         <For each={state.ids}>
-          {(id) => <option value={id}>{state.entities[id].name}</option>}
+          {(id) => {
+            console.log(id);
+            return (
+              <DropdownItem value={id}>{state.entities[id].name}</DropdownItem>
+            );
+          }}
         </For>
-      </ComboBox>
+      </Dropdown>
 
       <Button onClick={onDeleteResearchGroup}>
         <Delete />

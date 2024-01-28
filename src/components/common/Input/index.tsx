@@ -1,17 +1,27 @@
 import "./index.scss";
-import { JSX, Show, splitProps } from "solid-js";
+import { createEffect, JSX, Show, splitProps } from "solid-js";
 
 type Props = {
-  label: string;
+  label?: string;
   icon?: (props: any) => JSX.Element;
+  height?: string | number;
 } & JSX.InputHTMLAttributes<HTMLInputElement>;
 
 export default function (props: Props) {
-  const [local, rest] = splitProps(props, ["label", "class", "icon"]);
+  const [local, rest] = splitProps(props, ["label", "class", "icon", "height"]);
+
   return (
-    <div class={`input-container${local.class ? " " + local.class : ""}`}>
+    <div
+      class={`input-container${local.class ? " " + local.class : ""}`}
+      style={{
+        "--label-height": local.label ? "26px" : "0px",
+        "--container-height": local.height ? `${local.height}px` : "70px",
+      }}
+    >
       <input {...rest} />
-      <label>{local.label}</label>
+      <Show when={local.label}>
+        <label>{local.label}</label>
+      </Show>
       <Show when={local.icon}>{local.icon}</Show>
     </div>
   );

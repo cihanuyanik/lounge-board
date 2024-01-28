@@ -3,97 +3,124 @@ import BlockContainer from "~/components/common/BlockContainer";
 import Img from "~/components/common/Img";
 import NewsHeader from "~/assets/images/news-header.png";
 import Scrollable from "~/components/common/Scrollable";
-import { onCleanup, onMount } from "solid-js";
-import { isServer } from "solid-js/web";
+import { For, Show } from "solid-js";
+import { useAppContext } from "~/AppContext";
+import CreateEditNews, {
+  CreateNewsDialogResult,
+} from "~/components/News2/CreateEditNews";
+import { Timestamp } from "firebase/firestore";
+import LinkedInPost from "~/components/News2/LinkedInPost";
+import FacebookPost from "~/components/News2/FacebookPost";
+import TwitterPost from "~/components/News2/TwitterPost";
+import InstagramPost from "~/components/News2/InstagramPost";
 
-type NewsProps = {};
+export default function News() {
+  const { isAdmin, messageBox, busyDialog, API, news } = useAppContext();
+  let newsRef: HTMLDivElement = null!;
+  let newsDialog: HTMLDialogElement = null!;
 
-export default function News(props: NewsProps) {
+  async function onAddNew() {
+    console.log("onAddNew");
+    const dResult = await newsDialog.ShowModal<CreateNewsDialogResult>();
+    if (dResult.result === "Cancel") return;
+
+    try {
+      busyDialog.show("Creating news...");
+      if (dResult.selectedNewsType === "custom") {
+        // Create custom news
+      } else {
+        await API.News.add({
+          text: "",
+          isSelected: false,
+          type: dResult.selectedNewsType,
+          postHtml: dResult.postHtml,
+          frameHeight: dResult.frameHeight,
+          frameWidth: dResult.frameWidth,
+          updatedAt: Timestamp.now(),
+        });
+      }
+
+      busyDialog.close();
+    } catch (e) {
+      busyDialog.close();
+      messageBox.error(`${e}`);
+    }
+    console.log("Save news");
+    console.log(dResult);
+  }
+
+  async function onDeleteSelected() {
+    console.log("onDeleteSelected");
+  }
+
   const icon = <Img src={NewsHeader} style={{ height: "35px" }} />;
 
-  let newsRef: HTMLDivElement = null!;
-
-  const offset = 230;
-
   return (
-    <BlockContainer title={"News"} titleIcon={icon} class={"flex-1 w-full"}>
+    <BlockContainer
+      title={"News"}
+      titleIcon={icon}
+      onAddNewItem={isAdmin() ? onAddNew : undefined}
+      onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
+      class={"flex-1 w-full"}
+    >
       <Scrollable
         ref={newsRef}
         direction={"vertical"}
         hideScrollbar={true}
-        // class={"flex-1 w-full"}
         class={"news-container"}
       >
-        <IFrame
-          src={
-            "https://www.linkedin.com/embed/feed/update/urn:li:share:7154078908080889857"
-          }
-          minHeight={`${653 - offset}px`}
-        />
-        <IFrame
-          src={
-            "https://www.linkedin.com/embed/feed/update/urn:li:activity:7155831647811076096"
-          }
-          minHeight={`${1212 - offset}px`}
-        />
+        <For each={news.ids}>
+          {(id) => {
+            // TODO: Make them selectable to be deleted. Possibly by wrappig them with a div
 
-        <IFrame
-          src={
-            "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7153016155866116098"
-          }
-          minHeight={`${1044 - offset}px`}
-        />
-
-        {/*<IFrame />*/}
+            switch (news.entities[id].type) {
+              case "linkedin":
+                return (
+                  <LinkedInPost
+                    postHtml={news.entities[id].postHtml}
+                    width={news.entities[id].frameWidth}
+                    height={news.entities[id].frameHeight}
+                    scrolling={"no"}
+                    style={{ "border-radius": "5px" }}
+                  />
+                );
+              case "facebook":
+                return (
+                  <FacebookPost
+                    postHtml={news.entities[id].postHtml}
+                    width={news.entities[id].frameWidth}
+                    height={news.entities[id].frameHeight}
+                    scrolling={"no"}
+                    style={{ "border-radius": "5px" }}
+                  />
+                );
+              case "twitter":
+                return (
+                  <TwitterPost
+                    postHtml={news.entities[id].postHtml}
+                    width={news.entities[id].frameWidth}
+                    height={news.entities[id].frameHeight}
+                    scrolling={"no"}
+                    style={{ "border-radius": "5px" }}
+                  />
+                );
+              case "instagram":
+                return (
+                  <InstagramPost
+                    postHtml={news.entities[id].postHtml}
+                    width={news.entities[id].frameWidth}
+                    height={news.entities[id].frameHeight}
+                    scrolling={"no"}
+                    style={{ "border-radius": "5px" }}
+                  />
+                );
+            }
+          }}
+        </For>
       </Scrollable>
+      <Show when={isAdmin()}>
+        <CreateEditNews ref={newsDialog} />
+      </Show>
     </BlockContainer>
-  );
-}
-
-function IFrame(props: { src: string; minHeight: string }) {
-  let frame: HTMLIFrameElement = null!;
-  let frameContainer: HTMLDivElement = null!;
-
-  let frameContainerSizeObserver: ResizeObserver = null!;
-
-  onMount(() => {
-    if (isServer) {
-    } else {
-      onMountClient();
-    }
-  });
-
-  onCleanup(() => {
-    frameContainerSizeObserver?.unobserve(frameContainer);
-  });
-
-  function onMountClient() {
-    frameContainerSizeObserver = new ResizeObserver(async (entries) => {
-      const containerRect = entries[0].contentRect;
-      console.log(containerRect.width, containerRect.height);
-    });
-
-    frameContainerSizeObserver.observe(frameContainer);
-  }
-
-  return (
-    <div
-      ref={frameContainer}
-      style={{
-        width: "100%",
-        "min-height": props.minHeight,
-      }}
-    >
-      <iframe
-        ref={frame}
-        // onLoad={(ev) => {
-        //   console.log(frame.clientWidth);
-        // }}
-        src={props.src}
-        height="100%"
-        width="100%"
-        title="Embedded post"
-      ></iframe>
-    </div>
   );
 }

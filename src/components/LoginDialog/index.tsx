@@ -22,18 +22,6 @@ export default function (props: Props) {
   let password: HTMLInputElement = null!;
   let loggedInUser: any = null;
 
-  async function trySignUp() {
-    try {
-      // Try to signup first
-      await API.AuthService.signUp(email.value, password.value);
-      // If successful, login
-      return "success";
-    } catch (error: any) {
-      if (error.code) return error.code;
-      else return `${error}`;
-    }
-  }
-
   async function onLogin() {
     const dialog = document.getElementById(
       "login-dialog",
@@ -43,7 +31,6 @@ export default function (props: Props) {
 
     try {
       busyDialog.show("Logging in...");
-      // TODO: TRY ONLY SIGNING IN, NOT REGISTERNG
       if (!email.value.endsWith("@dtu.dk")) {
         // noinspection ExceptionCaughtLocallyJS
         throw new Error("You must use a DTU email to sign in");
@@ -53,28 +40,6 @@ export default function (props: Props) {
       loggedInUser = API.AuthService.user;
       busyDialog.close();
       dialog?.Close();
-
-      // const result = await trySignUp();
-      // if (result === "success") {
-      //   loggedInUser = API.AuthService.user;
-      //   busyDialog.close();
-      //   dialog?.Close();
-      //   return;
-      // } else if (result === "auth/email-already-in-use") {
-      //   const result = await trySignIn();
-      //   if (result === "success") {
-      //     loggedInUser = API.AuthService.user;
-      //     busyDialog.close();
-      //     dialog?.Close();
-      //     return;
-      //   } else {
-      //     // noinspection ExceptionCaughtLocallyJS
-      //     throw new Error(result);
-      //   }
-      // } else {
-      //   // noinspection ExceptionCaughtLocallyJS
-      //   throw new Error(result);
-      // }
     } catch (e) {
       busyDialog.close();
       messageBox.error(`${e}`);

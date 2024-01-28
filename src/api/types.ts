@@ -4,7 +4,12 @@ export type New = {
   id: string;
   text: string;
   createdAt: Timestamp;
+  updatedAt: Timestamp;
   isSelected: boolean;
+  type: "linkedin" | "facebook" | "twitter" | "instagram" | "custom";
+  postHtml: string;
+  frameHeight: number;
+  frameWidth: number;
 };
 
 export type Event = {
