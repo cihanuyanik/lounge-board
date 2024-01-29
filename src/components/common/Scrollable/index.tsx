@@ -1,5 +1,6 @@
-import "./index.scss";
+import "./index.css";
 import { JSX, splitProps } from "solid-js";
+
 type ScrollableProps = {
   children: JSX.Element | JSX.Element[];
   direction: "vertical" | "horizontal";

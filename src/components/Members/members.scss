@@ -13,15 +13,17 @@
     height: 120px;
     min-height: 120px;
     width: 100%;
-    background-image: url(~/assets/images/texture/papyrus.jpg);
+    //background-image: url(~/assets/images/texture/papyrus.jpg);
+    background-image: url("../../assets/images/texture/papyrus.jpg");
     box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
     border-radius: var(--radii-xl);
     padding: var(--space-2);
     gap: var(--space-2);
     user-select: none;
+    transition: all 0.2s ease-in-out;
 
     &.item-selected {
-      outline: 5px solid green;
+      box-shadow: 0 0 10px 5px green;
     }
 
     &.cursor-pointer {
@@ -70,7 +72,8 @@
     height: 120px;
     min-height: 120px;
     width: 100%;
-    background-image: url(~/assets/images/texture/papyrus.jpg);
+    //background-image: url(~/assets/images/texture/papyrus.jpg);
+    background-image: url("../../assets/images/texture/papyrus.jpg");
     box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
     border-radius: var(--radii-xl);
     padding: var(--space-2);

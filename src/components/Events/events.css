@@ -25,7 +25,7 @@
   align-items: flex-start;
   gap: var(--space-2);
   position: relative;
-  background: url("~/assets/images/texture/papyrus.jpg");
+  background: url("../../assets/images/texture/papyrus.jpg");
 }
 .events-container .event-item .text {
   flex: 1;
@@ -43,10 +43,11 @@
   gap: var(--space-1);
 }
 .events-container .event-item.past-event-item-background {
-  background: url("~/assets/images/texture/white-marble.jpg");
+  background: url("../../assets/images/texture/white-marble.jpg");
 }
 .events-container .event-item.item-selected {
-  outline: 5px solid green;
+  box-shadow: 0 0 10px 5px green;
+  transition: all 0.2s ease-in-out;
 }
 .events-container .event-item.cursor-pointer {
   cursor: pointer;
@@ -68,10 +69,10 @@
   align-items: flex-start;
   gap: var(--space-2);
   position: relative;
-  background: url("~/assets/images/texture/papyrus.jpg");
+  background: url("../../assets/images/texture/papyrus.jpg");
 }
 .create-edit-event-dialog .background-past {
-  background: url("~/assets/images/texture/white-marble.jpg");
+  background: url("../../assets/images/texture/white-marble.jpg");
 }
 .create-edit-event-dialog .text {
   width: 100%;

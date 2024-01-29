@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import Dialog, { DialogRef } from "~/components/common/Dialog";
 import Input from "~/components/common/Input";
 import Email from "~/assets/icons/Email";
@@ -8,7 +8,7 @@ import Row from "~/components/common/Row";
 import Button from "~/components/common/Button";
 import Tick from "~/assets/icons/Tick";
 import { useAppContext } from "~/AppContext";
-import { A, useNavigate } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
 
 type Props = {
   ref?: DialogRef;

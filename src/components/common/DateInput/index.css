@@ -20,6 +20,8 @@
   font-weight: inherit;
   color: var(--color-darkgray);
 }
+
+/*noinspection CssInvalidPseudoSelector*/
 .date-input > input::-webkit-datetime-edit {
   display: none;
 }

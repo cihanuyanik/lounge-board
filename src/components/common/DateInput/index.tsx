@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import moment from "moment";
 import CalendarDate from "~/assets/icons/CalendarDate";
 import Row from "~/components/common/Row";

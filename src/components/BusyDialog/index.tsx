@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import BusyDialogGif from "~/assets/images/busydialog.gif";
 import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";

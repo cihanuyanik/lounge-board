@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import { DialogResult } from "~/components/MessageBox/store";
 import Button from "~/components/common/Button";
 import ErrorImage from "~/assets/images/error.png";

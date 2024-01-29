@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import { JSX } from "solid-js";
 
 type Props = {

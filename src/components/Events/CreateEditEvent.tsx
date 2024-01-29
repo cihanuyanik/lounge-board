@@ -1,4 +1,4 @@
-import "./events.scss";
+import "./events.css";
 import Button from "~/components/common/Button";
 import { createStore } from "solid-js/store";
 import { Accessor, createContext, createMemo, useContext } from "solid-js";

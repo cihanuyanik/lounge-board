@@ -10,7 +10,6 @@ import { v4 as uuid } from "uuid";
 import Delete from "~/assets/icons/Delete";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
-import ComboBox from "~/components/common/ComboBox";
 import Add from "~/assets/icons/Add";
 import Tick from "~/assets/icons/Tick";
 import Cross from "~/assets/icons/Cross";

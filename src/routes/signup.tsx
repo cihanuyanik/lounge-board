@@ -15,8 +15,7 @@ import MessageBox from "~/components/MessageBox";
 import DefaultAvatar from "~/assets/images/member-placeholder.png";
 import Edit from "~/assets/icons/Edit";
 import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
-import { DialogRef } from "~/components/common/Dialog";
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { createMemo, createSignal } from "solid-js";
 import Footer from "~/components/Footer";
 import { useNavigate } from "@solidjs/router";
 

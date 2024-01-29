@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import Button from "~/components/common/Button";
 import Img from "~/components/common/Img";
 import { CropBox } from "~/components/ImageCropDialog/CropBox";

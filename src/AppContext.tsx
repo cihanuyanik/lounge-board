@@ -122,7 +122,6 @@ export function useDataLoader() {
     news,
     researchGroups,
     members,
-    meta,
     mutateMeta,
     API,
   } = useAppContext();

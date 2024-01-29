@@ -27,7 +27,8 @@
     align-items: flex-start;
     gap: var(--space-2);
     position: relative;
-    background: url("~/assets/images/texture/papyrus.jpg");
+    background: url("../../assets/images/texture/papyrus.jpg");
+    //background: url("~/assets/images/texture/papyrus.jpg");
 
     .text {
       flex: 1;
@@ -47,11 +48,13 @@
     }
 
     &.past-event-item-background {
-      background: url("~/assets/images/texture/white-marble.jpg");
+      //background: url("~/assets/images/texture/white-marble.jpg");
+      background: url("../../assets/images/texture/white-marble.jpg");
     }
 
     &.item-selected {
-      outline: 5px solid green;
+      box-shadow: 0 0 10px 5px green;
+      transition: all 0.2s ease-in-out;
     }
 
     &.cursor-pointer {
@@ -79,12 +82,13 @@
     align-items: flex-start;
     gap: var(--space-2);
     position: relative;
-
-    background: url("~/assets/images/texture/papyrus.jpg");
+    //background: url("~/assets/images/texture/papyrus.jpg");
+    background: url("../../assets/images/texture/papyrus.jpg");
   }
 
   .background-past {
-    background: url("~/assets/images/texture/white-marble.jpg");
+    //background: url("~/assets/images/texture/white-marble.jpg");
+    background: url("../../assets/images/texture/white-marble.jpg");
   }
 
   .text {

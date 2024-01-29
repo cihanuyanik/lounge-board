@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import { JSX, splitProps } from "solid-js";
 
 export default function (props: JSX.ImgHTMLAttributes<HTMLImageElement>) {

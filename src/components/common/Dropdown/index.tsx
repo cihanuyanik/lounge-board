@@ -1,31 +1,19 @@
-import "./index.scss";
+import "./index.css";
 import {
   Accessor,
-  batch,
   children,
   createEffect,
   createMemo,
   createSignal,
-  For,
   JSX,
   onCleanup,
-  Show,
 } from "solid-js";
-import { Portal } from "solid-js/web";
 
 type DropDownItemProps = {
   value: string;
   children: JSX.Element;
   onClick?: () => void;
 };
-
-export function DropdownItem(props: DropDownItemProps) {
-  return (
-    <div class={"item"} onClick={props.onClick} data-value={props.value}>
-      {props.children}
-    </div>
-  );
-}
 
 type Props = {
   class?: string;
@@ -71,6 +59,7 @@ export default function (props: Props) {
     setItemMap(itemMap);
   });
 
+  // noinspection HtmlUnknownAttribute
   return (
     <div
       class={`dropdown${props.class ? " " + props.class : ""}`}
@@ -88,9 +77,18 @@ export default function (props: Props) {
   );
 }
 
-function clickOutside(el: any, accessor: Accessor<() => void>) {
+export function DropdownItem(props: DropDownItemProps) {
+  return (
+    <div class={"item"} onClick={props.onClick} data-value={props.value}>
+      {props.children}
+    </div>
+  );
+}
+
+// noinspection JSUnusedLocalSymbols
+const clickOutside = (el: any, accessor: Accessor<() => void>): void => {
   const onClick = (e: MouseEvent) => !el.contains(e.target) && accessor()?.();
   document.body.addEventListener("click", onClick);
 
   onCleanup(() => document.body.removeEventListener("click", onClick));
-}
+};

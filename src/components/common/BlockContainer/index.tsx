@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import { createEffect, JSX, on, Show } from "solid-js";
 import Button from "~/components/common/Button";
 import Delete from "~/assets/icons/Delete";

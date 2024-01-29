@@ -1,48 +1,47 @@
-import "./news.scss";
-import { For, onCleanup, onMount, Show } from "solid-js";
-import NewItem from "~/components/News/NewItem";
+import "./news.css";
+import BlockContainer from "~/components/common/BlockContainer";
 import Img from "~/components/common/Img";
 import NewsHeader from "~/assets/images/news-header.png";
-import { scrollBottomAnimation } from "~/utils/utils";
-import { DialogResult } from "~/components/MessageBox/store";
 import Scrollable from "~/components/common/Scrollable";
+import { For, Show } from "solid-js";
 import { useAppContext } from "~/AppContext";
-import BlockContainer from "~/components/common/BlockContainer";
 import CreateEditNews, {
   CreateNewsDialogResult,
 } from "~/components/News/CreateEditNews";
+import { Timestamp } from "firebase/firestore";
+import NewsItem from "~/components/News/NewsItem";
+import { DialogResult } from "~/components/MessageBox/store";
 
 export default function News() {
-  const { isAdmin, messageBox, news, API } = useAppContext();
+  const { isAdmin, messageBox, busyDialog, API, news } = useAppContext();
+  let newsRef: HTMLDivElement = null!;
+  let newsDialog: HTMLDialogElement = null!;
 
-  let newsRef: HTMLDivElement;
-  let timeOut: any;
-  let createNewDialog: HTMLDialogElement = null!;
-
-  async function scroll() {
-    await scrollBottomAnimation(newsRef, 3000);
-    timeOut = setTimeout(scroll, 5000);
-  }
-
-  onMount(() => {
-    if (isAdmin()) return;
-    timeOut = setTimeout(scroll, 5000);
-  });
-
-  onCleanup(() => clearTimeout(timeOut));
+  // TODO: Scroll animation is required to be implemented
 
   async function onAddNew() {
-    // const dialogResult = await createNewDialog.show();
-    const dialogResult =
-      await createNewDialog.ShowModal<CreateNewsDialogResult>();
-    if (dialogResult.result === "Cancel") return;
+    const dResult = await newsDialog.ShowModal<CreateNewsDialogResult>();
+    if (dResult.result === "Cancel") return;
 
     try {
-      await API.News.add({
-        text: dialogResult.news.text,
-        isSelected: false,
-      });
+      busyDialog.show("Creating news...");
+      if (dResult.selectedNewsType === "custom") {
+        // TODO: Create custom news
+      } else {
+        await API.News.add({
+          text: "",
+          isSelected: false,
+          type: dResult.selectedNewsType,
+          postHtml: dResult.postHtml,
+          frameHeight: dResult.frameHeight,
+          frameWidth: dResult.frameWidth,
+          updatedAt: Timestamp.now(),
+        });
+      }
+
+      busyDialog.close();
     } catch (e) {
+      busyDialog.close();
       messageBox.error(`${e}`);
     }
   }
@@ -77,19 +76,19 @@ export default function News() {
       class={"flex-1 w-full"}
     >
       <Scrollable
-        ref={(el) => (newsRef = el)}
+        ref={newsRef}
         direction={"vertical"}
         hideScrollbar={true}
         class={"news-container"}
       >
         <For each={news.ids}>
           {(id, index) => (
-            <NewItem id={id} index={index} editDialog={createNewDialog} />
+            <NewsItem id={id} index={index} editDialog={newsDialog} />
           )}
         </For>
       </Scrollable>
       <Show when={isAdmin()}>
-        <CreateEditNews ref={createNewDialog} />
+        <CreateEditNews ref={newsDialog} />
       </Show>
     </BlockContainer>
   );

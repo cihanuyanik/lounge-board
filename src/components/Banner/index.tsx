@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import Img from "~/components/common/Img";
 import DTULogo from "~/assets/images/dtu-logo.png";
 import { For, Show } from "solid-js";

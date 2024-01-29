@@ -1,0 +1,27 @@
+.post-container {
+  position: relative;
+  height: min-content;
+  border-radius: var(--radii-xl);
+  overflow: clip;
+  // make sure the post is not clickable
+  pointer-events: none;
+  user-select: none;
+  > frame {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .logo {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+
+    top: var(--space-2);
+    right: var(--space-2);
+  }
+
+  &.twitter,
+  &.instagram {
+    background-color: #fdfdfd;
+  }
+}

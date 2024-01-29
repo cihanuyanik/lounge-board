@@ -1,4 +1,4 @@
-import "./events.scss";
+import "./events.css";
 import { For, onCleanup, onMount, Show } from "solid-js";
 import EventItem from "~/components/Events/EventItem";
 import Img from "~/components/common/Img";

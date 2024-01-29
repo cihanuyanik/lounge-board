@@ -1,5 +1,5 @@
-import "./index.scss";
-import { createEffect, JSX, Show, splitProps } from "solid-js";
+import "./index.css";
+import { JSX, Show, splitProps } from "solid-js";
 
 type Props = {
   label?: string;

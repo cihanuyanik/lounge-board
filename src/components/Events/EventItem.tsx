@@ -1,4 +1,4 @@
-import "./events.scss";
+import "./events.css";
 import { CreateEventDialogResult } from "~/components/Events/CreateEditEvent";
 import { Accessor, createMemo, Show } from "solid-js";
 import DateInput from "~/components/common/DateInput";

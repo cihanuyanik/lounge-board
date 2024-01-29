@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import Clock from "~/assets/icons/Clock";
 import Row from "~/components/common/Row";
 

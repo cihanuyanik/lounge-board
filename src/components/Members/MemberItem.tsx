@@ -1,4 +1,3 @@
-import "./members.scss";
 import Img from "~/components/common/Img";
 import MemberImagePlaceholder from "~/assets/images/member-placeholder.png";
 import { CreateEditMemberDialogResult } from "~/components/Members/CreateEditMember";

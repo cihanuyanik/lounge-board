@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.css";
 import { JSX, onCleanup, onMount, splitProps } from "solid-js";
 import { Portal } from "solid-js/web";
 
