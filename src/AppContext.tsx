@@ -155,7 +155,7 @@ export function useDataLoader() {
 
       unSubList.push(
         API.News.subscribe((data) => {
-          data.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+          data.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds);
           news.reload(data);
         }),
       );

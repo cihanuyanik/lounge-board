@@ -46,9 +46,9 @@ function _Home() {
           <Members />
           <Column class={"flex-1 h-full gap-2"}>
             <ResearchGroups />
-            <News />
+            <Events />
           </Column>
-          <Events />
+          <News />
         </Row>
         <Footer />
         <BusyDialog />

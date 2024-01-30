@@ -75,6 +75,8 @@ export default function IFramePost(props: IFramePostProps) {
       <iframe
         ref={props.ref}
         {...iframeAttributesFromPostHtml()}
+        // @ts-ignore
+        scrolling={props.scrolling}
         style={{
           overflow: props.scrolling === "no" ? "hidden" : "auto",
           "min-width": `${props.width}px`,

@@ -127,7 +127,6 @@ function _CreateEditNews(props: { ref: DialogRef }) {
           mutate((state) => {
             if (!news) {
               // open for creating new item
-
               state.news.type = "linkedin";
               state.news.isSelected = false;
               state.news.postTitle = "";

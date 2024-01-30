@@ -1,33 +1,46 @@
-.news-container {
+.news-block-container {
+  --item-width: 500px;
+  height: 100%;
+  width: calc(var(--item-width) + 4 * var(--space-2));
+  overflow: hidden;
+}
+
+.news-scrollable-container {
   flex: 1 0 0;
-  width: 100%;
   display: flex;
   flex-direction: column;
   background: var(--color-primary-darker);
   border-radius: var(--radii-2xl);
   padding: var(--space-2);
   gap: var(--space-2);
+  width: calc(var(--item-width) + 2 * var(--space-2));
 }
-.news-container .news-item {
+.news-scrollable-container .news-scroll-animation-wrapper {
+  position: relative;
+}
+.news-scrollable-container .news-scroll-animation-wrapper > *:not(:last-child) {
+  margin-bottom: var(--space-2);
+}
+.news-scrollable-container .news-item {
   width: min-content;
   margin: auto;
   border-radius: var(--radii-xl);
   box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
   transition: all 0.2s ease-in-out;
 }
-.news-container .item-selected {
+.news-scrollable-container .item-selected {
   box-shadow: 0 0 10px 5px green;
 }
-.news-container .cursor-pointer {
+.news-scrollable-container .cursor-pointer {
   cursor: pointer;
 }
-.news-container .text {
+.news-scrollable-container .text {
   width: 100%;
   text-align: center;
   color: black;
   font-size: var(--font-sizes-lg);
 }
-.news-container .time {
+.news-scrollable-container .time {
   width: 100%;
   text-align: right;
   color: var(--color-darkgray);
@@ -35,14 +48,22 @@
   justify-content: flex-end;
   gap: var(--space-2);
 }
-.news-container .time svg {
+.news-scrollable-container .time svg {
   width: 20px;
   height: 20px;
 }
-.news-container .emphasize {
+.news-scrollable-container .emphasize {
   animation: enlarge 1s infinite, pulse 1s infinite;
 }
 
+@keyframes scroll {
+  95% {
+    top: -100%;
+  }
+  100% {
+    top: 0;
+  }
+}
 .create-news-dialog {
   width: 800px !important;
   overflow: visible;
