@@ -10,7 +10,7 @@ type LinkedInPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 
 export default function LinkedInPost(props: LinkedInPostProps) {
   return (
-    <div class={"post-container"}>
+    <div class={"post-container linkedin"}>
       <IFramePost
         baseUrl={"linkedin.com"}
         expInternalType={"iframe"}

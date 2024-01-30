@@ -6,6 +6,7 @@
   // make sure the post is not clickable
   pointer-events: none;
   user-select: none;
+
   > frame {
     pointer-events: none;
     user-select: none;
@@ -20,6 +21,8 @@
     right: var(--space-2);
   }
 
+  &.linkedin,
+  &.facebook,
   &.twitter,
   &.instagram {
     background-color: #fdfdfd;

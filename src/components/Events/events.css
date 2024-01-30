@@ -1,7 +1,6 @@
 .events-container {
-  width: 20%;
-  min-width: 20%;
-  height: 100%;
+  flex: 1;
+  width: 100%;
   gap: var(--space-2);
 }
 .events-container .upcoming-events-container,

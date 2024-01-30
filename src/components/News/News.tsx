@@ -61,7 +61,7 @@ export default function News() {
       titleIcon={icon}
       onAddNewItem={isAdmin() ? onAddNew : undefined}
       onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
-      class={"flex-1 w-full"}
+      class={"h-full"}
     >
       <Scrollable
         ref={newsRef}

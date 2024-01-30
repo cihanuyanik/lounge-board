@@ -10,7 +10,7 @@ type FacebookPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 
 export default function FacebookPost(props: FacebookPostProps) {
   return (
-    <div class={"post-container"}>
+    <div class={"post-container facebook"}>
       <IFramePost
         baseUrl={"facebook.com"}
         expInternalType={"iframe"}

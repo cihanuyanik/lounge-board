@@ -82,9 +82,11 @@ function _Admin() {
           <Members />
           <Column class={"flex-1 h-full gap-2"}>
             <ResearchGroups />
-            <News />
+            {/*<News />*/}
+            <Events />
           </Column>
-          <Events />
+          {/*<Events />*/}
+          <News />
         </Row>
         <Footer />
         <BusyDialog />

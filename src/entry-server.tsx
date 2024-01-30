@@ -1,6 +1,7 @@
 import { createHandler } from "@solidjs/start/entry";
 import { StartServer } from "@solidjs/start/server";
 
+// noinspection HtmlRequiredTitleElement
 export default createHandler(() => (
   <StartServer
     document={({ assets, children, scripts }) => (
