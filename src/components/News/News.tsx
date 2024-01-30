@@ -8,7 +8,6 @@ import { useAppContext } from "~/AppContext";
 import CreateEditNews, {
   CreateNewsDialogResult,
 } from "~/components/News/CreateEditNews";
-import { Timestamp } from "firebase/firestore";
 import NewsItem from "~/components/News/NewsItem";
 import { DialogResult } from "~/components/MessageBox/store";
 
@@ -25,19 +24,8 @@ export default function News() {
 
     try {
       busyDialog.show("Creating news...");
-      if (dResult.selectedNewsType === "custom") {
-        // TODO: Create custom news
-      } else {
-        await API.News.add({
-          text: "",
-          isSelected: false,
-          type: dResult.selectedNewsType,
-          postHtml: dResult.postHtml,
-          frameHeight: dResult.frameHeight,
-          frameWidth: dResult.frameWidth,
-          updatedAt: Timestamp.now(),
-        });
-      }
+
+      await API.News.add({ ...dResult.news });
 
       busyDialog.close();
     } catch (e) {

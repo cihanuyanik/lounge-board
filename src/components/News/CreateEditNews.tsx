@@ -22,20 +22,17 @@ import LinkedInPost from "~/components/News/Posts/LinkedInPost";
 import FacebookPost from "~/components/News/Posts/FacebookPost";
 import TwitterPost from "~/components/News/Posts/TwitterPost";
 import InstagramPost from "~/components/News/Posts/InstagramPost";
+import DTULogo from "~/assets/images/dtu-logo.png";
+
+import Input from "~/components/common/Input";
+import CustomPost from "~/components/News/Posts/CustomPost";
+import { Timestamp } from "firebase/firestore";
 
 export type CreateNewsDialogResult = {
   result: "Accept" | "Cancel";
-  frameWidth: number;
-  frameHeight: number;
+  news: New;
   sizeUpdateTimer: any;
   previewContainer: HTMLDivElement;
-  postHtml: string;
-  selectedNewsType:
-    | "linkedin"
-    | "facebook"
-    | "twitter"
-    | "instagram"
-    | "custom";
   newsTypes: string[];
   newsTypeDisplay: Record<string, { text: string; image: string }>;
 };
@@ -43,17 +40,27 @@ export type CreateNewsDialogResult = {
 function createDialogStore() {
   const [state, setState] = createStore<CreateNewsDialogResult>({
     result: "Cancel",
-    frameWidth: 500,
-    frameHeight: 500,
+    news: {
+      id: "",
+      isSelected: false,
+      type: "custom",
+      postTitle: "",
+      avatarUrl: "",
+      postHtml: "",
+      frameHeight: 500,
+      frameWidth: 500,
+      updatedAt: Timestamp.now(),
+      createdAt: Timestamp.now(),
+    },
+
     sizeUpdateTimer: null,
     previewContainer: null!,
-    postHtml: "",
-    selectedNewsType: "linkedin",
+
     newsTypes: ["custom", "linkedin", "facebook", "twitter", "instagram"],
     newsTypeDisplay: {
       custom: {
         text: "Custom",
-        image: "",
+        image: DTULogo,
       },
       linkedin: {
         text: "LinkedIn",
@@ -120,23 +127,25 @@ function _CreateEditNews(props: { ref: DialogRef }) {
           mutate((state) => {
             if (!news) {
               // open for creating new item
-              state.newsTypeDisplay["custom"].image = user()?.photoURL || "";
-              state.selectedNewsType = "linkedin";
-              state.postHtml = "";
-              state.frameHeight = 500;
-              state.frameWidth = 500;
+
+              state.news.type = "linkedin";
+              state.news.isSelected = false;
+              state.news.postTitle = "";
+              state.news.avatarUrl = user()?.photoURL || "";
+              state.news.postHtml = "";
+              state.news.updatedAt = Timestamp.now();
+              state.news.frameHeight = 500;
+              state.news.frameWidth = 500;
+              state.result = "Cancel";
             } else {
               // open for updating existing item
-              state.newsTypeDisplay["custom"].image = user()?.photoURL || "";
-              state.selectedNewsType = news.type;
-              state.postHtml = news.postHtml;
-              state.selectedNewsType = news.type;
-              state.frameHeight = news.frameHeight;
-              state.frameWidth = news.frameWidth;
+              state.news = { ...news };
             }
           });
         }}
-        onClose={(ev) => (ev.target as HTMLDialogElement).Resolve(state)}
+        onClose={(ev) => {
+          (ev.target as HTMLDialogElement).Resolve(state);
+        }}
       >
         <Row class={"title"}>
           Create/Edit News
@@ -145,9 +154,15 @@ function _CreateEditNews(props: { ref: DialogRef }) {
 
         <Column class={"content"}>
           <NewsTypeSelection />
-          <IFrameInfo />
+          <Switch>
+            <Match when={state.news.type === "custom"}>
+              <CustomPostInfo />
+            </Match>
+            <Match when={state.news.type !== "custom"}>
+              <SocialMediaPostEmbedCode />
+            </Match>
+          </Switch>
           <Preview />
-          {/* TODO: Add editable custom post similar to a social media post  */}
         </Column>
         <DialogButtons />
       </Dialog>
@@ -161,11 +176,11 @@ function NewsTypeSelection() {
   return (
     <Dropdown
       rootStyle={{ width: "100%", "z-index": 3 }}
-      value={state.selectedNewsType}
+      value={state.news.type}
       onValueChanged={(e) => {
         mutate((state) => {
           // @ts-ignore
-          state.selectedNewsType = e.value;
+          state.news.type = e.value;
         });
       }}
     >
@@ -183,19 +198,48 @@ function NewsTypeSelection() {
   );
 }
 
-function IFrameInfo() {
+function CustomPostInfo() {
+  const { state, mutate } = useDialogContext();
+  return (
+    <Column class={"w-full gap-3"}>
+      <Input
+        class={"w-full"}
+        placeholder={"Post title"}
+        height={40}
+        onInput={(e) => {
+          mutate((state) => {
+            state.news.postTitle = e.currentTarget.value;
+          });
+        }}
+      />
+      <textarea
+        class={"html-code"}
+        spellcheck={false}
+        placeholder={"Post Html Code"}
+        value={state.news.postHtml}
+        onInput={(e) => {
+          mutate((state) => {
+            state.news.postHtml = e.currentTarget.value;
+          });
+        }}
+      />
+    </Column>
+  );
+}
+
+function SocialMediaPostEmbedCode() {
   const { state, mutate } = useDialogContext();
 
   return (
     <Column class={"w-full gap-3"}>
       <textarea
-        class={"iframe-editor"}
+        class={"html-code"}
         spellcheck={false}
-        placeholder={"HTML Code"}
-        value={state.postHtml}
+        placeholder={"Post Html Embed Code"}
+        value={state.news.postHtml}
         onInput={(e) => {
           mutate((state) => {
-            state.postHtml = e.currentTarget.value;
+            state.news.postHtml = e.currentTarget.value;
           });
         }}
       />
@@ -217,36 +261,48 @@ function Preview() {
       class={"preview"}
     >
       <Switch fallback={null}>
-        <Match when={state.selectedNewsType === "linkedin"}>
+        <Match when={state.news.type === "custom"}>
+          <CustomPost
+            width={state.news.frameWidth}
+            avatarUrl={state.news.avatarUrl}
+            title={state.news.postTitle}
+            postHtml={state.news.postHtml}
+            updatedAt={state.news.updatedAt}
+          />
+        </Match>
+        {/*Social Media Post*/}
+        <Match when={state.news.type === "linkedin"}>
           <LinkedInPost
-            postHtml={state.postHtml}
-            width={state.frameWidth}
-            height={state.frameHeight}
+            postHtml={state.news.postHtml}
+            width={state.news.frameWidth}
+            height={state.news.frameHeight}
           />
         </Match>
-        <Match when={state.selectedNewsType === "facebook"}>
+        <Match when={state.news.type === "facebook"}>
           <FacebookPost
-            postHtml={state.postHtml}
-            width={state.frameWidth}
-            height={state.frameHeight}
+            postHtml={state.news.postHtml}
+            width={state.news.frameWidth}
+            height={state.news.frameHeight}
           />
         </Match>
-        <Match when={state.selectedNewsType === "twitter"}>
+        <Match when={state.news.type === "twitter"}>
           <TwitterPost
-            postHtml={state.postHtml}
-            width={state.frameWidth}
-            height={state.frameHeight}
+            postHtml={state.news.postHtml}
+            width={state.news.frameWidth}
+            height={state.news.frameHeight}
           />
         </Match>
-        <Match when={state.selectedNewsType === "instagram"}>
+        <Match when={state.news.type === "instagram"}>
           <InstagramPost
-            postHtml={state.postHtml}
-            width={state.frameWidth}
-            height={state.frameHeight}
+            postHtml={state.news.postHtml}
+            width={state.news.frameWidth}
+            height={state.news.frameHeight}
           />
         </Match>
       </Switch>
-      <SizeAdjuster />
+      <Show when={state.news.type !== "custom"}>
+        <SizeAdjuster />
+      </Show>
     </Scrollable>
   );
 }
@@ -254,14 +310,14 @@ function Preview() {
 function SizeAdjuster() {
   const { state, mutate } = useDialogContext();
   return (
-    <Column class={"iframe-height-adjustor"}>
+    <Column class={"size-adjustor"}>
       <Button
         onPointerDown={(e) => {
           e.currentTarget.setPointerCapture(e.pointerId);
           mutate((state) => {
             state.sizeUpdateTimer = setInterval(() => {
               mutate((state) => {
-                state.frameHeight -= 1;
+                state.news.frameHeight -= 1;
                 state.previewContainer.scrollTop =
                   state.previewContainer.scrollHeight;
               });
@@ -279,10 +335,10 @@ function SizeAdjuster() {
       </Button>
       <input
         type={"number"}
-        value={state.frameHeight}
+        value={state.news.frameHeight}
         onInput={(e) => {
           mutate((state) => {
-            state.frameHeight = parseInt(e.currentTarget.value);
+            state.news.frameHeight = parseInt(e.currentTarget.value);
           });
 
           mutate((state) => {
@@ -291,7 +347,6 @@ function SizeAdjuster() {
           });
         }}
       />
-      {/*<p>{state.frameHeight}</p>*/}
       <Button
         style={{ rotate: "180deg" }}
         onPointerDown={(e) => {
@@ -299,7 +354,7 @@ function SizeAdjuster() {
           mutate((state) => {
             state.sizeUpdateTimer = setInterval(() => {
               mutate((state) => {
-                state.frameHeight += 1;
+                state.news.frameHeight += 1;
                 state.previewContainer.scrollTop =
                   state.previewContainer.scrollHeight;
               });
@@ -327,6 +382,7 @@ function DialogButtons() {
         class={"control-btn accept"}
         onClick={() => {
           mutate((state) => {
+            state.news.updatedAt = Timestamp.now();
             state.result = "Accept";
           });
 

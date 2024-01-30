@@ -1,12 +1,14 @@
 import { Timestamp } from "firebase/firestore";
 import { User as AuthUser } from "firebase/auth";
+
 export type New = {
   id: string;
-  text: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   isSelected: boolean;
   type: "linkedin" | "facebook" | "twitter" | "instagram" | "custom";
+  postTitle: string;
+  avatarUrl: string;
   postHtml: string;
   frameHeight: number;
   frameWidth: number;

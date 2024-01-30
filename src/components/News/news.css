@@ -81,31 +81,7 @@
   width: 24px;
   height: 24px;
 }
-.create-news-dialog > .content .iframe-height-adjustor {
-  position: absolute;
-  background: var(--color-primary-darker);
-  top: 50%;
-  right: var(--space-1);
-  transform: translate(0, -50%);
-  border-radius: var(--radii-full);
-  padding-top: var(--space-2);
-  padding-bottom: var(--space-2);
-  font-size: var(--font-sizes-sm);
-  gap: var(--space-5);
-}
-.create-news-dialog > .content .iframe-height-adjustor > input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 50px;
-  color: white;
-  text-align: center;
-}
-.create-news-dialog > .content .iframe-height-adjustor > input::-webkit-outer-spin-button, .create-news-dialog > .content .iframe-height-adjustor > input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.create-news-dialog > .content .iframe-editor {
+.create-news-dialog > .content .html-code {
   width: 100%;
   min-height: 150px;
   padding: var(--space-2);
@@ -119,7 +95,7 @@
   color: var(--color-darkgray);
   transition: all 0.2s ease-in-out;
 }
-.create-news-dialog > .content .iframe-editor:focus {
+.create-news-dialog > .content .html-code:focus {
   box-shadow: 0 0 10px 10px var(--color-tertiary);
   background: var(--color-secondary-lighter);
 }
@@ -131,15 +107,29 @@
   display: flex;
   justify-content: center;
 }
-.create-news-dialog > .content .text {
-  width: 100%;
-  background: transparent;
-  color: black;
-  font-size: var(--font-sizes-lg);
-  text-align: center;
-  outline: none;
+.create-news-dialog > .content .size-adjustor {
+  position: absolute;
+  background: var(--color-primary-darker);
+  top: 50%;
+  right: var(--space-1);
+  transform: translate(0, -50%);
+  border-radius: var(--radii-full);
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+  font-size: var(--font-sizes-sm);
+  gap: var(--space-5);
+}
+.create-news-dialog > .content .size-adjustor > input {
   border: none;
-  height: fit-content;
+  outline: none;
+  background: transparent;
+  width: 50px;
+  color: white;
+  text-align: center;
+}
+.create-news-dialog > .content .size-adjustor > input::-webkit-outer-spin-button, .create-news-dialog > .content .size-adjustor > input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .create-news-dialog > .content .time {
   width: 100%;
