@@ -1,0 +1,159 @@
+.events-block-container {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  flex: 1 0 0;
+}
+
+.scroll-wrapper {
+  flex: 1 0 0;
+  width: 100%;
+  background: var(--color-primary-darker);
+  border-radius: var(--radii-2xl);
+  position: relative;
+}
+
+.events-scrollable-container {
+  position: absolute;
+  inset: 0;
+  padding: var(--space-2);
+  height: auto !important;
+  display: flex;
+  flex-direction: row;
+  background: transparent;
+
+  // Select all children except the last one
+  & > *:not(:last-child) {
+    margin-left: var(--space-1);
+    margin-right: var(--space-1);
+  }
+
+  perspective: 500px;
+  //perspective-origin: center center;
+}
+
+.event-item {
+  width: 40%;
+  min-width: 40%;
+  transition: all 250ms ease-in-out;
+  //transform: scale(0.8);
+
+  box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
+  border-radius: var(--radii-2xl);
+  padding: var(--space-2);
+  user-select: none;
+  align-items: flex-start;
+  gap: var(--space-2);
+  position: relative;
+  background: url("../../assets/images/texture/papyrus.jpg");
+
+  &.placeholder {
+    scale: 0;
+  }
+
+  &.scroll-item {
+    transform: scale(0.8);
+    opacity: 0.6;
+    transition: all 400ms ease-in-out;
+
+    &.active {
+      transform: scale(1);
+      opacity: 1;
+      margin-left: calc(-1 * var(--space-1));
+      margin-right: calc(-1 * var(--space-1));
+    }
+
+    &.left {
+      transform: translateZ(-10px) scale(0.8) rotateY(-25deg);
+    }
+
+    &.right {
+      transform: translateZ(-10px) scale(0.8) rotateY(25deg);
+    }
+  }
+
+  .text {
+    flex: 1;
+    font-size: var(--font-sizes-lg);
+    font-weight: bold;
+    color: black;
+  }
+
+  .time {
+    font-size: var(--font-sizes-md);
+    font-weight: bold;
+    color: var(--color-darkgray);
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-1);
+  }
+
+  &.past-event-item-background {
+    //background: url("~/assets/images/texture/white-marble.jpg");
+    background: url("../../assets/images/texture/white-marble.jpg");
+  }
+
+  &.item-selected {
+    box-shadow: 0 0 10px 5px green;
+    transition: all 0.2s ease-in-out;
+  }
+
+  &.cursor-pointer {
+    cursor: pointer;
+  }
+
+  &.emphasize {
+    animation:
+      enlarge 1s infinite,
+      pulse 1s infinite;
+  }
+}
+
+.create-edit-event-dialog {
+  width: 400px;
+  overflow: visible;
+
+  .content {
+    width: 100%;
+    box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
+    border-radius: var(--radii-2xl);
+    padding: var(--space-2);
+    user-select: none;
+    align-items: flex-start;
+    gap: var(--space-2);
+    position: relative;
+    //background: url("~/assets/images/texture/papyrus.jpg");
+    background: url("../../assets/images/texture/papyrus.jpg");
+  }
+
+  .background-past {
+    //background: url("~/assets/images/texture/white-marble.jpg");
+    background: url("../../assets/images/texture/white-marble.jpg");
+  }
+
+  .text {
+    width: 100%;
+    background: transparent;
+    color: black;
+    font-size: var(--font-sizes-lg);
+    text-align: left;
+    outline: none;
+    border: none;
+    height: fit-content;
+
+    &::placeholder {
+      color: var(--color-darkgray);
+    }
+  }
+
+  .start-date-container,
+  .end-date-container {
+    font-size: var(--font-sizes-md);
+    color: var(--color-darkgray);
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-1);
+  }
+}

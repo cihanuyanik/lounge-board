@@ -3,6 +3,8 @@
   height: 100%;
   // Item width + 4 * padding (left and right)
   width: calc(var(--item-width) + 4 * var(--space-2));
+  min-width: calc(var(--item-width) + 4 * var(--space-2));
+  max-width: calc(var(--item-width) + 4 * var(--space-2));
   //float: left;
   overflow: hidden;
 }

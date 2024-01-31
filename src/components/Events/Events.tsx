@@ -8,7 +8,6 @@ import CreateEditEvent, {
 } from "~/components/Events/CreateEditEvent";
 import { DialogResult } from "~/components/MessageBox/store";
 import { scrollBottomAnimation } from "~/utils/utils";
-import Column from "~/components/common/Column";
 import Scrollable from "~/components/common/Scrollable";
 import BlockContainer from "~/components/common/BlockContainer";
 import { useAppContext } from "~/AppContext";

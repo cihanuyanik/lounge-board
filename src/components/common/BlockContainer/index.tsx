@@ -7,6 +7,7 @@ import Row from "~/components/common/Row";
 import Add from "~/assets/icons/Add";
 
 type BlockContainerProps = {
+  ref?: HTMLDivElement | ((el: HTMLDivElement) => void);
   title: string;
   titleIcon?: JSX.Element;
   children: JSX.Element | JSX.Element[];
@@ -32,6 +33,7 @@ export default function (props: BlockContainerProps) {
 
   return (
     <Column
+      ref={props.ref}
       class={`block-container${props.class ? " " + props.class : ""}`}
       style={props.style}
     >

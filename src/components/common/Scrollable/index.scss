@@ -3,11 +3,11 @@
   scrollbar-gutter: stable both-edges;
   -webkit-overflow-scrolling: touch;
 
-  .horizontal {
+  &.horizontal {
     height: 100%;
   }
 
-  .vertical {
+  &.vertical {
     width: 100%;
   }
 

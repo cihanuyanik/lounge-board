@@ -1,5 +1,5 @@
 import { Title } from "@solidjs/meta";
-import Events from "~/components/Events/Events";
+import Events from "~/components/Events2/Events";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
 import News from "~/components/News/News";
 import { onCleanup, onMount } from "solid-js";

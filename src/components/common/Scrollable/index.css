@@ -3,10 +3,10 @@
   scrollbar-gutter: stable both-edges;
   -webkit-overflow-scrolling: touch;
 }
-.scrollable .horizontal {
+.scrollable.horizontal {
   height: 100%;
 }
-.scrollable .vertical {
+.scrollable.vertical {
   width: 100%;
 }
 .scrollable.hide-scrollbar {

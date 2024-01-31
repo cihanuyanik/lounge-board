@@ -2,7 +2,7 @@ import { Title } from "@solidjs/meta";
 import Members from "~/components/Members/Members";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
 import News from "~/components/News/News";
-import Events from "~/components/Events/Events";
+import Events from "~/components/Events2/Events";
 import { createEffect, onCleanup, onMount } from "solid-js";
 import { AppContextProvider, useAppContext, useDataLoader } from "~/AppContext";
 import Row from "~/components/common/Row";
