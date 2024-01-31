@@ -3,32 +3,17 @@ import { createMutator } from "~/utils/utils";
 import { createAdaptor, SelectableAdaptor } from "~/utils/EntityAdaptor";
 import { Event } from "~/api/types";
 
-export function createUpcomingEventStore() {
+export function createEventStore() {
   const adaptor = createAdaptor(
     () => setEvents,
     true,
   ) as SelectableAdaptor<Event>;
 
-  const [upcomingEvents, setEvents] = createStore({
+  const [events, setEvents] = createStore({
     ...adaptor.getInitialState(),
   });
 
-  const mutateUpcomingEvents = createMutator(setEvents);
+  const mutateEvents = createMutator(setEvents);
 
-  return { upcomingEvents, mutateUpcomingEvents };
-}
-
-export function createPastEventStore() {
-  const adaptor = createAdaptor(
-    () => setEvents,
-    true,
-  ) as SelectableAdaptor<Event>;
-
-  const [pastEvents, setEvents] = createStore({
-    ...adaptor.getInitialState(),
-  });
-
-  const mutatePastEvents = createMutator(setEvents);
-
-  return { pastEvents, mutatePastEvents };
+  return { events, mutateEvents };
 }

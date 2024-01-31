@@ -7,10 +7,6 @@ import {
   useContext,
 } from "solid-js";
 import { useLocation } from "@solidjs/router";
-import {
-  createPastEventStore,
-  createUpcomingEventStore,
-} from "~/components/Events/store";
 import { createNewsStore } from "~/components/News/store";
 import { createResearchGroupStore } from "~/components/ResearchGroups/store";
 import { createMemberStore } from "~/components/Members/store";
@@ -18,16 +14,17 @@ import { createBusyDialogStore } from "~/components/BusyDialog/store";
 import { createMessageBoxStore } from "~/components/MessageBox/store";
 import { createStore } from "solid-js/store";
 import { Meta, User } from "~/api/types";
+import { Event } from "~/api/types";
 import { createMutator } from "~/utils/utils";
 import { Firebase } from "~/api/Firebase";
+import { createEventStore } from "~/components/Events/store";
 
 type AppContextType = {
   isAdmin: Accessor<boolean>;
   user: Accessor<User>;
   setUser: Setter<User>;
   API: Firebase;
-} & ReturnType<typeof createPastEventStore> &
-  ReturnType<typeof createUpcomingEventStore> &
+} & ReturnType<typeof createEventStore> & // ReturnType<typeof createUpcomingEventStore> & // ReturnType<typeof createPastEventStore> &
   ReturnType<typeof createNewsStore> &
   ReturnType<typeof createResearchGroupStore> &
   ReturnType<typeof createMemberStore> &
@@ -62,9 +59,7 @@ export function AppContextProvider(props: any) {
 
   const { messageBox, mutateMessageBox } = createMessageBoxStore();
 
-  const { pastEvents, mutatePastEvents } = createPastEventStore();
-
-  const { upcomingEvents, mutateUpcomingEvents } = createUpcomingEventStore();
+  const { events, mutateEvents } = createEventStore();
 
   const { news, mutateNews } = createNewsStore();
 
@@ -82,10 +77,8 @@ export function AppContextProvider(props: any) {
     <AppContext.Provider
       value={{
         isAdmin,
-        pastEvents,
-        mutatePastEvents,
-        upcomingEvents,
-        mutateUpcomingEvents,
+        events,
+        mutateEvents,
         news,
         mutateNews,
         researchGroups,
@@ -117,8 +110,7 @@ export function useDataLoader() {
   const {
     busyDialog,
     messageBox,
-    pastEvents,
-    upcomingEvents,
+    events,
     news,
     researchGroups,
     members,
@@ -139,17 +131,38 @@ export function useDataLoader() {
         }),
       );
 
-      unSubList.push(
-        API.UpcomingEvents.subscribe((data) => {
-          data.sort((a, b) => a.startsAt.seconds - b.startsAt.seconds);
-          upcomingEvents.reload(data);
-        }),
-      );
+      // unSubList.push(
+      //   API.UpcomingEvents.subscribe((data) => {
+      //     data.sort((a, b) => a.startsAt.seconds - b.startsAt.seconds);
+      //     upcomingEvents.reload(data);
+      //   }),
+      // );
+      //
+      // unSubList.push(
+      //   API.PastEvents.subscribe((data) => {
+      //     data.sort((a, b) => b.startsAt.seconds - a.startsAt.seconds);
+      //     pastEvents.reload(data);
+      //   }),
+      // );
 
       unSubList.push(
-        API.PastEvents.subscribe((data) => {
-          data.sort((a, b) => b.startsAt.seconds - a.startsAt.seconds);
-          pastEvents.reload(data);
+        API.Events.subscribe((data) => {
+          // Separate upcoming and past events
+          const upcomingEvents: Event[] = [];
+          const pastEvents: Event[] = [];
+          for (const event of data) {
+            if (event.isPast) {
+              pastEvents.push(event);
+            } else {
+              upcomingEvents.push(event);
+            }
+          }
+
+          upcomingEvents.sort(
+            (a, b) => a.startsAt.seconds - b.startsAt.seconds,
+          );
+          pastEvents.sort((a, b) => b.startsAt.seconds - a.startsAt.seconds);
+          events.reload([...upcomingEvents, ...pastEvents]);
         }),
       );
 

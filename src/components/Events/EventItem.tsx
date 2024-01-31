@@ -1,5 +1,3 @@
-import "./events.css";
-import { CreateEventDialogResult } from "~/components/Events/CreateEditEvent";
 import { Accessor, createMemo, Show } from "solid-js";
 import DateInput from "~/components/common/DateInput";
 import TimeInput from "~/components/common/TimeInput";
@@ -8,40 +6,38 @@ import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
 import { Event } from "~/api/types";
+import { CreateEventDialogResult } from "~/components/Events/CreateEditEvent";
 
 type Props = {
   id: string;
   index: Accessor<number>;
-  isPast: boolean;
   editDialog?: HTMLDialogElement;
 };
 
 export default function EventItem(props: Props) {
-  const { isAdmin, pastEvents, upcomingEvents, messageBox, API } =
-    useAppContext();
+  const { isAdmin, events, messageBox, API } = useAppContext();
 
   const startDate = createMemo(() => {
-    const startsAt = props.isPast
-      ? pastEvents.entities[props.id].startsAt
-      : upcomingEvents.entities[props.id].startsAt;
-
-    return toDate(startsAt)?.toLocaleISOString().slice(0, 10) || "";
+    return (
+      toDate(events.entities[props.id].startsAt)
+        ?.toLocaleISOString()
+        .slice(0, 10) || ""
+    );
   });
 
   const startTime = createMemo(() => {
-    const startsAt = props.isPast
-      ? pastEvents.entities[props.id].startsAt
-      : upcomingEvents.entities[props.id].startsAt;
-
-    return toDate(startsAt)?.toLocaleISOString().slice(11, 16) || "";
+    return (
+      toDate(events.entities[props.id].startsAt)
+        ?.toLocaleISOString()
+        .slice(11, 16) || ""
+    );
   });
 
   const endDate = createMemo(() => {
-    const endsAt = props.isPast
-      ? pastEvents.entities[props.id].endsAt
-      : upcomingEvents.entities[props.id].endsAt;
-
-    let eDate = toDate(endsAt)?.toLocaleISOString().slice(0, 10) || "";
+    let eDate =
+      toDate(events.entities[props.id].endsAt)
+        ?.toLocaleISOString()
+        .slice(0, 10) || "";
 
     if (startDate() === eDate) {
       eDate = "";
@@ -51,29 +47,24 @@ export default function EventItem(props: Props) {
   });
 
   const endTime = createMemo(() => {
-    const endsAt = props.isPast
-      ? pastEvents.entities[props.id].endsAt
-      : upcomingEvents.entities[props.id].endsAt;
-
-    return toDate(endsAt)?.toLocaleISOString().slice(11, 16) || "";
+    return (
+      toDate(events.entities[props.id].endsAt)
+        ?.toLocaleISOString()
+        .slice(11, 16) || ""
+    );
   });
 
   function onClick() {
-    const events = props.isPast ? pastEvents : upcomingEvents;
     if (events.entities[props.id].isSelected) events.unselect(props.id);
     else events.select(props.id);
   }
 
   async function onDoubleClick() {
     if (!props.editDialog) return;
-    const original = props.isPast
-      ? pastEvents.entities[props.id]
-      : upcomingEvents.entities[props.id];
 
-    const dResult = await props.editDialog.ShowModal<CreateEventDialogResult>({
-      event: original,
-      type: props.isPast ? "past" : "upcoming",
-    });
+    const dResult = await props.editDialog.ShowModal<CreateEventDialogResult>(
+      events.entities[props.id],
+    );
 
     if (dResult.result === "Cancel") return;
 
@@ -83,34 +74,25 @@ export default function EventItem(props: Props) {
         throw new Error("Start date is required");
       }
 
-      const changes: Event = {
-        id: original.id,
-        createdAt: original.createdAt,
-        text: dResult.event.text,
-        startsAt: dResult.event.startsAt,
-        endsAt: dResult.event.endsAt ? dResult.event.endsAt : null,
-        isSelected: false,
-      };
-
-      if (!new Date().isLessThan(changes.startsAt!)) {
-        // if startsAt smaller than current date, then it is a past event
-        if (!props.isPast) {
-          // if it is marked as upcoming event by props, it should be deleted from upcoming events
-          await API.UpcomingEvents.delete(original);
-        }
-
-        // then put it into past events
-        await API.PastEvents.add(changes);
-      } else {
-        // At this point it is going to be upcoming event
-        if (props.isPast) {
-          // if it is marked as past event by props, it should be deleted from past events
-          await API.PastEvents.delete(original);
-        }
-
-        // then put it into upcoming events
-        await API.UpcomingEvents.add(changes);
+      const original = events.entities[props.id];
+      const changes: Partial<Event> = {};
+      if (original.text !== dResult.event.text) {
+        changes.text = dResult.event.text;
       }
+      if (original.startsAt !== dResult.event.startsAt) {
+        changes.startsAt = dResult.event.startsAt;
+      }
+      if (original.endsAt !== dResult.event.endsAt) {
+        changes.endsAt = dResult.event.endsAt;
+      }
+      if (original.isPast !== dResult.event.isPast) {
+        changes.isPast = dResult.event.isPast;
+      }
+
+      await API.Events.update({
+        original: events.entities[props.id],
+        changes: changes,
+      });
     } catch (e) {
       messageBox.error(`${e}`);
     }
@@ -120,22 +102,16 @@ export default function EventItem(props: Props) {
     <Column
       class={"event-item"}
       classList={{
-        "past-event-item-background": props.isPast,
-        "item-selected":
-          pastEvents.entities[props.id]?.isSelected ||
-          upcomingEvents.entities[props.id]?.isSelected,
+        "past-event-item-background": events.entities[props.id]?.isPast,
+        "item-selected": events.entities[props.id]?.isSelected,
         "cursor-pointer": isAdmin(),
-        emphasize: !props.isPast && props.index() === 0,
+        // emphasize: !props.isPast && props.index() === 0,
+        "scroll-item": !isAdmin(),
       }}
       onclick={isAdmin() ? onClick : undefined}
       ondblclick={isAdmin() ? onDoubleClick : undefined}
     >
-      <Row class={"text"}>
-        <Show when={props.isPast}>{pastEvents.entities[props.id].text}</Show>
-        <Show when={!props.isPast}>
-          {upcomingEvents.entities[props.id].text}
-        </Show>
-      </Row>
+      <Row class={"text"}>{events.entities[props.id].text}</Row>
       <Row class={"time"}>
         <DateInput
           value={startDate()}

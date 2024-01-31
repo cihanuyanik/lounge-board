@@ -1,7 +1,16 @@
 import "./events.css";
 import Button from "~/components/common/Button";
 import { createStore } from "solid-js/store";
-import { Accessor, createContext, createMemo, useContext } from "solid-js";
+import {
+  Accessor,
+  batch,
+  createContext,
+  createEffect,
+  createMemo,
+  createSignal,
+  on,
+  useContext,
+} from "solid-js";
 import { Event } from "~/api/types";
 import { createMutator, toDate } from "~/utils/utils";
 import DateInput from "~/components/common/DateInput";
@@ -11,11 +20,15 @@ import Row from "~/components/common/Row";
 import Tick from "~/assets/icons/Tick";
 import Cross from "~/assets/icons/Cross";
 import Dialog, { DialogRef } from "~/components/common/Dialog";
+import moment from "moment";
 
 export type CreateEventDialogResult = {
   result: "Accept" | "Cancel";
   event: Event;
-  type: "upcoming" | "past";
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
 };
 
 function createDialogStore() {
@@ -24,77 +37,64 @@ function createDialogStore() {
     event: {
       id: "",
       text: "",
+      isPast: false,
+      isSelected: false,
       // @ts-ignore
       startsAt: new Date(),
       // @ts-ignore
       endsAt: null,
-      isSelected: false,
     },
-    type: "upcoming",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
   });
 
   const mutate = createMutator(setState);
 
+  createEffect(
+    on(
+      () => state.event.startsAt,
+      (startsAt) => {
+        mutate((state) => {
+          state.startDate =
+            toDate(startsAt)?.toLocaleISOString().slice(0, 10) || "";
+          state.startTime =
+            toDate(startsAt)?.toLocaleISOString().slice(11, 16) || "";
+        });
+      },
+    ),
+  );
+
+  createEffect(
+    on(
+      () => state.event.endsAt,
+      (endsAt) => {
+        mutate((state) => {
+          state.endDate =
+            toDate(endsAt)?.toLocaleISOString().slice(0, 10) || "";
+          state.endTime =
+            toDate(endsAt)?.toLocaleISOString().slice(11, 16) || "";
+        });
+      },
+    ),
+  );
+
   return { state, mutate };
 }
 
-type ContextType = {
-  startDate: Accessor<string>;
-  startTime: Accessor<string>;
-  endDate: Accessor<string>;
-  endTime: Accessor<string>;
-  minDate: Accessor<string>;
-  maxDate: Accessor<string>;
-} & ReturnType<typeof createDialogStore>;
+type ContextType = ReturnType<typeof createDialogStore>;
 
 const Context = createContext<ContextType>();
 
 function ContextProvider(props: any) {
   const { state, mutate } = createDialogStore();
 
-  const startDate = createMemo(
-    () => toDate(state.event.startsAt)?.toLocaleISOString().slice(0, 10) || "",
-  );
-
-  const startTime = createMemo(
-    () => toDate(state.event.startsAt)?.toLocaleISOString().slice(11, 16) || "",
-  );
-
-  const endDate = createMemo(
-    () => toDate(state.event.endsAt)?.toLocaleISOString().slice(0, 10) || "",
-  );
-
-  const endTime = createMemo(
-    () => toDate(state.event.endsAt)?.toLocaleISOString().slice(11, 16) || "",
-  );
-
-  const minDate = createMemo(() => {
-    if (state.type === "upcoming") {
-      return new Date().toLocaleISOString().slice(0, 10);
-    } else {
-      return "";
-    }
-  });
-
-  const maxDate = createMemo(() => {
-    if (state.type === "past") {
-      return new Date().toLocaleISOString().slice(0, 10);
-    } else {
-      return "";
-    }
-  });
-
   return (
     <Context.Provider
       value={{
         state,
         mutate,
-        startDate,
-        startTime,
-        endDate,
-        endTime,
-        minDate,
-        maxDate,
       }}
     >
       {props.children}
@@ -115,16 +115,7 @@ export default function CreateEditEvent(props: { ref: DialogRef }) {
 }
 
 function _CreateEditEvent(props: { ref: DialogRef }) {
-  const {
-    state,
-    mutate,
-    startDate,
-    startTime,
-    endDate,
-    endTime,
-    minDate,
-    maxDate,
-  } = useDialogContext();
+  const { state, mutate } = useDialogContext();
 
   let textRef: HTMLTextAreaElement;
   let startAtDateRef: HTMLInputElement = null!;
@@ -135,31 +126,33 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
   function onBeforeShow(
     ev: CustomEvent<{ event?: Event; type?: "upcoming" | "past" }>,
   ) {
-    const { event, type } = ev.detail;
+    const event = ev.detail as Event | undefined;
 
     mutate((state) => {
       state.result = "Cancel";
-      // Set event type
-      if (type) state.type = type;
       if (event) {
         // Open in edit mode
-        state.event = {
-          ...event,
-          // @ts-ignore
-          startsAt: event.startsAt.toDate(),
-          // @ts-ignore
-          endsAt: event.endsAt?.toDate() || undefined,
-        };
+        state.event.id = event.id;
+        state.event.text = event.text;
+        state.event.isPast = event.isPast;
+        state.event.isSelected = event.isSelected;
+        // @ts-ignore
+        state.event.startsAt = event.startsAt.toDate();
+        // @ts-ignore
+        state.event.endsAt = event.endsAt?.toDate() || undefined;
       } else {
         // Open in create mode
-        state.event = {
-          id: "",
-          text: "",
-          // @ts-ignore
-          startsAt: new Date(),
-          // @ts-ignore
-          endsAt: null,
-        };
+        // 1 week from this day at 09:00
+        const startsAt = new Date(moment().add(1, "week").toDate());
+        startsAt.setHours(9, 0);
+
+        state.event.text = "";
+        state.event.isPast = false;
+        state.event.isSelected = false;
+        // @ts-ignore
+        state.event.startsAt = startsAt;
+        // @ts-ignore
+        state.event.endsAt = null;
       }
     });
   }
@@ -195,9 +188,9 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
     >
       <Column
         class={"content"}
-        classList={{ "background-past": state.type === "past" }}
+        classList={{ "background-past": state.event.isPast }}
       >
-        <Row class={"w-full"}>
+        <Row class={"w-full flex-1"}>
           <textarea
             ref={(el) => (textRef = el)}
             value={state.event.text}
@@ -216,15 +209,47 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
             ref={startAtDateRef}
             format={"DD MMM YYYY"}
             background={"transparent"}
-            value={startDate()}
-            min={minDate()}
-            max={maxDate()}
+            value={state.startDate}
+            onChange={(value) => {
+              const newStartAtDate = new Date(
+                value + "T" + startAtTimeRef.value,
+              );
+              // Check whether the date is valid
+              if (isNaN(newStartAtDate.getTime())) {
+                return;
+              }
+
+              mutate((state) => {
+                // Check whether the date is in the past
+                state.event.isPast = newStartAtDate < new Date();
+                // Update startsAt
+                // @ts-ignore
+                state.event.startsAt = newStartAtDate;
+              });
+            }}
           />
           <p> --- </p>
           <TimeInput
             ref={startAtTimeRef}
             background={"transparent"}
-            value={startTime()}
+            value={state.startTime}
+            onChange={(value) => {
+              const newStartAtDate = new Date(
+                startAtDateRef.value + "T" + value,
+              );
+              // Check whether the date is valid
+              if (isNaN(newStartAtDate.getTime())) {
+                return;
+              }
+
+              mutate((state) => {
+                // Check whether the date is in the past
+                state.event.isPast = newStartAtDate < new Date();
+                // Update startsAt
+                // @ts-ignore
+                state.event.startsAt = newStartAtDate;
+              });
+            }}
           />
         </Row>
 
@@ -233,15 +258,40 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
             ref={endAtDateRef}
             format={"DD MMM YYYY"}
             background={"transparent"}
-            value={endDate()}
-            min={startDate()}
-            // max={maxDate()}
+            value={state.endDate}
+            min={state.startDate}
+            onChange={(value) => {
+              const newEndAtDate = new Date(value + "T" + endAtTimeRef.value);
+              // Check whether the date is valid
+              if (isNaN(newEndAtDate.getTime())) {
+                return;
+              }
+
+              mutate((state) => {
+                // Update endsAt
+                // @ts-ignore
+                state.event.endsAt = newEndAtDate;
+              });
+            }}
           />
           <p> --- </p>
           <TimeInput
             ref={endAtTimeRef}
             background={"transparent"}
-            value={endTime()}
+            value={state.endTime}
+            onChange={(value) => {
+              const newEndAtDate = new Date(endAtDateRef.value + "T" + value);
+              // Check whether the date is valid
+              if (isNaN(newEndAtDate.getTime())) {
+                return;
+              }
+
+              mutate((state) => {
+                // Update endsAt
+                // @ts-ignore
+                state.event.endsAt = newEndAtDate;
+              });
+            }}
           />
         </Row>
       </Column>

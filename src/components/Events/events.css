@@ -1,22 +1,41 @@
-.events-container {
-  flex: 1;
+.events-block-container {
   width: 100%;
-  gap: var(--space-2);
+  min-width: 100%;
+  max-width: 100%;
+  flex: 1 0 0;
 }
-.events-container .upcoming-events-container,
-.events-container .past-events-container {
+
+.scroll-wrapper {
   flex: 1 0 0;
   width: 100%;
-  display: flex;
-  flex-direction: column;
   background: var(--color-primary-darker);
   border-radius: var(--radii-2xl);
-  padding: var(--space-2);
-  gap: var(--space-3);
-  color: var(--color-text);
+  position: relative;
 }
-.events-container .event-item {
-  width: 100%;
+
+.events-scrollable-container {
+  position: absolute;
+  inset: 0;
+  padding: var(--space-2);
+  height: auto !important;
+  display: flex;
+  flex-direction: row;
+  background: transparent;
+  perspective: 500px;
+  perspective-origin: center center;
+}
+.events-scrollable-container > * {
+  margin-left: var(--space-2);
+  margin-right: var(--space-2);
+}
+.events-scrollable-container > *:first-child {
+  margin-left: 0;
+}
+
+.event-item {
+  width: 40%;
+  min-width: 40%;
+  transition: all 250ms ease-in-out;
   box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
   border-radius: var(--radii-2xl);
   padding: var(--space-2);
@@ -25,14 +44,36 @@
   gap: var(--space-2);
   position: relative;
   background: url("../../assets/images/texture/papyrus.jpg");
+  transform-origin: 50% 50%;
 }
-.events-container .event-item .text {
+.event-item.placeholder {
+  transform: scale(0.8);
+  opacity: 0;
+}
+.event-item.scroll-item {
+  transform: scale(0.8);
+  opacity: 0.6;
+  transition: all 400ms ease-in-out;
+  margin-left: calc(var(--space-2) * -1);
+  margin-right: calc(var(--space-2) * -1);
+}
+.event-item.scroll-item.active {
+  transform: scale(1);
+  opacity: 1;
+}
+.event-item.scroll-item.left {
+  transform: translateZ(-10px) scale(0.8) rotateY(-25deg);
+}
+.event-item.scroll-item.right {
+  transform: translateZ(-10px) scale(0.8) rotateY(25deg);
+}
+.event-item .text {
   flex: 1;
   font-size: var(--font-sizes-lg);
   font-weight: bold;
   color: black;
 }
-.events-container .event-item .time {
+.event-item .time {
   font-size: var(--font-sizes-md);
   font-weight: bold;
   color: var(--color-darkgray);
@@ -41,26 +82,28 @@
   justify-content: flex-end;
   gap: var(--space-1);
 }
-.events-container .event-item.past-event-item-background {
+.event-item.past-event-item-background {
   background: url("../../assets/images/texture/white-marble.jpg");
 }
-.events-container .event-item.item-selected {
+.event-item.item-selected {
   box-shadow: 0 0 10px 5px green;
   transition: all 0.2s ease-in-out;
 }
-.events-container .event-item.cursor-pointer {
+.event-item.cursor-pointer {
   cursor: pointer;
 }
-.events-container .event-item.emphasize {
+.event-item.emphasize {
   animation: enlarge 1s infinite, pulse 1s infinite;
 }
 
 .create-edit-event-dialog {
   width: 400px;
+  min-height: 200px;
   overflow: visible;
 }
 .create-edit-event-dialog .content {
   width: 100%;
+  min-height: 200px;
   box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
   border-radius: var(--radii-2xl);
   padding: var(--space-2);
@@ -78,7 +121,7 @@
   background: transparent;
   color: black;
   font-size: var(--font-sizes-lg);
-  text-align: left;
+  text-align: center;
   outline: none;
   border: none;
   height: fit-content;

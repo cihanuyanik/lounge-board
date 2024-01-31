@@ -15,6 +15,7 @@ import ResearchGroupsCollection from "~/api/ResearchGroupsCollection";
 import MembersCollection from "~/api/MembersCollection";
 import MetaCollection from "~/api/MetaCollection";
 import { AuthenticationService } from "~/api/AuthenticationService";
+import EventsCollection from "~/api/EventsCollection";
 
 export class Firebase {
   private readonly _app: FirebaseApp;
@@ -22,8 +23,9 @@ export class Firebase {
   private readonly _storage: FirebaseStorage;
   public AuthService: AuthenticationService;
   public News: NewsCollection;
-  public UpcomingEvents: UpcomingEventsCollection;
-  public PastEvents: PastEventsCollection;
+  // public UpcomingEvents: UpcomingEventsCollection;
+  // public PastEvents: PastEventsCollection;
+  public Events: EventsCollection;
   public ResearchGroups: ResearchGroupsCollection;
   public Members: MembersCollection;
   public Meta: MetaCollection;
@@ -48,8 +50,9 @@ export class Firebase {
     }
 
     this.News = new NewsCollection(this);
-    this.UpcomingEvents = new UpcomingEventsCollection(this);
-    this.PastEvents = new PastEventsCollection(this);
+    // this.UpcomingEvents = new UpcomingEventsCollection(this);
+    // this.PastEvents = new PastEventsCollection(this);
+    this.Events = new EventsCollection(this);
     this.ResearchGroups = new ResearchGroupsCollection(this);
     this.Members = new MembersCollection(this);
     this.Meta = new MetaCollection(this);

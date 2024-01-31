@@ -1,75 +1,121 @@
 import "./events.css";
+import BlockContainer from "~/components/common/BlockContainer";
 import { For, onCleanup, onMount, Show } from "solid-js";
-import EventItem from "~/components/Events/EventItem";
+import Scrollable from "~/components/common/Scrollable";
+import { useAppContext } from "~/AppContext";
 import Img from "~/components/common/Img";
 import EventsHeader from "~/assets/images/events-header.png";
+import { DialogResult } from "~/components/MessageBox/store";
 import CreateEditEvent, {
   CreateEventDialogResult,
 } from "~/components/Events/CreateEditEvent";
-import { DialogResult } from "~/components/MessageBox/store";
-import { scrollBottomAnimation } from "~/utils/utils";
-import Scrollable from "~/components/common/Scrollable";
-import BlockContainer from "~/components/common/BlockContainer";
-import { useAppContext } from "~/AppContext";
-import { Event } from "~/api/types";
-import Row from "~/components/common/Row";
+import EventItem from "~/components/Events/EventItem";
 
 export default function Events() {
-  const { isAdmin, messageBox, pastEvents, upcomingEvents, API } =
-    useAppContext();
+  const { isAdmin, messageBox, busyDialog, events, API } = useAppContext();
 
-  let upcomingEventsRef: HTMLDivElement;
-  let pastEventsRef: HTMLDivElement;
-  let scrollTimeout: NodeJS.Timeout;
-  let dueTimeCheckTimeout: NodeJS.Timeout;
+  let eventsBlockContainer: HTMLDivElement = null!;
+  let eventsScrollableContainer: HTMLDivElement = null!;
+  let scrollTimer: NodeJS.Timeout;
+  let activeChildIndex = -1;
+
   let createEventDialog: HTMLDialogElement = null!;
-
-  async function scrollAnimate() {
-    await Promise.all([
-      scrollBottomAnimation(upcomingEventsRef, 1000),
-      scrollBottomAnimation(pastEventsRef, 1000),
-    ]);
-
-    scrollTimeout = setTimeout(scrollAnimate, 5000);
-  }
-
-  async function dueTimeCheckTimeoutHandler() {
-    try {
-      const nowDate = new Date();
-      // Go through all upcoming events and check if they are due
-      for (const id of upcomingEvents.ids) {
-        if (!nowDate.isLessThan(upcomingEvents.entities[id].startsAt)) {
-          const copyEvent = { ...upcomingEvents.entities[id] };
-
-          // remove from upcoming events
-          await API.UpcomingEvents.delete(copyEvent);
-
-          // add to past events
-          await API.PastEvents.add(copyEvent);
-        }
-      }
-    } catch (e) {
-      // ignore
-    }
-
-    dueTimeCheckTimeout = setTimeout(dueTimeCheckTimeoutHandler, 5000);
-  }
 
   onMount(() => {
     if (isAdmin()) return;
-    scrollTimeout = setTimeout(scrollAnimate, 5000);
-    dueTimeCheckTimeout = setTimeout(dueTimeCheckTimeoutHandler, 5000);
+
+    scrollTimer = setInterval(async () => {
+      // Next item
+      const childElement = getActiveElement();
+      if (!childElement) return;
+
+      eventsScrollableContainer.scrollTo({
+        behavior: "smooth",
+        left:
+          childElement.activeElem.offsetLeft +
+          childElement.activeElem.offsetWidth / 2 -
+          eventsScrollableContainer.offsetWidth / 2,
+      });
+
+      clearClasses(childElement.prevElem);
+      clearClasses(childElement.activeElem);
+      clearClasses(childElement.nextElem);
+
+      childElement.prevElem?.classList.add("left");
+      childElement.activeElem.classList.add("active");
+      childElement.nextElem?.classList.add("right");
+    }, 3000);
   });
 
   onCleanup(() => {
-    clearTimeout(scrollTimeout);
-    clearTimeout(dueTimeCheckTimeout);
+    if (isAdmin()) return;
+    clearInterval(scrollTimer);
   });
 
-  const onAddNew = async (type: "upcoming" | "past") => {
-    const dResult = await createEventDialog.ShowModal<CreateEventDialogResult>({
-      type,
-    });
+  function getActiveElement() {
+    const childCount = eventsScrollableContainer.childElementCount;
+    if (childCount === 2) {
+      // No events exists
+      return null;
+    }
+
+    function getPrevSibling(activeElement: HTMLElement) {
+      let prevSibling = activeElement.previousElementSibling;
+      while (prevSibling && prevSibling.classList.contains("placeholder")) {
+        prevSibling = prevSibling.previousElementSibling;
+      }
+      if (!prevSibling) {
+        prevSibling = eventsScrollableContainer.lastElementChild;
+        while (prevSibling && prevSibling.classList.contains("placeholder")) {
+          prevSibling = prevSibling.previousElementSibling;
+        }
+      }
+      return prevSibling;
+    }
+
+    function getNextSibling(activeElement: HTMLElement) {
+      let nextSibling = activeElement.nextElementSibling;
+      while (nextSibling && nextSibling.classList.contains("placeholder")) {
+        nextSibling = nextSibling.nextElementSibling;
+      }
+      if (!nextSibling) {
+        nextSibling = eventsScrollableContainer.firstElementChild;
+        while (nextSibling && nextSibling.classList.contains("placeholder")) {
+          nextSibling = nextSibling.nextElementSibling;
+        }
+      }
+      return nextSibling;
+    }
+
+    let searchIterationCount = 0;
+    while (searchIterationCount < childCount) {
+      searchIterationCount++;
+
+      activeChildIndex = (activeChildIndex + 1) % childCount;
+      const activeElement = eventsScrollableContainer.children[
+        activeChildIndex
+      ] as HTMLElement;
+      if (!activeElement.classList.contains("placeholder")) {
+        // Find previous valid sibling
+        return {
+          prevElem: getPrevSibling(activeElement),
+          activeElem: activeElement,
+          nextElem: getNextSibling(activeElement),
+        };
+      }
+    }
+  }
+
+  function clearClasses(element: Element | null) {
+    if (!element) return;
+    element.classList.remove("active");
+    element.classList.remove("left");
+    element.classList.remove("right");
+  }
+
+  async function onAddNew() {
+    const dResult =
+      await createEventDialog.ShowModal<CreateEventDialogResult>();
     if (dResult.result === "Cancel") return;
 
     try {
@@ -78,33 +124,18 @@ export default function Events() {
         throw new Error("Start date is required");
       }
 
-      const newEvent: Omit<Event, "id" | "createdAt"> = {
-        text: dResult.event.text,
-        startsAt: dResult.event.startsAt,
-        endsAt: dResult.event.endsAt ? dResult.event.endsAt : null,
-        isSelected: false,
-      };
-
-      // if startsAt smaller than current date, then it is a past event
-      if (!new Date().isLessThan(dResult.event.startsAt)) {
-        // past event
-        await API.PastEvents.add(newEvent);
-      } else {
-        // upcoming event
-        await API.UpcomingEvents.add(newEvent);
-      }
+      busyDialog.show("Adding event...");
+      await API.Events.add({ ...dResult.event });
+      busyDialog.close();
     } catch (e) {
+      busyDialog.close();
       messageBox.error(`${e}`);
     }
-  };
+  }
 
   const onDeleteSelected = async () => {
     try {
-      if (
-        upcomingEvents.selectedIds.length === 0 &&
-        pastEvents.selectedIds.length === 0
-      )
-        return;
+      if (events.selectedIds.length === 0) return;
 
       const dResult = await messageBox.question(
         "Are you sure you want to delete event(s)?",
@@ -112,91 +143,54 @@ export default function Events() {
       if (dResult === DialogResult.No) return;
 
       // Start transaction for upcoming events
-      API.UpcomingEvents.beginTransaction();
+      API.Events.beginTransaction();
 
       // Delete upcoming events
-      for (const id of upcomingEvents.selectedIds) {
-        await API.UpcomingEvents.delete(upcomingEvents.entities[id]);
+      for (const id of events.selectedIds) {
+        await API.Events.delete(events.entities[id]);
       }
-
-      // Start transaction for past events by using existing batch
-      API.PastEvents.batch = API.UpcomingEvents.batch;
-
-      // Delete past events
-      for (const id of pastEvents.selectedIds) {
-        await API.PastEvents.delete(pastEvents.entities[id]);
-      }
-
       // Commit all transactions through upcoming events
-      await API.UpcomingEvents.commitTransaction();
-
-      // Clear transaction in past events
-      API.PastEvents.batch = undefined;
+      await API.Events.commitTransaction();
     } catch (e) {
       messageBox.error(`${e}`);
     }
   };
 
-  const ucEventsIcon = <Img src={EventsHeader} style={{ height: "35px" }} />;
-
-  const pastEventsIcon = <Img src={EventsHeader} style={{ height: "35px" }} />;
+  const eventsIcon = <Img src={EventsHeader} style={{ height: "35px" }} />;
 
   return (
-    <Row class={"events-container"}>
-      <BlockContainer
-        title={"Upcoming Events"}
-        titleIcon={ucEventsIcon}
-        onAddNewItem={isAdmin() ? () => onAddNew("upcoming").then() : undefined}
-        onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
-        class={"h-full flex-1-0-0"}
-      >
+    <BlockContainer
+      ref={eventsBlockContainer}
+      title={"Events"}
+      titleIcon={eventsIcon}
+      onAddNewItem={isAdmin() ? onAddNew : undefined}
+      onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
+      class={"events-block-container"}
+    >
+      <div class={"scroll-wrapper"}>
         <Scrollable
-          ref={(el) => (upcomingEventsRef = el)}
-          direction={"vertical"}
-          hideScrollbar={true}
-          class={"upcoming-events-container"}
+          ref={eventsScrollableContainer}
+          direction={"horizontal"}
+          hideScrollbar={!isAdmin()}
+          class={"events-scrollable-container"}
         >
-          <For each={upcomingEvents.ids}>
-            {(id, index) => (
-              <EventItem
-                id={id}
-                index={index}
-                isPast={false}
-                editDialog={createEventDialog}
-              />
-            )}
-          </For>
-        </Scrollable>
-      </BlockContainer>
+          <Show when={!isAdmin()}>
+            <div class={"event-item placeholder"} />
+          </Show>
 
-      <BlockContainer
-        title={"Past Events"}
-        titleIcon={pastEventsIcon}
-        onAddNewItem={isAdmin() ? () => onAddNew("past").then() : undefined}
-        onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
-        class={"h-full flex-1-0-0"}
-      >
-        <Scrollable
-          ref={(el) => (pastEventsRef = el)}
-          direction={"vertical"}
-          hideScrollbar={true}
-          class={"past-events-container"}
-        >
-          <For each={pastEvents.ids}>
+          <For each={events.ids}>
             {(id, index) => (
-              <EventItem
-                id={id}
-                index={index}
-                isPast={true}
-                editDialog={createEventDialog}
-              />
+              <EventItem id={id} index={index} editDialog={createEventDialog} />
             )}
           </For>
+          <Show when={!isAdmin()}>
+            <div class={"event-item placeholder"} />
+          </Show>
         </Scrollable>
-      </BlockContainer>
+      </div>
       <Show when={isAdmin()}>
         <CreateEditEvent ref={createEventDialog} />
       </Show>
-    </Row>
+    </BlockContainer>
   );
 }

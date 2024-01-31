@@ -194,4 +194,29 @@ object {
   gap: var(--space-4);
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: var(--radii-full);
+}
+
+::-webkit-scrollbar-track:horizontal {
+  margin-left: var(--space-3);
+  margin-right: var(--space-3);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-secondary-darker);
+  border-radius: var(--radii-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-lighter);
+}
+
 /*# sourceMappingURL=app.css.map */

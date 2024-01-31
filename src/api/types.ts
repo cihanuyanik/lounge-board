@@ -20,6 +20,7 @@ export type Event = {
   startsAt: Timestamp;
   endsAt?: Timestamp | null;
   isSelected: boolean;
+  isPast: boolean;
   createdAt: Timestamp;
 };
 
