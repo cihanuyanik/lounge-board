@@ -33,7 +33,7 @@ export default function News() {
     await sleep(3000);
 
     // Run scroll animation
-    runScrollAnimation();
+    runScrollAnimation().then();
   }
 
   onCleanup(() => {
@@ -48,7 +48,7 @@ export default function News() {
     }
   });
 
-  function runScrollAnimation() {
+  async function runScrollAnimation() {
     // Start animation and wait for it to finish
     try {
       scrollAnimation = scrollWithAnimation({
@@ -61,14 +61,17 @@ export default function News() {
         pixelsPerSecondToReturnBack: 1000,
       });
 
-      scrollAnimation?.finished.then(() => {
-        // Restart animation after 3 seconds
-        scrollAnimationTimer = setTimeout(() => {
-          runScrollAnimation();
-        }, 3000);
-      });
+      await scrollAnimation?.finished;
+
+      // Restart animation after 3 seconds
+      scrollAnimationTimer = setTimeout(() => {
+        runScrollAnimation();
+      }, 3000);
     } catch (e) {
-      console.error("Scroll animation failed at News container: ", e);
+      // Try to restart animation after 60 seconds
+      scrollAnimationTimer = setTimeout(() => {
+        runScrollAnimation();
+      }, 60000);
     }
   }
 

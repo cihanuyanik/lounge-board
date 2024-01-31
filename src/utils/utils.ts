@@ -97,7 +97,6 @@ export function toDate(
   return new Date();
 }
 
-// TODO: Make these arguments as object
 type ScrollWithAnimationOptions = {
   animationContainer: HTMLElement;
   scrollDirection: "up" | "down" | "left" | "right";
@@ -135,7 +134,9 @@ export function scrollWithAnimation(options: ScrollWithAnimationOptions) {
   }
 
   if (options.viewPortDistance > options.totalItemDistance) {
-    return;
+    throw new Error(
+      "Scroll animation is not necessary. View port distance is larger than total item distance",
+    );
   }
 
   if (

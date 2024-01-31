@@ -27,10 +27,6 @@
     > *:not(:last-child) {
       margin-bottom: var(--space-2);
     }
-
-
-    //top: 0;
-    //animation: scroll 10s linear 1s infinite;
   }
 
   .news-item {
@@ -74,15 +70,6 @@
     animation:
       enlarge 1s infinite,
       pulse 1s infinite;
-  }
-}
-
-@keyframes scroll {
-  95% {
-    top: -100%;
-  }
-  100% {
-    top: 0;
   }
 }
 

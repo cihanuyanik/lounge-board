@@ -1,4 +1,4 @@
-.members-container {
+.members-scrollable-container {
   flex: 1 0 0;
   width: 100%;
   display: flex;
@@ -9,7 +9,13 @@
   gap: var(--space-3);
   color: var(--color-text);
 }
-.members-container .member-item {
+.members-scrollable-container .members-scroll-animation-wrapper {
+  position: relative;
+}
+.members-scrollable-container .members-scroll-animation-wrapper > *:not(:last-child) {
+  margin-bottom: var(--space-3);
+}
+.members-scrollable-container .member-item {
   height: 120px;
   min-height: 120px;
   width: 100%;
@@ -21,35 +27,35 @@
   user-select: none;
   transition: all 0.2s ease-in-out;
 }
-.members-container .member-item.item-selected {
+.members-scrollable-container .member-item.item-selected {
   box-shadow: 0 0 10px 5px green;
 }
-.members-container .member-item.cursor-pointer {
+.members-scrollable-container .member-item.cursor-pointer {
   cursor: pointer;
 }
-.members-container .member-item .avatar {
+.members-scrollable-container .member-item .avatar {
   height: 100px;
   width: 85px;
 }
-.members-container .member-item .avatar img {
+.members-scrollable-container .member-item .avatar img {
   flex: 1;
   border-radius: 50% 50%;
   box-shadow: 0 0 10px 4px var(--color-primary-darker);
 }
-.members-container .member-item .name-role {
+.members-scrollable-container .member-item .name-role {
   flex: 1;
   gap: var(--space-2);
   font-weight: bold;
   text-align: center;
 }
-.members-container .member-item .name-role .name {
+.members-scrollable-container .member-item .name-role .name {
   word-break: break-word;
   color: black;
   font-size: var(--font-sizes-lg);
   width: 100%;
   border-bottom: 3px solid var(--color-primary);
 }
-.members-container .member-item .name-role .role {
+.members-scrollable-container .member-item .name-role .role {
   word-break: break-word;
   color: var(--color-darkgray);
   font-size: var(--font-sizes-md);

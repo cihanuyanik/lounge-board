@@ -143,13 +143,13 @@ export default function Events() {
   const pastEventsIcon = <Img src={EventsHeader} style={{ height: "35px" }} />;
 
   return (
-    <Column class={"events-container"}>
+    <Row class={"events-container"}>
       <BlockContainer
         title={"Upcoming Events"}
         titleIcon={ucEventsIcon}
         onAddNewItem={isAdmin() ? () => onAddNew("upcoming").then() : undefined}
         onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
-        class={"w-full flex-1-0-0"}
+        class={"h-full flex-1-0-0"}
       >
         <Scrollable
           ref={(el) => (upcomingEventsRef = el)}
@@ -175,7 +175,7 @@ export default function Events() {
         titleIcon={pastEventsIcon}
         onAddNewItem={isAdmin() ? () => onAddNew("past").then() : undefined}
         onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
-        class={"w-full flex-1-0-0"}
+        class={"h-full flex-1-0-0"}
       >
         <Scrollable
           ref={(el) => (pastEventsRef = el)}
@@ -198,6 +198,6 @@ export default function Events() {
       <Show when={isAdmin()}>
         <CreateEditEvent ref={createEventDialog} />
       </Show>
-    </Column>
+    </Row>
   );
 }

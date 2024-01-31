@@ -1,4 +1,4 @@
-.members-container {
+.members-scrollable-container {
   flex: 1 0 0;
   width: 100%;
   display: flex;
@@ -8,6 +8,16 @@
   padding: var(--space-2);
   gap: var(--space-3);
   color: var(--color-text);
+
+  .members-scroll-animation-wrapper {
+    position: relative;
+
+    // Add gaps between elements via margin
+    // Select all elements except the last one
+    > *:not(:last-child) {
+      margin-bottom: var(--space-3);
+    }
+  }
 
   .member-item {
     height: 120px;

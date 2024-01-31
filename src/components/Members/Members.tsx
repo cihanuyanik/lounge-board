@@ -3,7 +3,11 @@ import "./members.css";
 import { For, onCleanup, onMount, Show } from "solid-js";
 import MemberItem from "~/components/Members/MemberItem";
 import Img from "~/components/common/Img";
-import { scrollBottomAnimation } from "~/utils/utils";
+import {
+  scrollBottomAnimation,
+  scrollWithAnimation,
+  sleep,
+} from "~/utils/utils";
 
 import CreateEditMember, {
   CreateEditMemberDialogResult,
@@ -168,42 +172,106 @@ export default function Members() {
 function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
   const { isAdmin, meta } = useAppContext();
 
-  let memberContainer: HTMLDivElement;
   let timeOut: any;
+  let membersScrollableContainer: HTMLDivElement = null!;
+  let membersAnimationContainer: HTMLDivElement = null!;
+  let scrollAnimation: Animation | undefined;
+  let scrollAnimationTimer: NodeJS.Timeout = null!;
 
-  onMount(() => {
+  // onMount(() => {
+  //   if (isAdmin()) {
+  //     // admin page
+  //   } else {
+  //     // index page
+  //     timeOut = setTimeout(scroll, 5000);
+  //   }
+  // });
+
+  onMount(async () => {
     if (isAdmin()) {
-      // admin page
+      // If landed on admin page, don't run scroll animation
     } else {
-      // index page
-      timeOut = setTimeout(scroll, 5000);
+      onMountClient().then();
     }
   });
+
+  async function onMountClient() {
+    // Wait for news to be loaded
+    await sleep(3000);
+
+    // Run scroll animation
+    runScrollAnimation().then();
+  }
+
+  // onCleanup(() => {
+  //   if (isAdmin()) {
+  //     // admin page
+  //   } else {
+  //     // index page
+  //     clearTimeout(timeOut);
+  //   }
+  // });
 
   onCleanup(() => {
-    if (isAdmin()) {
-      // admin page
-    } else {
-      // index page
-      clearTimeout(timeOut);
+    // Stop restart timer
+    if (scrollAnimationTimer) {
+      clearTimeout(scrollAnimationTimer);
+    }
+
+    // Cancel active animation
+    if (scrollAnimation && scrollAnimation.playState !== "finished") {
+      scrollAnimation.cancel();
     }
   });
 
-  async function scroll() {
-    await scrollBottomAnimation(memberContainer, 2000);
-    timeOut = setTimeout(scroll, 5000);
+  // async function scroll() {
+  //   await scrollBottomAnimation(membersScrollableContainer, 2000);
+  //   timeOut = setTimeout(scroll, 5000);
+  // }
+
+  async function runScrollAnimation() {
+    // Start animation and wait for it to finish
+    try {
+      scrollAnimation = scrollWithAnimation({
+        animationContainer: membersAnimationContainer,
+        scrollDirection: "down",
+        totalItemDistance: membersAnimationContainer.scrollHeight,
+        viewPortDistance: membersScrollableContainer.clientHeight - 16,
+        pixelsPerSecondToScroll: 50,
+        stayAtRestDurationInMsAfterScroll: 3000,
+        pixelsPerSecondToReturnBack: 1000,
+      });
+
+      await scrollAnimation?.finished;
+
+      // Restart animation after 2 seconds
+      scrollAnimationTimer = setTimeout(() => {
+        runScrollAnimation();
+      }, 2000);
+    } catch (e) {
+      // Try to restart animation after 60 seconds
+      // TODO: Make this 60 seconds when completed
+      scrollAnimationTimer = setTimeout(() => {
+        runScrollAnimation();
+      }, 60000);
+    }
   }
 
   return (
     <Scrollable
-      ref={(el) => (memberContainer = el)}
+      ref={membersScrollableContainer}
       direction={"vertical"}
       hideScrollbar={true}
-      class={"members-container"}
+      class={"members-scrollable-container"}
     >
-      <For each={meta.membersDisplayOrder}>
-        {(id) => <MemberItem id={id} editDialog={props.editDialog()} />}
-      </For>
+      <div
+        ref={membersAnimationContainer}
+        class={"members-scroll-animation-wrapper"}
+      >
+        <For each={meta.membersDisplayOrder}>
+          {(id) => <MemberItem id={id} editDialog={props.editDialog()} />}
+        </For>
+      </div>
     </Scrollable>
   );
 }
