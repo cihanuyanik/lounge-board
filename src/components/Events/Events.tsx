@@ -10,6 +10,7 @@ import CreateEditEvent, {
   CreateEventDialogResult,
 } from "~/components/Events/CreateEditEvent";
 import EventItem from "~/components/Events/EventItem";
+import { Timestamp } from "firebase/firestore";
 
 export default function Events() {
   const { isAdmin, messageBox, busyDialog, events, API } = useAppContext();
@@ -21,9 +22,24 @@ export default function Events() {
 
   let createEventDialog: HTMLDialogElement = null!;
 
+  let dueTimeCheckerTimer: NodeJS.Timeout;
+
   onMount(() => {
     if (isAdmin()) return;
 
+    // Index page hit
+    // Start scroll animation
+    startScrollAnimation();
+
+    startEventDueTimeChecker();
+  });
+
+  onCleanup(() => {
+    if (isAdmin()) return;
+    clearInterval(scrollTimer);
+  });
+
+  function startScrollAnimation() {
     scrollTimer = setInterval(async () => {
       // Next item
       const childElement = getActiveElement();
@@ -45,46 +61,41 @@ export default function Events() {
       childElement.activeElem.classList.add("active");
       childElement.nextElem?.classList.add("right");
     }, 3000);
-  });
+  }
 
-  onCleanup(() => {
-    if (isAdmin()) return;
-    clearInterval(scrollTimer);
-  });
+  function getPrevSibling(activeElement: HTMLElement) {
+    let prevSibling = activeElement.previousElementSibling;
+    while (prevSibling && prevSibling.classList.contains("placeholder")) {
+      prevSibling = prevSibling.previousElementSibling;
+    }
+    if (!prevSibling) {
+      prevSibling = eventsScrollableContainer.lastElementChild;
+      while (prevSibling && prevSibling.classList.contains("placeholder")) {
+        prevSibling = prevSibling.previousElementSibling;
+      }
+    }
+    return prevSibling;
+  }
+
+  function getNextSibling(activeElement: HTMLElement) {
+    let nextSibling = activeElement.nextElementSibling;
+    while (nextSibling && nextSibling.classList.contains("placeholder")) {
+      nextSibling = nextSibling.nextElementSibling;
+    }
+    if (!nextSibling) {
+      nextSibling = eventsScrollableContainer.firstElementChild;
+      while (nextSibling && nextSibling.classList.contains("placeholder")) {
+        nextSibling = nextSibling.nextElementSibling;
+      }
+    }
+    return nextSibling;
+  }
 
   function getActiveElement() {
     const childCount = eventsScrollableContainer.childElementCount;
     if (childCount === 2) {
       // No events exists
       return null;
-    }
-
-    function getPrevSibling(activeElement: HTMLElement) {
-      let prevSibling = activeElement.previousElementSibling;
-      while (prevSibling && prevSibling.classList.contains("placeholder")) {
-        prevSibling = prevSibling.previousElementSibling;
-      }
-      if (!prevSibling) {
-        prevSibling = eventsScrollableContainer.lastElementChild;
-        while (prevSibling && prevSibling.classList.contains("placeholder")) {
-          prevSibling = prevSibling.previousElementSibling;
-        }
-      }
-      return prevSibling;
-    }
-
-    function getNextSibling(activeElement: HTMLElement) {
-      let nextSibling = activeElement.nextElementSibling;
-      while (nextSibling && nextSibling.classList.contains("placeholder")) {
-        nextSibling = nextSibling.nextElementSibling;
-      }
-      if (!nextSibling) {
-        nextSibling = eventsScrollableContainer.firstElementChild;
-        while (nextSibling && nextSibling.classList.contains("placeholder")) {
-          nextSibling = nextSibling.nextElementSibling;
-        }
-      }
-      return nextSibling;
     }
 
     let searchIterationCount = 0;
@@ -111,6 +122,46 @@ export default function Events() {
     element.classList.remove("active");
     element.classList.remove("left");
     element.classList.remove("right");
+  }
+
+  function startEventDueTimeChecker() {
+    // Call time out handler after 10 minutes
+    dueTimeCheckerTimer = setTimeout(timeOutHandler, 10 * 60 * 1000);
+
+    async function timeOutHandler() {
+      // Start transaction
+      API.Events.beginTransaction();
+
+      // Iterate over events and compare with current time
+      // If event is due, update its isPast property
+      const now = Timestamp.now();
+      for (const eventId of events.ids) {
+        const event = events.entities[eventId];
+
+        // Check if event is due
+        if (event.startsAt < now && event.isPast === false) {
+          // Update event
+          await API.Events.update({
+            original: event,
+            changes: { isPast: true },
+          });
+        }
+
+        // Check if event is upcoming and marked as past by mistake
+        if (event.startsAt > now && event.isPast === true) {
+          // Update event
+          await API.Events.update({
+            original: event,
+            changes: { isPast: false },
+          });
+        }
+      }
+
+      // Commit transaction
+      await API.Events.commitTransaction();
+
+      dueTimeCheckerTimer = setTimeout(timeOutHandler, 10 * 60 * 1000);
+    }
   }
 
   async function onAddNew() {

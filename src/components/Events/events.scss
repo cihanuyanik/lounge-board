@@ -22,7 +22,7 @@
   flex-direction: row;
   background: transparent;
 
-  // Select all childrens
+  // Select all children
   & > * {
     margin-left: var(--space-2);
     margin-right: var(--space-2);
@@ -41,6 +41,7 @@
   width: 40%;
   min-width: 40%;
   transition: all 250ms ease-in-out;
+  transform-origin: 50% 50%;
 
   box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
   border-radius: var(--radii-2xl);
@@ -50,7 +51,7 @@
   gap: var(--space-2);
   position: relative;
   background: url("../../assets/images/texture/papyrus.jpg");
-  transform-origin: 50% 50%;
+
 
   &.placeholder {
     transform: scale(0.8);
@@ -97,7 +98,6 @@
   }
 
   &.past-event-item-background {
-    //background: url("~/assets/images/texture/white-marble.jpg");
     background: url("../../assets/images/texture/white-marble.jpg");
   }
 

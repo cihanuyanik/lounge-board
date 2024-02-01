@@ -3,7 +3,7 @@ import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Img from "~/components/common/Img";
 import moment from "moment";
-import { createMemo } from "solid-js";
+import { createMemo, createSignal, onCleanup, onMount } from "solid-js";
 import { Timestamp } from "firebase/firestore";
 
 type CustomPostProps = {
@@ -15,15 +15,44 @@ type CustomPostProps = {
 };
 
 export default function (props: CustomPostProps) {
-  const parser = new DOMParser();
+  const [timePassed, setTimePassed] = createSignal(
+    moment(props.updatedAt.toDate()).fromNow(),
+  );
 
   const contentBody = createMemo(() => {
-    return parser.parseFromString(props.postHtml || "", "text/html").body;
+    return new DOMParser().parseFromString(props.postHtml || "", "text/html")
+      .body;
   });
 
-  const timePassed = createMemo(() => {
-    return moment(props.updatedAt.toDate()).fromNow();
+  let timePassedUpdateTimer: NodeJS.Timeout;
+
+  onMount(() => {
+    setTimeout(runTimePassedUpdater, 3000);
   });
+
+  onCleanup(() => {
+    clearInterval(timePassedUpdateTimer);
+  });
+
+  function runTimePassedUpdater() {
+    const timePassed = moment(props.updatedAt.toDate()).fromNow();
+    setTimePassed(timePassed);
+
+    let durationMs;
+
+    if (timePassed.includes("sec") || timePassed.includes("min")) {
+      // Run every minutes
+      durationMs = 60 * 1000;
+    } else if (timePassed.includes("hour")) {
+      // Run every hour
+      durationMs = 60 * 60 * 1000;
+    } else {
+      // Run every day
+      durationMs = 24 * 60 * 60 * 1000;
+    }
+
+    timePassedUpdateTimer = setTimeout(runTimePassedUpdater, durationMs);
+  }
 
   return (
     <Column class={"custom-post"} style={{ width: `${props.width}px` }}>
