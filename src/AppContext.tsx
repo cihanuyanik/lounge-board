@@ -131,20 +131,6 @@ export function useDataLoader() {
         }),
       );
 
-      // unSubList.push(
-      //   API.UpcomingEvents.subscribe((data) => {
-      //     data.sort((a, b) => a.startsAt.seconds - b.startsAt.seconds);
-      //     upcomingEvents.reload(data);
-      //   }),
-      // );
-      //
-      // unSubList.push(
-      //   API.PastEvents.subscribe((data) => {
-      //     data.sort((a, b) => b.startsAt.seconds - a.startsAt.seconds);
-      //     pastEvents.reload(data);
-      //   }),
-      // );
-
       unSubList.push(
         API.Events.subscribe((data) => {
           // Separate upcoming and past events

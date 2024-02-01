@@ -8,6 +8,7 @@ import InstagramPost from "~/components/News/Posts/InstagramPost";
 import { CreateNewsDialogResult } from "~/components/News/CreateEditNews";
 import { New } from "~/api/types";
 import CustomPost from "~/components/News/Posts/CustomPost";
+import { Timestamp } from "firebase/firestore";
 
 type NewsItemProps = {
   id: string;
@@ -39,6 +40,7 @@ export default function NewsItem(props: NewsItemProps) {
       const changes = {} as Partial<New>;
 
       changes.isSelected = false;
+      changes.updatedAt = Timestamp.now();
       if (dResult.news.type !== original.type) {
         changes.type = dResult.news.type;
       }

@@ -50,7 +50,7 @@ export default function (props: Props) {
             ? moment(props.value, "YYYY-MM-DD").format(
                 props.format || "DD MMM YYYY",
               )
-            : "dd/mm/yyyy"
+            : "01 Jan 2024"
         }
         style={{
           background: props.background,

@@ -9,8 +9,6 @@ import {
   deleteObject,
 } from "firebase/storage";
 import NewsCollection from "~/api/NewsCollection";
-import UpcomingEventsCollection from "~/api/UpcomingEventsCollection";
-import PastEventsCollection from "~/api/PastEventsCollection";
 import ResearchGroupsCollection from "~/api/ResearchGroupsCollection";
 import MembersCollection from "~/api/MembersCollection";
 import MetaCollection from "~/api/MetaCollection";
@@ -23,8 +21,6 @@ export class Firebase {
   private readonly _storage: FirebaseStorage;
   public AuthService: AuthenticationService;
   public News: NewsCollection;
-  // public UpcomingEvents: UpcomingEventsCollection;
-  // public PastEvents: PastEventsCollection;
   public Events: EventsCollection;
   public ResearchGroups: ResearchGroupsCollection;
   public Members: MembersCollection;

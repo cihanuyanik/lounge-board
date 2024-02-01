@@ -37,7 +37,7 @@
   perspective-origin: center center;
 }
 
-.event-item {
+.event-card {
   width: 40%;
   min-width: 40%;
   transition: all 250ms ease-in-out;
@@ -45,13 +45,104 @@
 
   box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
   border-radius: var(--radii-2xl);
-  padding: var(--space-2);
   user-select: none;
-  align-items: flex-start;
-  gap: var(--space-2);
-  position: relative;
   background: url("../../assets/images/texture/papyrus.jpg");
 
+  justify-content: stretch;
+
+  overflow: clip;
+  font-weight: bolder;
+
+  &-header {
+    width: 100%;
+    position: relative;
+    isolation: isolate;
+    padding: var(--space-2);
+  }
+
+  .icon {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    border-radius: var(--radii-xl);
+    img {
+      height: 45px;
+      width: 45px;
+    }
+  }
+
+  .name {
+    color: black;
+    align-self: stretch;
+    height: 40px;
+    margin-left: 50px;
+    font-size: var(--font-sizes-xl);
+    font-weight: bolder;
+    border-bottom: solid 1px var(--color-primary);
+  }
+
+  .details {
+    width: 100%;
+    height: 35px;
+    color: var(--color-darkgray);
+    font-size: var(--font-sizes-lg);
+  }
+
+  &-datetime-info {
+    width: 100%;
+    height: 70px;
+
+    color: var(--color-tertiary-darker);
+    font-size: var(--font-sizes-xl);
+
+    text-align: center;
+
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+
+  .date {
+    flex: 1 0 0;
+    border-top: solid 4px var(--color-primary);
+    border-right: solid 2px var(--color-primary);
+    border-radius: var(--radii-xl);
+    padding: var(--space-1);
+    height: 70px;
+
+    svg {
+      height: 40px;
+      width: 40px;
+    }
+  }
+
+  .time {
+    flex: 1 0 0;
+    border-top: solid 4px var(--color-primary);
+    border-right: solid 2px var(--color-primary);
+    border-left: solid 2px var(--color-primary);
+    border-radius: var(--radii-xl);
+    padding: var(--space-1);
+    height: 70px;
+
+    svg {
+      height: 40px;
+      width: 40px;
+    }
+  }
+
+  .duration {
+    flex: 1 0 0;
+    border-top: solid 4px var(--color-primary);
+    border-left: solid 2px var(--color-primary);
+    border-radius: var(--radii-xl);
+    padding: var(--space-1);
+    height: 70px;
+
+    svg {
+      height: 40px;
+      width: 40px;
+    }
+  }
 
   &.placeholder {
     transform: scale(0.8);
@@ -80,23 +171,6 @@
     }
   }
 
-  .text {
-    flex: 1;
-    font-size: var(--font-sizes-lg);
-    font-weight: bold;
-    color: black;
-  }
-
-  .time {
-    font-size: var(--font-sizes-md);
-    font-weight: bold;
-    color: var(--color-darkgray);
-    width: 100%;
-    align-items: center;
-    justify-content: flex-end;
-    gap: var(--space-1);
-  }
-
   &.past-event-item-background {
     background: url("../../assets/images/texture/white-marble.jpg");
   }
@@ -119,49 +193,118 @@
 
 .create-edit-event-dialog {
   width: 400px;
-  min-height: 200px;
   overflow: visible;
+  background: var(--color-primary) !important;
 
-  .content {
-    width: 100%;
-    min-height: 200px;
+  .header {
+    background-color: var(--color-primary-darker);
+    border-bottom: solid 5px var(--color-primary-darker);
+    border-top-left-radius: var(--radii-xl);
+    border-top-right-radius: var(--radii-xl);
 
-    box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
-    border-radius: var(--radii-2xl);
-    padding: var(--space-2);
-    user-select: none;
-    align-items: flex-start;
-    gap: var(--space-2);
-    position: relative;
-    background: url("../../assets/images/texture/papyrus.jpg");
-  }
+    padding: var(--space-1);
+    gap: var(--space-3);
 
-  .background-past {
-    background: url("../../assets/images/texture/white-marble.jpg");
-  }
-
-  .text {
-    width: 100%;
-    background: transparent;
-    color: black;
-    font-size: var(--font-sizes-lg);
-    text-align: center;
-    outline: none;
-    border: none;
-    height: fit-content;
-
-    &::placeholder {
-      color: var(--color-darkgray);
+    img {
+      height: 25px;
+      width: 25px;
     }
   }
 
-  .start-date-container,
-  .end-date-container {
-    font-size: var(--font-sizes-md);
-    color: var(--color-darkgray);
+  .content-editors {
+    padding: var(--space-5) var(--space-10);
+    gap: var(--space-3);
+
+    .date-time-picker {
+      width: 100%;
+
+      --container-height: 60px;
+      --label-height: 26px;
+
+      position: relative;
+      isolation: isolate;
+      height: var(--container-height);
+
+      > label {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: var(--space-4);
+        z-index: 1;
+        transition: all 0.2s ease-in-out;
+        padding-left: var(--space-2);
+        padding-right: var(--space-2);
+
+        font-weight: bold;
+        font-size: var(--font-sizes-md);
+        background: var(--color-tertiary-lighter);
+        color: var(--color-darkgray);
+        border-radius: var(--radii-xl);
+      }
+
+      > svg {
+        position: absolute;
+        top: var(--label-height);
+        bottom: 0;
+        left: 0;
+        z-index: 3;
+        transition: all 0.2s ease-in-out;
+        height: calc(var(--container-height) - var(--label-height));
+        color: white;
+        padding: var(--space-2);
+        background: var(--color-tertiary);
+        border-top-left-radius: var(--radii-3xl);
+        border-bottom-left-radius: var(--radii-3xl);
+      }
+
+      > .date-time-container {
+        position: absolute;
+        top: var(--label-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2;
+
+        padding-left: 30px;
+
+        color: var(--color-tertiary-darker);
+        justify-content: space-evenly;
+
+        text-align: center;
+        border: none;
+        outline: none;
+        align-self: stretch;
+        font-size: var(--font-sizes-lg);
+        font-weight: bold;
+        background: var(--color-secondary);
+        border-radius: var(--radii-3xl);
+
+        box-shadow: 0 0 10px 5px var(--color-tertiary-lighter);
+
+        transition: all 0.2s ease-in-out;
+
+        > .date-input,
+        > .time-input {
+          :before {
+            color: black;
+          }
+        }
+      }
+    }
+  }
+
+  .separator {
+    height: 20px;
     width: 100%;
-    align-items: center;
-    justify-content: flex-end;
-    gap: var(--space-1);
+    border-top: solid 3px var(--color-primary-darker);
+  }
+
+  .preview {
+    padding-bottom: var(--space-4);
+
+    .event-card {
+      width: 375px;
+      height: 170px;
+    }
   }
 }

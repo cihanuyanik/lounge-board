@@ -1,14 +1,8 @@
 import "./members.css";
-
 import { For, onCleanup, onMount, Show } from "solid-js";
 import MemberItem from "~/components/Members/MemberItem";
 import Img from "~/components/common/Img";
-import {
-  scrollBottomAnimation,
-  scrollWithAnimation,
-  sleep,
-} from "~/utils/utils";
-
+import { scrollWithAnimation, sleep } from "~/utils/utils";
 import CreateEditMember, {
   CreateEditMemberDialogResult,
 } from "~/components/Members/CreateEditMember";
@@ -172,20 +166,10 @@ export default function Members() {
 function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
   const { isAdmin, meta } = useAppContext();
 
-  let timeOut: any;
   let membersScrollableContainer: HTMLDivElement = null!;
   let membersAnimationContainer: HTMLDivElement = null!;
   let scrollAnimation: Animation | undefined;
   let scrollAnimationTimer: NodeJS.Timeout = null!;
-
-  // onMount(() => {
-  //   if (isAdmin()) {
-  //     // admin page
-  //   } else {
-  //     // index page
-  //     timeOut = setTimeout(scroll, 5000);
-  //   }
-  // });
 
   onMount(async () => {
     if (isAdmin()) {
@@ -203,15 +187,6 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
     runScrollAnimation().then();
   }
 
-  // onCleanup(() => {
-  //   if (isAdmin()) {
-  //     // admin page
-  //   } else {
-  //     // index page
-  //     clearTimeout(timeOut);
-  //   }
-  // });
-
   onCleanup(() => {
     // Stop restart timer
     if (scrollAnimationTimer) {
@@ -223,11 +198,6 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
       scrollAnimation.cancel();
     }
   });
-
-  // async function scroll() {
-  //   await scrollBottomAnimation(membersScrollableContainer, 2000);
-  //   timeOut = setTimeout(scroll, 5000);
-  // }
 
   async function runScrollAnimation() {
     // Start animation and wait for it to finish
@@ -250,7 +220,6 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
       }, 2000);
     } catch (e) {
       // Try to restart animation after 60 seconds
-      // TODO: Make this 60 seconds when completed
       scrollAnimationTimer = setTimeout(() => {
         runScrollAnimation();
       }, 60000);

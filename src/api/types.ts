@@ -17,8 +17,10 @@ export type New = {
 export type Event = {
   id: string;
   text: string;
+  name: string;
+  details: string;
   startsAt: Timestamp;
-  endsAt?: Timestamp | null;
+  endsAt: Timestamp;
   isSelected: boolean;
   isPast: boolean;
   createdAt: Timestamp;

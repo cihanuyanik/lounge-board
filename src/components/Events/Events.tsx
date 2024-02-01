@@ -6,11 +6,11 @@ import { useAppContext } from "~/AppContext";
 import Img from "~/components/common/Img";
 import EventsHeader from "~/assets/images/events-header.png";
 import { DialogResult } from "~/components/MessageBox/store";
+import EventItem from "~/components/Events/EventItem";
+import { Timestamp } from "firebase/firestore";
 import CreateEditEvent, {
   CreateEventDialogResult,
 } from "~/components/Events/CreateEditEvent";
-import EventItem from "~/components/Events/EventItem";
-import { Timestamp } from "firebase/firestore";
 
 export default function Events() {
   const { isAdmin, messageBox, busyDialog, events, API } = useAppContext();
@@ -226,7 +226,7 @@ export default function Events() {
           class={"events-scrollable-container"}
         >
           <Show when={!isAdmin()}>
-            <div class={"event-item placeholder"} />
+            <div class={"event-card placeholder"} />
           </Show>
 
           <For each={events.ids}>
@@ -235,7 +235,7 @@ export default function Events() {
             )}
           </For>
           <Show when={!isAdmin()}>
-            <div class={"event-item placeholder"} />
+            <div class={"event-card placeholder"} />
           </Show>
         </Scrollable>
       </div>

@@ -1,61 +1,131 @@
 import "./index.css";
-import Clock from "~/assets/icons/Clock";
 import Row from "~/components/common/Row";
+import Clock from "~/assets/icons/Clock";
+import { createEffect, createMemo, createSignal, onMount } from "solid-js";
+
+export type TimeInputRef = {
+  get value(): string;
+  set value(value: string);
+};
 
 type Props = {
   id?: string;
-  ref?: HTMLInputElement | ((el: HTMLInputElement) => void);
+  ref?: TimeInputRef | ((el: TimeInputRef) => void);
   value?: string;
   onChange?: (value: string) => void;
-  color?: string;
-  background?: string;
-  fontSize?: string;
-  fontWeight?: string;
-  disabled?: boolean;
 };
 
 export default function (props: Props) {
-  let inputRef: HTMLInputElement;
+  const [hour, setHour] = createSignal("00");
+  const [minute, setMinute] = createSignal("00");
+
+  onMount(() => {
+    if (props.ref) {
+      const refType: TimeInputRef = {
+        get value() {
+          return timeValue();
+        },
+        set value(value: string) {
+          // Check if value is valid
+          setTimeValue(value);
+        },
+      };
+
+      if (typeof props.ref === "function") {
+        props.ref(refType);
+      } else {
+        props.ref = refType;
+      }
+    }
+  });
+
+  function setTimeValue(value: string) {
+    // Check if value is valid
+    const input = value.split(":");
+    if (input.length !== 2) {
+      throw new Error("TimeInput: Invalid time format");
+    }
+
+    // Check validity of hour
+    if (parseInt(input[0]) > 23) {
+      throw new Error("TimeInput: Invalid hour");
+    }
+
+    // Check validity of minute
+    if (parseInt(input[1]) > 59) {
+      throw new Error("TimeInput: Invalid minute");
+    }
+
+    // Set hour and minute
+    setHour(input[0]);
+    setMinute(input[1]);
+  }
+
+  createEffect(() => {
+    if (props.value) {
+      setTimeValue(props.value);
+    }
+  });
+
+  const timeValue = createMemo(() => {
+    return `${hour()}:${minute()}`;
+  });
 
   return (
-    <Row
-      class={"time-input"}
-      style={{
-        background: props.background,
-        color: props.color,
-        "pointer-events": props.disabled ? "none" : "auto",
-      }}
-      onClick={() => inputRef.showPicker()}
-    >
-      <Clock style={{ height: "20px", width: "20px" }} />
+    <Row class={"time-input"}>
+      <Row class={"icon"}>
+        <Clock />
+      </Row>
       <input
-        ref={(el) => {
-          inputRef = el;
-          if (props.ref) {
-            if (typeof props.ref === "function") {
-              props.ref(el);
-            } else {
-              props.ref = el;
-            }
-          }
-        }}
-        id={props.id || undefined}
-        type={"time"}
-        data-value={props.value || "hh:mm"}
-        style={{
-          background: props.background,
-          "font-size": props.fontSize,
-          "font-weight": props.fontWeight,
-        }}
-        value={props.value || ""}
-        onChange={() => {
-          if (!inputRef.value) {
-            inputRef.setAttribute("data-value", "hh:mm");
+        id={"hour"}
+        type={"number"}
+        min={0}
+        max={23}
+        value={hour()}
+        onInput={(e) => {
+          // append input value to previous one and truncate to 2 digits
+          if (e.currentTarget.value.length === 1) {
+            e.currentTarget.value = "0" + e.currentTarget.value;
           } else {
-            inputRef.setAttribute("data-value", inputRef.value);
+            e.currentTarget.value = (hour() + e.currentTarget.value).slice(-2);
           }
 
-          props.onChange?.(inputRef.value);
+          // if value is larger than 23, set it to 23
+          if (parseInt(e.currentTarget.value) > 23) {
+            e.currentTarget.value = "23";
+          }
+
+          // set hour
+          setHour(e.currentTarget.value);
+
+          props.onChange?.(timeValue());
+        }}
+      />
+      <p>:</p>
+      <input
+        id={"minute"}
+        type={"number"}
+        min={0}
+        max={55}
+        step={5}
+        value={minute()}
+        onInput={(e) => {
+          // append input value to previous one and truncate to 2 digits
+          if (e.currentTarget.value.length === 1) {
+            e.currentTarget.value = "0" + e.currentTarget.value;
+          } else {
+            e.currentTarget.value = (hour() + e.currentTarget.value).slice(-2);
+          }
+
+          // if value is larger than 59, set it to 59
+          if (parseInt(e.currentTarget.value) > 59) {
+            e.currentTarget.value = "59";
+          }
+
+          // set hour
+          setMinute(e.currentTarget.value);
+
+          props.onChange?.(timeValue());
         }}
       />
     </Row>

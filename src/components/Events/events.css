@@ -32,111 +32,225 @@
   margin-left: 0;
 }
 
-.event-item {
+.event-card {
   width: 40%;
   min-width: 40%;
   transition: all 250ms ease-in-out;
   transform-origin: 50% 50%;
   box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
   border-radius: var(--radii-2xl);
-  padding: var(--space-2);
   user-select: none;
-  align-items: flex-start;
-  gap: var(--space-2);
-  position: relative;
   background: url("../../assets/images/texture/papyrus.jpg");
+  justify-content: stretch;
+  overflow: clip;
+  font-weight: bolder;
 }
-.event-item.placeholder {
+.event-card-header {
+  width: 100%;
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-2);
+}
+.event-card .icon {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  border-radius: var(--radii-xl);
+}
+.event-card .icon img {
+  height: 45px;
+  width: 45px;
+}
+.event-card .name {
+  color: black;
+  align-self: stretch;
+  height: 40px;
+  margin-left: 50px;
+  font-size: var(--font-sizes-xl);
+  font-weight: bolder;
+  border-bottom: solid 1px var(--color-primary);
+}
+.event-card .details {
+  width: 100%;
+  height: 35px;
+  color: var(--color-darkgray);
+  font-size: var(--font-sizes-lg);
+}
+.event-card-datetime-info {
+  width: 100%;
+  height: 70px;
+  color: var(--color-tertiary-darker);
+  font-size: var(--font-sizes-xl);
+  text-align: center;
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+}
+.event-card .date {
+  flex: 1 0 0;
+  border-top: solid 4px var(--color-primary);
+  border-right: solid 2px var(--color-primary);
+  border-radius: var(--radii-xl);
+  padding: var(--space-1);
+  height: 70px;
+}
+.event-card .date svg {
+  height: 40px;
+  width: 40px;
+}
+.event-card .time {
+  flex: 1 0 0;
+  border-top: solid 4px var(--color-primary);
+  border-right: solid 2px var(--color-primary);
+  border-left: solid 2px var(--color-primary);
+  border-radius: var(--radii-xl);
+  padding: var(--space-1);
+  height: 70px;
+}
+.event-card .time svg {
+  height: 40px;
+  width: 40px;
+}
+.event-card .duration {
+  flex: 1 0 0;
+  border-top: solid 4px var(--color-primary);
+  border-left: solid 2px var(--color-primary);
+  border-radius: var(--radii-xl);
+  padding: var(--space-1);
+  height: 70px;
+}
+.event-card .duration svg {
+  height: 40px;
+  width: 40px;
+}
+.event-card.placeholder {
   transform: scale(0.8);
   opacity: 0;
 }
-.event-item.scroll-item {
+.event-card.scroll-item {
   transform: scale(0.8);
   opacity: 0.6;
   transition: all 400ms ease-in-out;
   margin-left: calc(var(--space-2) * -1);
   margin-right: calc(var(--space-2) * -1);
 }
-.event-item.scroll-item.active {
+.event-card.scroll-item.active {
   transform: scale(1);
   opacity: 1;
 }
-.event-item.scroll-item.left {
+.event-card.scroll-item.left {
   transform: translateZ(-10px) scale(0.8) rotateY(-25deg);
 }
-.event-item.scroll-item.right {
+.event-card.scroll-item.right {
   transform: translateZ(-10px) scale(0.8) rotateY(25deg);
 }
-.event-item .text {
-  flex: 1;
-  font-size: var(--font-sizes-lg);
-  font-weight: bold;
-  color: black;
-}
-.event-item .time {
-  font-size: var(--font-sizes-md);
-  font-weight: bold;
-  color: var(--color-darkgray);
-  width: 100%;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-1);
-}
-.event-item.past-event-item-background {
+.event-card.past-event-item-background {
   background: url("../../assets/images/texture/white-marble.jpg");
 }
-.event-item.item-selected {
+.event-card.item-selected {
   box-shadow: 0 0 10px 5px green;
   transition: all 0.2s ease-in-out;
 }
-.event-item.cursor-pointer {
+.event-card.cursor-pointer {
   cursor: pointer;
 }
-.event-item.emphasize {
+.event-card.emphasize {
   animation: enlarge 1s infinite, pulse 1s infinite;
 }
 
 .create-edit-event-dialog {
   width: 400px;
-  min-height: 200px;
   overflow: visible;
+  background: var(--color-primary) !important;
 }
-.create-edit-event-dialog .content {
+.create-edit-event-dialog .header {
+  background-color: var(--color-primary-darker);
+  border-bottom: solid 5px var(--color-primary-darker);
+  border-top-left-radius: var(--radii-xl);
+  border-top-right-radius: var(--radii-xl);
+  padding: var(--space-1);
+  gap: var(--space-3);
+}
+.create-edit-event-dialog .header img {
+  height: 25px;
+  width: 25px;
+}
+.create-edit-event-dialog .content-editors {
+  padding: var(--space-5) var(--space-10);
+  gap: var(--space-3);
+}
+.create-edit-event-dialog .content-editors .date-time-picker {
   width: 100%;
-  min-height: 200px;
-  box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
-  border-radius: var(--radii-2xl);
-  padding: var(--space-2);
-  user-select: none;
-  align-items: flex-start;
-  gap: var(--space-2);
+  --container-height: 60px;
+  --label-height: 26px;
   position: relative;
-  background: url("../../assets/images/texture/papyrus.jpg");
+  isolation: isolate;
+  height: var(--container-height);
 }
-.create-edit-event-dialog .background-past {
-  background: url("../../assets/images/texture/white-marble.jpg");
-}
-.create-edit-event-dialog .text {
-  width: 100%;
-  background: transparent;
-  color: black;
-  font-size: var(--font-sizes-lg);
-  text-align: center;
-  outline: none;
-  border: none;
-  height: fit-content;
-}
-.create-edit-event-dialog .text::placeholder {
-  color: var(--color-darkgray);
-}
-.create-edit-event-dialog .start-date-container,
-.create-edit-event-dialog .end-date-container {
+.create-edit-event-dialog .content-editors .date-time-picker > label {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--space-4);
+  z-index: 1;
+  transition: all 0.2s ease-in-out;
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+  font-weight: bold;
   font-size: var(--font-sizes-md);
+  background: var(--color-tertiary-lighter);
   color: var(--color-darkgray);
+  border-radius: var(--radii-xl);
+}
+.create-edit-event-dialog .content-editors .date-time-picker > svg {
+  position: absolute;
+  top: var(--label-height);
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  transition: all 0.2s ease-in-out;
+  height: calc(var(--container-height) - var(--label-height));
+  color: white;
+  padding: var(--space-2);
+  background: var(--color-tertiary);
+  border-top-left-radius: var(--radii-3xl);
+  border-bottom-left-radius: var(--radii-3xl);
+}
+.create-edit-event-dialog .content-editors .date-time-picker > .date-time-container {
+  position: absolute;
+  top: var(--label-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding-left: 30px;
+  color: var(--color-tertiary-darker);
+  justify-content: space-evenly;
+  text-align: center;
+  border: none;
+  outline: none;
+  align-self: stretch;
+  font-size: var(--font-sizes-lg);
+  font-weight: bold;
+  background: var(--color-secondary);
+  border-radius: var(--radii-3xl);
+  box-shadow: 0 0 10px 5px var(--color-tertiary-lighter);
+  transition: all 0.2s ease-in-out;
+}
+.create-edit-event-dialog .content-editors .date-time-picker > .date-time-container > .date-input :before,
+.create-edit-event-dialog .content-editors .date-time-picker > .date-time-container > .time-input :before {
+  color: black;
+}
+.create-edit-event-dialog .separator {
+  height: 20px;
   width: 100%;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-1);
+  border-top: solid 3px var(--color-primary-darker);
+}
+.create-edit-event-dialog .preview {
+  padding-bottom: var(--space-4);
+}
+.create-edit-event-dialog .preview .event-card {
+  width: 375px;
+  height: 170px;
 }
 
 /*# sourceMappingURL=events.css.map */
