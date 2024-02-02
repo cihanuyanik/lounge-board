@@ -205,6 +205,7 @@ function CustomPostInfo() {
         class={"w-full"}
         placeholder={"Post title"}
         height={40}
+        value={state.news.postTitle}
         onInput={(e) => {
           mutate((state) => {
             state.news.postTitle = e.currentTarget.value;
