@@ -207,7 +207,7 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
         scrollDirection: "down",
         totalItemDistance: membersAnimationContainer.scrollHeight,
         viewPortDistance: membersScrollableContainer.clientHeight - 16,
-        pixelsPerSecondToScroll: 50,
+        pixelsPerSecondToScroll: 25,
         stayAtRestDurationInMsAfterScroll: 3000,
         pixelsPerSecondToReturnBack: 1000,
       });

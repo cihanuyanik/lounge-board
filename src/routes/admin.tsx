@@ -95,14 +95,6 @@ function _Admin() {
     unSubList.splice(0, unSubList.length);
   });
 
-  createEffect(async () => {
-    // if (!isServer) {
-    //   if (user() && user().emailVerified) {
-    //     await loadData();
-    //   }
-    // }
-  });
-
   let loginDialog: HTMLDialogElement = null!;
   let emailVerificationDialog: HTMLDialogElement = null!;
 
