@@ -79,6 +79,9 @@ function _Signup() {
 
       await API.AuthService.signUp(email(), password());
       await API.AuthService.updateProfile(name(), avatar());
+      await API.AuthService.verifyEmail();
+
+      console.log("Sign-up successful");
 
       busyDialog.close();
 

@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   User,
+  sendEmailVerification,
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { Firebase } from "~/api/Firebase";
@@ -53,5 +54,13 @@ export class AuthenticationService {
       displayName: name,
       photoURL: profileImage,
     });
+  }
+
+  async verifyEmail() {
+    if (!this.user) {
+      throw new Error("User is not logged in");
+    }
+
+    return await sendEmailVerification(this.user);
   }
 }

@@ -15,6 +15,9 @@ import { isServer } from "solid-js/web";
 import { sleep } from "~/utils/utils";
 import LoginDialog from "~/components/LoginDialog";
 import { User } from "~/api/types";
+import EmailVerificationDialog, {
+  EmailVerificationDialogResult,
+} from "~/components/EmailVerificationDialog";
 
 export default function Home() {
   return (
@@ -25,7 +28,7 @@ export default function Home() {
 }
 
 function _Admin() {
-  const { busyDialog, user, setUser, API } = useAppContext();
+  const { busyDialog, user, setUser, API, messageBox } = useAppContext();
   const { loadData, unSubList } = useDataLoader();
 
   onMount(async () => {
@@ -45,15 +48,44 @@ function _Admin() {
       );
 
       // Wait for 100ms to let BusyDialog object to be created
-      await sleep(100);
+      await sleep(200);
       busyDialog.show("Signing in...");
-      await sleep(1000);
+
+      // Wait for user to be set by checking it out, it will wait 2secs in total
+      let checkCount = 0;
+      while (!user() && checkCount < 20) {
+        await sleep(100);
+        checkCount++;
+      }
+
       busyDialog.close();
     } catch (e) {
       busyDialog.close();
     } finally {
       if (!user()) {
         await loginDialog.ShowModal<User>();
+      }
+
+      // Check email verification status
+      if (user() && !user().emailVerified) {
+        const dResult =
+          await emailVerificationDialog.ShowModal<EmailVerificationDialogResult>();
+        if (dResult === "Cancel") {
+          // Messagebox for showing you must verify your email
+          messageBox.warning(
+            "You have to verify your email to use the admin features",
+          );
+        }
+
+        if (dResult === "Verified") {
+          messageBox.success(
+            "Email verified successfully. You can use admin features now",
+          );
+        }
+      }
+
+      if (user() && user().emailVerified) {
+        await loadData();
       }
     }
   });
@@ -64,14 +96,15 @@ function _Admin() {
   });
 
   createEffect(async () => {
-    if (!isServer) {
-      if (user()) {
-        await loadData();
-      }
-    }
+    // if (!isServer) {
+    //   if (user() && user().emailVerified) {
+    //     await loadData();
+    //   }
+    // }
   });
 
   let loginDialog: HTMLDialogElement = null!;
+  let emailVerificationDialog: HTMLDialogElement = null!;
 
   return (
     <main>
@@ -90,6 +123,7 @@ function _Admin() {
         <BusyDialog />
         <MessageBox />
         <LoginDialog ref={loginDialog} />
+        <EmailVerificationDialog ref={emailVerificationDialog} />
       </div>
     </main>
   );
