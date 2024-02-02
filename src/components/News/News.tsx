@@ -56,7 +56,7 @@ export default function News() {
         scrollDirection: "down",
         totalItemDistance: newsAnimationContainer.scrollHeight,
         viewPortDistance: newsScrollableContainer.clientHeight - 16,
-        pixelsPerSecondToScroll: 50,
+        pixelsPerSecondToScroll: 25,
         stayAtRestDurationInMsAfterScroll: 3000,
         pixelsPerSecondToReturnBack: 1000,
       });

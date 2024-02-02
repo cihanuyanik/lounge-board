@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
+    "build_deploy": "vinxi build && firebase deploy",
     "start": "vinxi start",
     "preview_static": "npx serve dist/public"
   },
