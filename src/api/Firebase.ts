@@ -46,8 +46,6 @@ export class Firebase {
     }
 
     this.News = new NewsCollection(this);
-    // this.UpcomingEvents = new UpcomingEventsCollection(this);
-    // this.PastEvents = new PastEventsCollection(this);
     this.Events = new EventsCollection(this);
     this.ResearchGroups = new ResearchGroupsCollection(this);
     this.Members = new MembersCollection(this);

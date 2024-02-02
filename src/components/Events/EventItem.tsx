@@ -33,6 +33,8 @@ export default function EventItem(props: Props) {
       events.entities[props.id],
     );
 
+    console.log(dResult);
+
     if (dResult.result === "Cancel") return;
 
     try {
@@ -45,8 +47,11 @@ export default function EventItem(props: Props) {
       const changes: Partial<Event> = {};
       changes.isSelected = false;
 
-      if (original.text !== dResult.event.text) {
-        changes.text = dResult.event.text;
+      if (original.name !== dResult.event.name) {
+        changes.name = dResult.event.name;
+      }
+      if (original.details !== dResult.event.details) {
+        changes.details = dResult.event.details;
       }
       if (original.startsAt !== dResult.event.startsAt) {
         changes.startsAt = dResult.event.startsAt;

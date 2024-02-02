@@ -22,14 +22,14 @@ import Title from "~/assets/icons/Title";
 import Details from "~/assets/icons/Details";
 import Start from "~/assets/icons/Start";
 import Stop from "~/assets/icons/Stop";
+import DateTimePicker from "~/components/common/DateTimePicker";
 
 export type CreateEventDialogResult = {
   result: "Accept" | "Cancel";
   event: Event;
-  startDate: string;
-  startTime: string;
-  endDate: string;
-  endTime: string;
+
+  startDateTime: string;
+  endDateTime: string;
 };
 
 function createDialogStore() {
@@ -47,10 +47,9 @@ function createDialogStore() {
       // @ts-ignore
       endsAt: new Date(),
     },
-    startDate: "",
-    startTime: "",
-    endDate: "",
-    endTime: "",
+
+    startDateTime: "",
+    endDateTime: "",
   });
 
   const mutate = createMutator(setState);
@@ -60,10 +59,7 @@ function createDialogStore() {
       () => state.event.startsAt,
       (startsAt) => {
         mutate((state) => {
-          state.startDate =
-            toDate(startsAt)?.toLocaleISOString().slice(0, 10) || "";
-          state.startTime =
-            toDate(startsAt)?.toLocaleISOString().slice(11, 16) || "";
+          state.startDateTime = toDate(startsAt)?.toLocaleISOString() || "";
         });
       },
     ),
@@ -74,10 +70,7 @@ function createDialogStore() {
       () => state.event.endsAt,
       (endsAt) => {
         mutate((state) => {
-          state.endDate =
-            toDate(endsAt)?.toLocaleISOString().slice(0, 10) || "";
-          state.endTime =
-            toDate(endsAt)?.toLocaleISOString().slice(11, 16) || "";
+          state.endDateTime = toDate(endsAt)?.toLocaleISOString() || "";
         });
       },
     ),
@@ -119,11 +112,6 @@ export default function CreateEditEvent(props: { ref: DialogRef }) {
 
 function _CreateEditEvent(props: { ref: DialogRef }) {
   const { state, mutate } = useDialogContext();
-
-  let startAtDateRef: HTMLInputElement = null!;
-  let startAtTimeRef: TimeInputRef = null!;
-  let endAtDateRef: HTMLInputElement = null!;
-  let endAtTimeRef: TimeInputRef = null!;
 
   function onBeforeShow(
     ev: CustomEvent<{ event?: Event; type?: "upcoming" | "past" }>,
@@ -171,12 +159,10 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
   function onClose(ev: CustomEvent) {
     // Prepare dialogStore for return
     mutate((state) => {
-      let startsAt = new Date(
-        `${startAtDateRef.value}T${startAtTimeRef.value}`,
-      );
+      let startsAt = new Date(state.startDateTime);
       // @ts-ignore
       if (isNaN(startsAt)) startsAt = undefined;
-      let endsAt = new Date(`${endAtDateRef.value}T${endAtTimeRef.value}`);
+      let endsAt = new Date(state.endDateTime);
       // @ts-ignore
       if (isNaN(endsAt)) endsAt = undefined;
       // @ts-ignore
@@ -224,102 +210,48 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
             mutate((state) => (state.event.details = ev.currentTarget.value));
           }}
         />
-        <Column class={"date-time-picker"}>
-          <Start />
-          <label>Starts @</label>
-          <Row class={"date-time-container"}>
-            <DateInput
-              ref={startAtDateRef}
-              format={"DD MMM YYYY"}
-              background={"transparent"}
-              value={state.startDate}
-              onChange={(value) => {
-                const newStartAtDate = new Date(
-                  value + "T" + startAtTimeRef.value,
-                );
-                // Check whether the date is valid
-                if (isNaN(newStartAtDate.getTime())) {
-                  return;
-                }
+        <DateTimePicker
+          label={"Starts @"}
+          icon={Start}
+          height={60}
+          value={state.startDateTime}
+          onChange={(value) => {
+            const newStartAtDate = new Date(value);
+            // Check whether the date is valid
+            if (isNaN(newStartAtDate.getTime())) {
+              return;
+            }
 
-                mutate((state) => {
-                  // Check whether the date is in the past
-                  state.event.isPast = newStartAtDate < new Date();
-                  // Update startsAt
-                  // @ts-ignore
-                  state.event.startsAt = newStartAtDate;
-                });
-              }}
-            />
-            <p>-</p>
-            <TimeInput
-              ref={startAtTimeRef}
-              value={state.startTime}
-              onChange={(value) => {
-                const newStartAtDate = new Date(
-                  startAtDateRef.value + "T" + value,
-                );
-                // Check whether the date is valid
-                if (isNaN(newStartAtDate.getTime())) {
-                  return;
-                }
+            mutate((state) => {
+              // Check whether the date is in the past
+              state.event.isPast = newStartAtDate < new Date();
+              // Update startsAt
+              // @ts-ignore
+              state.event.startsAt = newStartAtDate;
+            });
+          }}
+        />
 
-                mutate((state) => {
-                  // Check whether the date is in the past
-                  state.event.isPast = newStartAtDate < new Date();
-                  // Update startsAt
-                  // @ts-ignore
-                  state.event.startsAt = newStartAtDate;
-                });
-              }}
-            />
-          </Row>
-        </Column>
+        <DateTimePicker
+          label={"Ends @"}
+          icon={Stop}
+          height={60}
+          value={state.endDateTime}
+          min={state.startDateTime}
+          onChange={(value) => {
+            const newEndAtDate = new Date(value);
+            // Check whether the date is valid
+            if (isNaN(newEndAtDate.getTime())) {
+              return;
+            }
 
-        <Column class={"date-time-picker"}>
-          <Stop />
-          <label>Ends @</label>
-          <Row class={"date-time-container"}>
-            <DateInput
-              ref={endAtDateRef}
-              format={"DD MMM YYYY"}
-              background={"transparent"}
-              value={state.endDate || state.startDate}
-              min={state.startDate}
-              onChange={(value) => {
-                const newEndAtDate = new Date(value + "T" + endAtTimeRef.value);
-                // Check whether the date is valid
-                if (isNaN(newEndAtDate.getTime())) {
-                  return;
-                }
-
-                mutate((state) => {
-                  // Update endsAt
-                  // @ts-ignore
-                  state.event.endsAt = newEndAtDate;
-                });
-              }}
-            />
-            <p>-</p>
-            <TimeInput
-              ref={endAtTimeRef}
-              value={state.endTime || state.startTime}
-              onChange={(value) => {
-                const newEndAtDate = new Date(endAtDateRef.value + "T" + value);
-                // Check whether the date is valid
-                if (isNaN(newEndAtDate.getTime())) {
-                  return;
-                }
-
-                mutate((state) => {
-                  // Update endsAt
-                  // @ts-ignore
-                  state.event.endsAt = newEndAtDate;
-                });
-              }}
-            />
-          </Row>
-        </Column>
+            mutate((state) => {
+              // Update endsAt
+              // @ts-ignore
+              state.event.endsAt = newEndAtDate;
+            });
+          }}
+        />
       </Column>
       <Row class={"separator"} />
       <Preview />
