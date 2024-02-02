@@ -1,4 +1,4 @@
-import { Accessor, Match, Switch } from "solid-js";
+import { Accessor, Match, Show, Switch } from "solid-js";
 import { useAppContext } from "~/AppContext";
 import Row from "~/components/common/Row";
 import LinkedInPost from "~/components/News/Posts/LinkedInPost";
@@ -9,6 +9,7 @@ import { CreateNewsDialogResult } from "~/components/News/CreateEditNews";
 import { New } from "~/api/types";
 import CustomPost from "~/components/News/Posts/CustomPost";
 import { Timestamp } from "firebase/firestore";
+import Tick from "~/assets/icons/Tick";
 
 type NewsItemProps = {
   id: string;
@@ -129,6 +130,11 @@ export default function NewsItem(props: NewsItemProps) {
           />
         </Match>
       </Switch>
+      <Show when={isAdmin() && news.entities[props.id]?.isSelected}>
+        <Row class={"item-selected-marker"}>
+          <Tick />
+        </Row>
+      </Show>
     </Row>
   );
 }

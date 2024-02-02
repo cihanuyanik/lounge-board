@@ -29,6 +29,11 @@
   border-radius: var(--radii-xl);
   box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
   transition: all 0.2s ease-in-out;
+  position: relative;
+  isolation: isolate;
+}
+.news-scrollable-container .news-item > .item-selected-marker svg {
+  height: auto;
 }
 .news-scrollable-container .item-selected {
   box-shadow: 0 0 10px 5px green;

@@ -1,4 +1,4 @@
-import { Accessor } from "solid-js";
+import { Accessor, Show } from "solid-js";
 import { buildDurationString, toDate } from "~/utils/utils";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
@@ -11,6 +11,7 @@ import CalendarDate from "~/assets/icons/CalendarDate";
 import moment from "moment/moment";
 import Clock from "~/assets/icons/Clock";
 import Duration from "~/assets/icons/Duration";
+import Tick from "~/assets/icons/Tick";
 
 type Props = {
   id: string;
@@ -132,6 +133,11 @@ export default function EventItem(props: Props) {
           </Column>
         </Row>
       </Row>
+      <Show when={isAdmin() && events.entities[props.id]?.isSelected}>
+        <Row class={"item-selected-marker"}>
+          <Tick />
+        </Row>
+      </Show>
     </Column>
   );
 }

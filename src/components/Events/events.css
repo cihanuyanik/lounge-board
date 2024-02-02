@@ -44,6 +44,7 @@
   justify-content: stretch;
   overflow: clip;
   font-weight: bolder;
+  position: relative;
 }
 .event-card-header {
   flex: 1;

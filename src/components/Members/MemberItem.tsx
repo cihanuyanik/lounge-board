@@ -6,6 +6,7 @@ import { Show } from "solid-js";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
+import Tick from "~/assets/icons/Tick";
 
 type MemberItemProps = {
   id: string;
@@ -73,6 +74,12 @@ export default function MemberItem(props: MemberItemProps) {
 
       <Show when={isAdmin()}>
         <DragHandle />
+      </Show>
+
+      <Show when={isAdmin() && members.entities[props.id]?.isSelected}>
+        <Row class={"item-selected-marker"}>
+          <Tick />
+        </Row>
       </Show>
     </Row>
   );

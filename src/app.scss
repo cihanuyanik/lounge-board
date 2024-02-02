@@ -235,3 +235,22 @@ object {
     background: var(--color-primary-lighter);
   }
 }
+
+.item-selected-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 50%;
+  width: 50%;
+  border-radius: var(--radii-xl);
+  animation: pulse 1s infinite;
+  color: white;
+
+  svg {
+    height: 100%;
+    background: rgb(0, 255, 0, 0.6);
+    border-radius: var(--radii-full);
+    padding: var(--space-2);
+  }
+}

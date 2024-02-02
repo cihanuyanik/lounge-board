@@ -37,6 +37,14 @@
     border-radius: var(--radii-xl);
     box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
     transition: all 0.2s ease-in-out;
+    position: relative;
+    isolation: isolate;
+
+    > .item-selected-marker {
+      svg {
+        height: auto;
+      }
+    }
   }
 
   .item-selected {
