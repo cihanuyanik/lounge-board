@@ -13,7 +13,7 @@ import { DialogResult } from "~/components/MessageBox/store";
 import { scrollWithAnimation, sleep } from "~/utils/utils";
 
 export default function News() {
-  const { isAdmin, messageBox, busyDialog, API, news } = useAppContext();
+  const { isAdmin, messageBox, Executor, API, news } = useAppContext();
   let newsAnimationContainer: HTMLDivElement = null!;
   let newsScrollableContainer: HTMLDivElement = null!;
   let newsDialog: HTMLDialogElement = null!;
@@ -48,6 +48,7 @@ export default function News() {
     }
   });
 
+  // TODO: This part and Member scroll: Maybe they can be refactored into a single component
   async function runScrollAnimation() {
     // Start animation and wait for it to finish
     try {
@@ -75,50 +76,42 @@ export default function News() {
     }
   }
 
-  async function onAddNew() {
-    const dResult = await newsDialog.ShowModal<CreateNewsDialogResult>();
-    if (dResult.result === "Cancel") return;
-
-    try {
-      busyDialog.show("Creating news...");
-
-      await API.News.add({ ...dResult.news });
-
-      busyDialog.close();
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
-  }
-
-  async function onDeleteSelected() {
-    try {
-      if (news.selectedIds.length === 0) return;
-
-      const dResult = await messageBox.question(
-        "Are you sure you want to delete news?",
-      );
-      if (dResult === DialogResult.No) return;
-
-      API.News.beginTransaction();
-      for (const id of news.selectedIds) {
-        await API.News.delete(news.entities[id]);
-      }
-      await API.News.commitTransaction();
-    } catch (e) {
-      messageBox.error(`${e}`);
-    }
-  }
-
   const icon = <Img src={NewsHeader} style={{ height: "35px" }} />;
 
   return (
     <BlockContainer
       title={"News"}
       titleIcon={icon}
-      onAddNewItem={isAdmin() ? onAddNew : undefined}
-      onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
       class={"news-block-container"}
+      onAddNewItem={
+        !isAdmin()
+          ? undefined
+          : async () => {
+              const dResult =
+                await newsDialog.ShowModal<CreateNewsDialogResult>();
+              if (dResult.result === "Cancel") return;
+
+              await Executor.run(() => API.News.add({ ...dResult.news }), {
+                busyDialogMessage: "Creating news...",
+              });
+            }
+      }
+      onDeleteSelectedItems={
+        !isAdmin()
+          ? undefined
+          : async () => {
+              if (news.selectedIds.length === 0) return;
+
+              const dResult = await messageBox.question(
+                "Are you sure you want to delete news?",
+              );
+              if (dResult === DialogResult.No) return;
+
+              await Executor.run(() => API.News.deleteMany(news.selectedIds), {
+                busyDialogMessage: "Deleting news...",
+              });
+            }
+      }
     >
       <Scrollable
         ref={newsScrollableContainer}

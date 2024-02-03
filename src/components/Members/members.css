@@ -1,3 +1,9 @@
+.members-block-container {
+  height: 100%;
+  min-width: 320px;
+  max-width: 320px;
+}
+
 .members-scrollable-container {
   flex: 1 0 0;
   width: 100%;
@@ -15,8 +21,8 @@
 .members-scrollable-container .members-scroll-animation-wrapper > *:not(:last-child) {
   margin-bottom: var(--space-3);
 }
-.members-scrollable-container .member-item {
-  height: 120px;
+
+.member-item {
   min-height: 120px;
   width: 100%;
   background-image: url("../../assets/images/texture/papyrus.jpg");
@@ -27,66 +33,70 @@
   user-select: none;
   transition: all 0.2s ease-in-out;
 }
-.members-scrollable-container .member-item.item-selected {
+.member-item.item-selected {
   box-shadow: 0 0 10px 5px green;
 }
-.members-scrollable-container .member-item.cursor-pointer {
+.member-item.cursor-pointer {
   cursor: pointer;
 }
-.members-scrollable-container .member-item .avatar {
+.member-item .avatar {
   height: 100px;
   width: 85px;
+  position: relative;
 }
-.members-scrollable-container .member-item .avatar img {
+.member-item .avatar img {
   flex: 1;
   border-radius: 50% 50%;
   box-shadow: 0 0 10px 4px var(--color-primary-darker);
 }
-.members-scrollable-container .member-item .name-role {
+.member-item .name-role {
   flex: 1;
   gap: var(--space-2);
   font-weight: bold;
   text-align: center;
 }
-.members-scrollable-container .member-item .name-role .name {
+.member-item .name-role .name {
   word-break: break-word;
   color: black;
   font-size: var(--font-sizes-lg);
   width: 100%;
   border-bottom: 3px solid var(--color-primary);
 }
-.members-scrollable-container .member-item .name-role .role {
+.member-item .name-role .role {
   word-break: break-word;
   color: var(--color-darkgray);
   font-size: var(--font-sizes-md);
 }
 
 .create-edit-member-dialog {
-  width: 400px;
+  width: 288px !important;
   overflow: visible;
 }
-.create-edit-member-dialog .member-item {
-  height: 120px;
-  min-height: 120px;
+.create-edit-member-dialog .name-role > input {
+  color: black;
+  font-size: var(--font-sizes-lg);
   width: 100%;
-  background-image: url("../../assets/images/texture/papyrus.jpg");
-  box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
-  border-radius: var(--radii-xl);
-  padding: var(--space-2);
-  gap: var(--space-2);
-  user-select: none;
+  text-align: center;
+  background: transparent;
+  outline: none;
+  border: none;
 }
-.create-edit-member-dialog .member-item .avatar {
-  height: 100px;
-  width: 85px;
-  position: relative;
+.create-edit-member-dialog .name-role > input::placeholder {
+  color: var(--color-darkgray);
 }
-.create-edit-member-dialog .member-item .avatar img {
-  flex: 1;
-  border-radius: 50% 50%;
-  box-shadow: 0 0 10px 4px var(--color-primary-darker);
+.create-edit-member-dialog .name-role > textarea {
+  color: var(--color-darkgray);
+  font-size: var(--font-sizes-md);
+  width: 100%;
+  text-align: center;
+  background: transparent;
+  outline: none;
+  border: none;
 }
-.create-edit-member-dialog .member-item .avatar button {
+.create-edit-member-dialog .name-role > textarea::placeholder {
+  color: var(--color-darkgray);
+}
+.create-edit-member-dialog .avatar button {
   position: absolute;
   right: 0;
   top: 0;
@@ -96,36 +106,8 @@
   background: transparent;
   opacity: 0;
 }
-.create-edit-member-dialog .member-item .name-role {
-  flex: 1;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-  font-weight: bold;
-  text-align: center;
-}
-.create-edit-member-dialog .member-item .name-role .name {
-  color: black;
-  font-size: var(--font-sizes-lg);
-  width: 100%;
-  text-align: center;
-  background: transparent;
-  outline: none;
-  border: none;
-}
-.create-edit-member-dialog .member-item .name-role .name::placeholder {
-  color: var(--color-darkgray);
-}
-.create-edit-member-dialog .member-item .name-role .role {
-  color: var(--color-darkgray);
-  font-size: var(--font-sizes-md);
-  width: 100%;
-  text-align: center;
-  background: transparent;
-  outline: none;
-  border: none;
-}
-.create-edit-member-dialog .member-item .name-role .role::placeholder {
-  color: var(--color-darkgray);
+.create-edit-member-dialog .avatar:hover button {
+  opacity: 1;
 }
 
 /*# sourceMappingURL=members.css.map */

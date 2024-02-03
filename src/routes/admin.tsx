@@ -3,7 +3,7 @@ import Members from "~/components/Members/Members";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
 import News from "~/components/News/News";
 import Events from "~/components/Events/Events";
-import { createEffect, onCleanup, onMount } from "solid-js";
+import { onCleanup, onMount } from "solid-js";
 import { AppContextProvider, useAppContext, useDataLoader } from "~/AppContext";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
@@ -28,66 +28,77 @@ export default function Home() {
 }
 
 function _Admin() {
-  const { busyDialog, user, setUser, API, messageBox } = useAppContext();
+  const { user, setUser, Executor, API, messageBox } = useAppContext();
   const { loadData, unSubList } = useDataLoader();
+
+  function subscribeToAuthState() {
+    unSubList.push(
+      API.AuthService.auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          // Logged in
+          setUser(user);
+        } else {
+          // Logged out
+          setUser(null!);
+        }
+      }),
+    );
+  }
+
+  async function login() {
+    if (!user()) {
+      await loginDialog.ShowModal<User>();
+    }
+  }
+
+  async function checkEmailVerification() {
+    // Check email verification status
+    if (user() && !user().emailVerified) {
+      const dResult =
+        await emailVerificationDialog.ShowModal<EmailVerificationDialogResult>();
+      if (dResult === "Cancel") {
+        // Messagebox for showing you must verify your email
+        messageBox.warning(
+          "You have to verify your email to use the admin features",
+        );
+      }
+
+      if (dResult === "Verified") {
+        messageBox.success(
+          "Email verified successfully. You can use admin features now",
+        );
+      }
+    }
+  }
 
   onMount(async () => {
     if (isServer) return;
 
-    try {
-      unSubList.push(
-        API.AuthService.auth.onAuthStateChanged(async (user) => {
-          if (user) {
-            // Logged in
-            setUser(user);
-          } else {
-            // Logged out
-            setUser(null!);
+    // Wait for 200ms to let BusyDialog object to be created
+    await sleep(200);
+
+    await Executor.run(
+      async () => {
+        subscribeToAuthState();
+
+        // Wait for user to be set by checking it out, it will wait 2secs in total
+        let checkCount = 0;
+        while (!user() && checkCount < 20) {
+          await sleep(100);
+          checkCount++;
+        }
+      },
+      {
+        busyDialogMessage: "Signing in...",
+        postAction: async () => {
+          await login();
+          await checkEmailVerification();
+          if (user() && user().emailVerified) {
+            await loadData();
           }
-        }),
-      );
-
-      // Wait for 100ms to let BusyDialog object to be created
-      await sleep(200);
-      busyDialog.show("Signing in...");
-
-      // Wait for user to be set by checking it out, it will wait 2secs in total
-      let checkCount = 0;
-      while (!user() && checkCount < 20) {
-        await sleep(100);
-        checkCount++;
-      }
-
-      busyDialog.close();
-    } catch (e) {
-      busyDialog.close();
-    } finally {
-      if (!user()) {
-        await loginDialog.ShowModal<User>();
-      }
-
-      // Check email verification status
-      if (user() && !user().emailVerified) {
-        const dResult =
-          await emailVerificationDialog.ShowModal<EmailVerificationDialogResult>();
-        if (dResult === "Cancel") {
-          // Messagebox for showing you must verify your email
-          messageBox.warning(
-            "You have to verify your email to use the admin features",
-          );
-        }
-
-        if (dResult === "Verified") {
-          messageBox.success(
-            "Email verified successfully. You can use admin features now",
-          );
-        }
-      }
-
-      if (user() && user().emailVerified) {
-        await loadData();
-      }
-    }
+        },
+      },
+    );
   });
 
   onCleanup(() => {

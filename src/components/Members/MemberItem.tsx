@@ -7,6 +7,7 @@ import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
 import Tick from "~/assets/icons/Tick";
+import { detectChanges } from "~/utils/utils";
 
 type MemberItemProps = {
   id: string;
@@ -14,40 +15,7 @@ type MemberItemProps = {
 };
 
 export default function MemberItem(props: MemberItemProps) {
-  const { isAdmin, busyDialog, messageBox, members, API } = useAppContext();
-
-  function onClick() {
-    const memberItem = members.entities[props.id];
-    if (memberItem.isSelected) members.unselect(memberItem.id);
-    else members.select(memberItem.id);
-  }
-
-  async function onDoubleClick() {
-    if (!props.editDialog) return;
-    const dResult =
-      await props.editDialog.ShowModal<CreateEditMemberDialogResult>(
-        members.entities[props.id],
-      );
-    if (dResult.result === "Cancel") return;
-
-    try {
-      busyDialog.show("Updating member...");
-
-      await API.Members.update({
-        original: members.entities[props.id],
-        changes: {
-          name: dResult.member.name,
-          role: dResult.member.role,
-          image: dResult.member.image,
-        },
-      });
-
-      busyDialog.close();
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
-  }
+  const { isAdmin, members, Executor, API } = useAppContext();
 
   return (
     <Row
@@ -58,8 +26,39 @@ export default function MemberItem(props: MemberItemProps) {
         "cursor-pointer": isAdmin(),
         "item-selected": members.entities[props.id]?.isSelected,
       }}
-      onclick={isAdmin() ? onClick : undefined}
-      ondblclick={isAdmin() ? onDoubleClick : undefined}
+      onclick={
+        !isAdmin()
+          ? undefined
+          : () => {
+              const memberItem = members.entities[props.id];
+              if (memberItem.isSelected) members.unselect(memberItem.id);
+              else members.select(memberItem.id);
+            }
+      }
+      ondblclick={
+        !isAdmin()
+          ? undefined
+          : async () => {
+              if (!props.editDialog) return;
+              const dResult =
+                await props.editDialog.ShowModal<CreateEditMemberDialogResult>(
+                  members.entities[props.id],
+                );
+              if (dResult.result === "Cancel") return;
+
+              await Executor.run(
+                () =>
+                  API.Members.update({
+                    original: members.entities[props.id],
+                    changes: detectChanges(
+                      members.entities[props.id],
+                      dResult.member,
+                    ),
+                  }),
+                { busyDialogMessage: "Updating member..." },
+              );
+            }
+      }
     >
       <Row class={"avatar"}>
         <Img

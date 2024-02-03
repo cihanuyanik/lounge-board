@@ -383,6 +383,7 @@ function DialogButtons() {
         onClick={() => {
           mutate((state) => {
             state.news.updatedAt = Timestamp.now();
+            state.news.isSelected = false;
             state.result = "Accept";
           });
 

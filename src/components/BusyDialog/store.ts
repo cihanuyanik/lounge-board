@@ -17,7 +17,10 @@ export function createBusyDialogStore() {
     show: (message: string) => {
       mutateBusyDialog((state) => {
         state.message = message;
-        state.dialogRef?.ShowModal().then();
+        if (state.dialogRef) {
+          state.dialogRef.ShowModal().then();
+          state.isOpen = true;
+        }
       });
     },
 
@@ -25,6 +28,7 @@ export function createBusyDialogStore() {
       mutateBusyDialog((state) => {
         state.message = "";
         state.dialogRef?.Close();
+        state.isOpen = false;
       });
     },
   });

@@ -3,7 +3,6 @@ import "./DateExtensions";
 import "./EventRegisterExtension";
 import "./ArrayExtensions";
 import "./DialogExtensions";
-import moment from "moment/moment";
 
 /**
  * Creates a mutate function built on top of given setter function
@@ -20,23 +19,18 @@ export function sleep(delayMs: number) {
   return new Promise((resolve) => setTimeout(resolve, delayMs));
 }
 
-export function toDate(
-  source: Date | object | string | null | undefined,
-): Date {
-  if (source === null || source === undefined)
-    // @ts-ignore
-    return undefined;
-
-  if (source instanceof Date) return source;
-
-  // @ts-ignore
-  if (typeof source === "object" && source.toDate !== undefined)
-    // @ts-ignore
-    return source.toDate();
-  if (typeof source === "string") return new Date(source);
-  return new Date();
+export function detectChanges<T>(original: T, updated: T) {
+  // Detect changes occurred in the updated object with respect to the original object
+  const changes = {} as Partial<T>;
+  for (const key in original) {
+    if (updated[key] !== undefined && original[key] !== updated[key]) {
+      changes[key] = updated[key];
+    }
+  }
+  return changes;
 }
 
+// TODO: Move this into its own file and class
 type ScrollWithAnimationOptions = {
   animationContainer: HTMLElement;
   scrollDirection: "up" | "down" | "left" | "right";
@@ -191,27 +185,4 @@ export function scrollWithAnimation(options: ScrollWithAnimationOptions) {
   return options.animationContainer.animate(keyFrames, {
     duration: animationDuration * 1000,
   });
-}
-
-export function buildDurationString(startAt: Date, endAt: Date) {
-  const startsAt = moment(startAt);
-  const endsAt = moment(endAt);
-  const duration = moment.duration(endsAt.diff(startsAt));
-
-  let minutes = duration.minutes();
-  let hours = duration.hours();
-  let days = duration.days();
-
-  // If minutes is 59, set it to 0 and increment hours
-  if (minutes === 59) {
-    minutes = 0;
-    hours++;
-  }
-
-  // Build duration string
-  let durationString = "";
-  if (days > 0) durationString += `${days}D `;
-  if (hours > 0) durationString += `${hours}H `;
-  if (minutes > 0) durationString += `${minutes}M `;
-  return durationString.trim();
 }

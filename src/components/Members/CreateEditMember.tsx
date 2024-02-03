@@ -1,4 +1,3 @@
-import { emptyMember } from "~/components/Members/store";
 import { createStore } from "solid-js/store";
 import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
@@ -16,7 +15,7 @@ import { createContext, useContext } from "solid-js";
 
 export type CreateEditMemberDialogResult = {
   result: "Accept" | "Cancel";
-  member: Member;
+  member: Omit<Member, "id" | "createdAt">;
 };
 
 function createDialogStore() {
@@ -24,7 +23,7 @@ function createDialogStore() {
   const [state, setState] = createStore<CreateEditMemberDialogResult>({
     result: "Cancel",
     // @ts-ignore
-    member: emptyMember(),
+    member: { name: "", role: "", image: "", isSelected: false },
   });
 
   // create mutator
@@ -61,19 +60,27 @@ export default function CreateEditMember(props: { ref: DialogRef }) {
 
 function _CreateEditMember(props: { ref: DialogRef }) {
   const { state, mutate } = useDialogContext();
-  function onBeforeShow(ev: CustomEvent) {
-    const member = ev.detail as Member;
-    mutate((state) => {
-      state.member = member ? { ...member, isSelected: false } : emptyMember();
-    });
-  }
 
   return (
     <Dialog
       id={"create-edit-member-dialog"}
       class={"create-edit-member-dialog"}
       ref={props.ref}
-      onBeforeShow={onBeforeShow}
+      onBeforeShow={(ev: CustomEvent) => {
+        const member = ev.detail as Member;
+        mutate((state) => {
+          state.result = "Cancel";
+          if (member) {
+            // Open in edit mode & copy only the properties that are needed (for safety)
+            state.member.name = member.name;
+            state.member.role = member.role;
+            state.member.image = member.image;
+            state.member.isSelected = false;
+          } else {
+            state.member = { name: "", role: "", image: "", isSelected: false };
+          }
+        });
+      }}
       onClose={(ev) => (ev.target as HTMLDialogElement).Resolve(state)}
     >
       <Row class={"member-item"}>
@@ -144,13 +151,7 @@ function Avatar() {
   }
 
   return (
-    <Row
-      class={"avatar"}
-      onMouseEnter={() => {
-        const editButton = document.getElementById("edit-member-image");
-        if (editButton) editButton.style.opacity = "1";
-      }}
-    >
+    <Row class={"avatar"}>
       <Img src={state.member.image || MemberImagePlaceholder} />
 
       <Button id={"edit-member-image"} onClick={() => imageSelectInput.click()}>
@@ -189,9 +190,13 @@ function TextInfo() {
 
       <textarea
         value={state.member.role}
-        onInput={(e) =>
-          mutate((state) => (state.member.role = e.target.value || ""))
-        }
+        onInput={(e) => {
+          mutate((state) => {
+            state.member.role = e.target.value || "";
+          });
+          e.currentTarget.style.height = "";
+          e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
+        }}
         placeholder={"Member Role"}
         class={"role"}
       />

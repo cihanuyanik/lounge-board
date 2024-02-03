@@ -1,5 +1,4 @@
 import { Accessor, Show } from "solid-js";
-import { buildDurationString, toDate } from "~/utils/utils";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
@@ -12,66 +11,17 @@ import moment from "moment/moment";
 import Clock from "~/assets/icons/Clock";
 import Duration from "~/assets/icons/Duration";
 import Tick from "~/assets/icons/Tick";
+import { buildDurationString } from "~/utils/DateExtensions";
+import { detectChanges } from "~/utils/utils";
 
 type Props = {
   id: string;
   index: Accessor<number>;
-  editDialog?: HTMLDialogElement;
+  editDialog: HTMLDialogElement;
 };
 
 export default function EventItem(props: Props) {
-  const { isAdmin, events, messageBox, API } = useAppContext();
-
-  function onClick() {
-    if (events.entities[props.id].isSelected) events.unselect(props.id);
-    else events.select(props.id);
-  }
-
-  async function onDoubleClick() {
-    if (!props.editDialog) return;
-
-    const dResult = await props.editDialog.ShowModal<CreateEventDialogResult>(
-      events.entities[props.id],
-    );
-
-    console.log(dResult);
-
-    if (dResult.result === "Cancel") return;
-
-    try {
-      if (!dResult.event.startsAt) {
-        // noinspection ExceptionCaughtLocallyJS
-        throw new Error("Start date is required");
-      }
-
-      const original = events.entities[props.id];
-      const changes: Partial<Event> = {};
-      changes.isSelected = false;
-
-      if (original.name !== dResult.event.name) {
-        changes.name = dResult.event.name;
-      }
-      if (original.details !== dResult.event.details) {
-        changes.details = dResult.event.details;
-      }
-      if (original.startsAt !== dResult.event.startsAt) {
-        changes.startsAt = dResult.event.startsAt;
-      }
-      if (original.endsAt !== dResult.event.endsAt) {
-        changes.endsAt = dResult.event.endsAt;
-      }
-      if (original.isPast !== dResult.event.isPast) {
-        changes.isPast = dResult.event.isPast;
-      }
-
-      await API.Events.update({
-        original: events.entities[props.id],
-        changes: changes,
-      });
-    } catch (e) {
-      messageBox.error(`${e}`);
-    }
-  }
+  const { isAdmin, events, Executor, API } = useAppContext();
 
   return (
     <Column
@@ -82,8 +32,39 @@ export default function EventItem(props: Props) {
         "cursor-pointer": isAdmin(),
         "scroll-item": !isAdmin(),
       }}
-      onclick={isAdmin() ? onClick : undefined}
-      ondblclick={isAdmin() ? onDoubleClick : undefined}
+      onclick={
+        !isAdmin()
+          ? undefined
+          : () => {
+              if (events.entities[props.id].isSelected)
+                events.unselect(props.id);
+              else events.select(props.id);
+            }
+      }
+      ondblclick={
+        !isAdmin()
+          ? undefined
+          : async () => {
+              const dResult =
+                await props.editDialog.ShowModal<CreateEventDialogResult>(
+                  events.entities[props.id],
+                );
+              if (dResult.result === "Cancel") return;
+
+              await Executor.run(async () => {
+                const original = events.entities[props.id];
+                const changes: Partial<Event> = detectChanges(
+                  original,
+                  dResult.event,
+                );
+
+                await API.Events.update({
+                  original: events.entities[props.id],
+                  changes: changes,
+                });
+              });
+            }
+      }
     >
       <Column class={"event-card-header"}>
         <Row class={"icon"}>
@@ -127,8 +108,8 @@ export default function EventItem(props: Props) {
           <Duration />
           <Column class={"flex-1"}>
             {buildDurationString(
-              toDate(events.entities[props.id].startsAt),
-              toDate(events.entities[props.id].endsAt),
+              events.entities[props.id].startsAt,
+              events.entities[props.id].endsAt,
             )}
           </Column>
         </Row>

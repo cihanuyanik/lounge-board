@@ -9,45 +9,12 @@ import Cross from "~/assets/icons/Cross";
 import Tick from "~/assets/icons/Tick";
 import { useAppContext } from "~/AppContext";
 
-type Props = {
-  ref: DialogRef;
-};
-
 export type EmailVerificationDialogResult = "Cancel" | "Verified";
 
-export default function (props: Props) {
-  const { busyDialog, messageBox, API } = useAppContext();
+export default function (props: { ref: DialogRef }) {
+  const { API, Executor } = useAppContext();
 
   let dialogResult: EmailVerificationDialogResult = "Cancel";
-
-  async function onResendVerification() {
-    try {
-      busyDialog.show("Resending verification email...");
-
-      await API.AuthService.verifyEmail();
-
-      busyDialog.close();
-      messageBox.success("Verification email sent to your email address!");
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`Failed to resend verification email: ${e}`);
-    }
-  }
-
-  async function onVerified() {
-    if (API.AuthService.user) {
-      await API.AuthService.user.reload();
-      if (API.AuthService.user.emailVerified) {
-        dialogResult = "Verified";
-        const dialog = document.getElementById(
-          "email-verification-dialog",
-        ) as HTMLDialogElement | null;
-        dialog?.Close();
-      } else {
-        messageBox.error("Email is still not verified!");
-      }
-    }
-  }
 
   return (
     <Dialog
@@ -83,14 +50,44 @@ export default function (props: Props) {
             click the button below to <span>resend</span> the verification
             email.
           </p>
-          <Button class={"button-rect resend"} onClick={onResendVerification}>
+          <Button
+            class={"button-rect resend"}
+            onClick={async () => {
+              await Executor.run(() => API.AuthService.verifyEmail(), {
+                busyDialogMessage: "Resending verification email...",
+                successMessage:
+                  "Verification email sent to your email address!",
+              });
+            }}
+          >
             <Email />
             Resend verification Email
           </Button>
         </Column>
       </Column>
       <Row class={"control-buttons"}>
-        <Button class={"button-rect green"} onClick={onVerified}>
+        <Button
+          class={"button-rect green"}
+          onClick={async () => {
+            await Executor.run(
+              async () => {
+                await API.AuthService.user!.reload();
+                if (!API.AuthService.user!.emailVerified)
+                  throw new Error("Email is still not verified!");
+              },
+              {
+                busyDialogMessage: "Checking email verification status...",
+                postAction: () => {
+                  dialogResult = "Verified";
+                  const dialog = document.getElementById(
+                    "email-verification-dialog",
+                  ) as HTMLDialogElement | null;
+                  dialog?.Close();
+                },
+              },
+            );
+          }}
+        >
           <Tick />
           Verified!
         </Button>

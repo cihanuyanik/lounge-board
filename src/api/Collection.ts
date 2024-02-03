@@ -122,10 +122,13 @@ export default class Collection<
     }
   }
 
-  async delete(data: T): Promise<void> {
+  async delete(data: T | string): Promise<void> {
     try {
+      // if data is just a string, use it as the id
+      const id = typeof data === "string" ? data : data.id;
+
       // Access the document in the collection with the id
-      const docRef = doc(this._db, this._name, data.id);
+      const docRef = doc(this._db, this._name, id);
 
       if (this._batch) {
         this._batch.delete(docRef);

@@ -18,12 +18,14 @@ import { Event } from "~/api/types";
 import { createMutator } from "~/utils/utils";
 import { Firebase } from "~/api/Firebase";
 import { createEventStore } from "~/components/Events/store";
+import AsyncExecutor from "~/utils/AsyncExecutor";
 
 type AppContextType = {
   isAdmin: Accessor<boolean>;
   user: Accessor<User>;
   setUser: Setter<User>;
   API: Firebase;
+  Executor: AsyncExecutor;
 } & ReturnType<typeof createEventStore> & // ReturnType<typeof createUpcomingEventStore> & // ReturnType<typeof createPastEventStore> &
   ReturnType<typeof createNewsStore> &
   ReturnType<typeof createResearchGroupStore> &
@@ -73,6 +75,8 @@ export function AppContextProvider(props: any) {
 
   const API = new Firebase();
 
+  const Executor = new AsyncExecutor(busyDialog, messageBox);
+
   return (
     <AppContext.Provider
       value={{
@@ -94,6 +98,7 @@ export function AppContextProvider(props: any) {
         user,
         setUser,
         API,
+        Executor,
       }}
     >
       {props.children}

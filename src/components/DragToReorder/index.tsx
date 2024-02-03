@@ -16,9 +16,9 @@ export type DragMoveCallback = (
 ) => void;
 
 export type DragFinishCallback = (
-  draggingItemId: string,
   oldIndex: number,
   newIndex: number,
+  draggingItemId: string,
   endPos: { x: number; y: number },
   endBoundRect: DOMRect,
   draggingItem: HTMLElement,
@@ -274,9 +274,9 @@ export class DragManager {
     //notify subscriber about dragend
     if (this.onDragFinishCb) {
       this.onDragFinishCb(
-        this.draggableItem.id,
         oldIndex,
         newIndex,
+        this.draggableItem.id,
         this.dragEndPos,
         this.draggableItem.getBoundingClientRect(),
         this.draggableItem,

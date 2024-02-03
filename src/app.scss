@@ -246,6 +246,8 @@ object {
   border-radius: var(--radii-xl);
   animation: pulse 1s infinite;
   color: white;
+  pointer-events: none;
+  user-select: none;
 
   svg {
     height: 100%;

@@ -27,6 +27,7 @@ function _Home() {
 
   onMount(async () => {
     if (isServer) return;
+
     // Wait for 100ms to let BusyDialog object to be created
     await sleep(100);
     await loadData();

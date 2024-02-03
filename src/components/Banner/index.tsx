@@ -11,19 +11,8 @@ import { useNavigate } from "@solidjs/router";
 import { User } from "~/api/types";
 
 export default function (props: { user?: User }) {
-  const { researchGroups, messageBox, busyDialog, API } = useAppContext();
+  const { researchGroups, Executor, API } = useAppContext();
   const navigate = useNavigate();
-  async function onSignOut() {
-    try {
-      busyDialog.show("Signing out...");
-      await API.AuthService.signOut();
-      busyDialog.close();
-      navigate("/", {});
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
-  }
 
   return (
     <Row class={"banner w-full gap-2"}>
@@ -34,7 +23,15 @@ export default function (props: { user?: User }) {
           <Column>
             <p>{"Welcome"}</p>
             <p>{props.user?.displayName}</p>
-            <Button class={"button-rect"} onClick={onSignOut}>
+            <Button
+              class={"button-rect"}
+              onClick={async () => {
+                await Executor.run(() => API.AuthService.signOut(), {
+                  busyDialogMessage: "Signing out...",
+                  postAction: () => navigate("/", {}),
+                });
+              }}
+            >
               <p>Sign Out</p>
               <Logout />
             </Button>

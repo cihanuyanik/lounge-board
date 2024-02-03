@@ -28,7 +28,7 @@ export default function Home() {
 }
 
 function _Signup() {
-  const { busyDialog, messageBox, API } = useAppContext();
+  const { API, Executor } = useAppContext();
   const navigate = useNavigate();
 
   const [avatar, setAvatar] = createSignal<string>(DefaultAvatar);
@@ -36,12 +36,22 @@ function _Signup() {
   const [email, setEmail] = createSignal<string>("");
   const [password, setPassword] = createSignal<string>("");
 
+  const isEmailValid = createMemo(() => {
+    // Has to contain @ and end with dtu.dk
+    return email().includes("@") && email().endsWith("dtu.dk");
+  });
+
+  const isPasswordValid = createMemo(() => {
+    // Has to be at least 6 characters long
+    return password().length >= 6;
+  });
+
   // Create a derived signal to set disable state of the button
   const isSignUpDisabled = createMemo(() => {
     return (
       name() === "" ||
-      email() === "" ||
-      password() === "" ||
+      !isEmailValid() ||
+      !isPasswordValid() ||
       avatar() === DefaultAvatar
     );
   });
@@ -71,25 +81,6 @@ function _Signup() {
     };
 
     reader.readAsDataURL(image);
-  }
-
-  async function onSignup() {
-    try {
-      busyDialog.show("Signing up...");
-
-      await API.AuthService.signUp(email(), password());
-      await API.AuthService.updateProfile(name(), avatar());
-      await API.AuthService.verifyEmail();
-
-      console.log("Sign-up successful");
-
-      busyDialog.close();
-
-      navigate("/admin");
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
   }
 
   return (
@@ -153,7 +144,21 @@ function _Signup() {
           <Row class={"w-full"}>
             <Button
               class={"button-rect green"}
-              onClick={onSignup}
+              onClick={async () => {
+                await Executor.run(
+                  async () => {
+                    await API.AuthService.signUp(email(), password());
+                    await API.AuthService.updateProfile(name(), avatar());
+                    await API.AuthService.verifyEmail();
+                  },
+                  {
+                    busyDialogMessage: "Signing up...",
+                    postAction: () => {
+                      navigate("/admin");
+                    },
+                  },
+                );
+              }}
               disabled={isSignUpDisabled()}
             >
               Signup

@@ -3,9 +3,7 @@ import Button from "~/components/common/Button";
 import { createStore } from "solid-js/store";
 import { createContext, createEffect, on, useContext } from "solid-js";
 import { Event } from "~/api/types";
-import { buildDurationString, createMutator, toDate } from "~/utils/utils";
-import DateInput from "~/components/common/DateInput";
-import TimeInput, { TimeInputRef } from "~/components/common/TimeInput/index";
+import { createMutator } from "~/utils/utils";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Tick from "~/assets/icons/Tick";
@@ -23,6 +21,7 @@ import Details from "~/assets/icons/Details";
 import Start from "~/assets/icons/Start";
 import Stop from "~/assets/icons/Stop";
 import DateTimePicker from "~/components/common/DateTimePicker";
+import { buildDurationString, toDate } from "~/utils/DateExtensions";
 
 export type CreateEventDialogResult = {
   result: "Accept" | "Cancel";
@@ -127,7 +126,7 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
         state.event.name = event.name;
         state.event.details = event.details;
         state.event.isPast = event.isPast;
-        state.event.isSelected = event.isSelected;
+        state.event.isSelected = false;
         // @ts-ignore
         state.event.startsAt = event.startsAt.toDate();
         // @ts-ignore
@@ -258,6 +257,7 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
 
       {/*Dialog Controls*/}
       <>
+        {/*TODO: Add input validation to make accept button enabled or disabled*/}
         <Button
           class={"control-btn accept"}
           onClick={() => {
@@ -293,6 +293,7 @@ function Preview() {
 
   return (
     <Row class={"preview"}>
+      {/* TODO:  Fix Code repetition with EventItem*/}
       <Column
         class={"event-card"}
         classList={{
@@ -326,10 +327,7 @@ function Preview() {
           <Row class={"duration"}>
             <Duration />
             <Column class={"flex-1"}>
-              {buildDurationString(
-                toDate(state.event.startsAt),
-                toDate(state.event.endsAt),
-              )}
+              {buildDurationString(state.event.startsAt, state.event.endsAt)}
             </Column>
           </Row>
         </Row>

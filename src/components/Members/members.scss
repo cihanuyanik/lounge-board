@@ -1,3 +1,10 @@
+.members-block-container {
+  height: 100%;
+  //width: 20%;
+  min-width: 320px;
+  max-width: 320px;
+}
+
 .members-scrollable-container {
   flex: 1 0 0;
   width: 100%;
@@ -18,132 +25,111 @@
       margin-bottom: var(--space-3);
     }
   }
+}
 
-  .member-item {
-    height: 120px;
-    min-height: 120px;
-    width: 100%;
-    background-image: url("../../assets/images/texture/papyrus.jpg");
-    box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
-    border-radius: var(--radii-xl);
-    padding: var(--space-2);
-    gap: var(--space-2);
-    user-select: none;
-    transition: all 0.2s ease-in-out;
+.member-item {
+  //height: 120px;
+  min-height: 120px;
+  width: 100%;
+  background-image: url("../../assets/images/texture/papyrus.jpg");
+  box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
+  border-radius: var(--radii-xl);
+  padding: var(--space-2);
+  gap: var(--space-2);
+  user-select: none;
+  transition: all 0.2s ease-in-out;
 
-    &.item-selected {
-      box-shadow: 0 0 10px 5px green;
-    }
+  &.item-selected {
+    box-shadow: 0 0 10px 5px green;
+  }
 
-    &.cursor-pointer {
-      cursor: pointer;
-    }
+  &.cursor-pointer {
+    cursor: pointer;
+  }
 
-    .avatar {
-      height: 100px;
-      width: 85px;
+  .avatar {
+    height: 100px;
+    width: 85px;
+    position: relative;
 
-      img {
-        flex: 1;
-        border-radius: 50% 50%;
-        box-shadow: 0 0 10px 4px var(--color-primary-darker);
-      }
-    }
-
-    .name-role {
+    img {
       flex: 1;
-      gap: var(--space-2);
-      font-weight: bold;
-      text-align: center;
+      border-radius: 50% 50%;
+      box-shadow: 0 0 10px 4px var(--color-primary-darker);
+    }
+  }
 
-      .name {
-        word-break: break-word;
-        color: black;
-        font-size: var(--font-sizes-lg);
-        width: 100%;
-        border-bottom: 3px solid var(--color-primary);
-      }
+  .name-role {
+    flex: 1;
+    gap: var(--space-2);
+    font-weight: bold;
+    text-align: center;
 
-      .role {
-        word-break: break-word;
-        color: var(--color-darkgray);
-        font-size: var(--font-sizes-md);
-      }
+    .name {
+      word-break: break-word;
+      color: black;
+      font-size: var(--font-sizes-lg);
+      width: 100%;
+      border-bottom: 3px solid var(--color-primary);
+    }
+
+    .role {
+      word-break: break-word;
+      color: var(--color-darkgray);
+      font-size: var(--font-sizes-md);
     }
   }
 }
 
 .create-edit-member-dialog {
-  width: 400px;
+  width: 288px !important;
   overflow: visible;
 
-  .member-item {
-    height: 120px;
-    min-height: 120px;
-    width: 100%;
-    //background-image: url(~/assets/images/texture/papyrus.jpg);
-    background-image: url("../../assets/images/texture/papyrus.jpg");
-    box-shadow: 0 0 10px 0 var(--color-secondary-lighter);
-    border-radius: var(--radii-xl);
-    padding: var(--space-2);
-    gap: var(--space-2);
-    user-select: none;
+  .name-role {
+    > input {
+      color: black;
+      font-size: var(--font-sizes-lg);
+      width: 100%;
+      text-align: center;
+      background: transparent;
+      outline: none;
+      border: none;
 
-    .avatar {
-      height: 100px;
-      width: 85px;
-      position: relative;
-
-      img {
-        flex: 1;
-        border-radius: 50% 50%;
-        box-shadow: 0 0 10px 4px var(--color-primary-darker);
-      }
-
-      button {
-        position: absolute;
-        right: 0;
-        top: 0;
-        height: 40px;
-        width: 40px;
-        padding: var(--space-1);
-        background: transparent;
-        opacity: 0;
+      &::placeholder {
+        color: var(--color-darkgray);
       }
     }
 
-    .name-role {
-      flex: 1;
-      gap: var(--space-2);
-      flex-wrap: wrap;
-      font-weight: bold;
+    > textarea {
+      color: var(--color-darkgray);
+      font-size: var(--font-sizes-md);
+      width: 100%;
       text-align: center;
-
-      .name {
-        color: black;
-        font-size: var(--font-sizes-lg);
-        width: 100%;
-        text-align: center;
-        background: transparent;
-        outline: none;
-        border: none;
-
-        &::placeholder {
-          color: var(--color-darkgray);
-        }
-      }
-
-      .role {
+      background: transparent;
+      outline: none;
+      border: none;
+      &::placeholder {
         color: var(--color-darkgray);
-        font-size: var(--font-sizes-md);
-        width: 100%;
-        text-align: center;
-        background: transparent;
-        outline: none;
-        border: none;
-        &::placeholder {
-          color: var(--color-darkgray);
-        }
+      }
+    }
+  }
+
+  .avatar {
+    button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 40px;
+      width: 40px;
+      padding: var(--space-1);
+      background: transparent;
+      opacity: 0;
+    }
+
+    // Catch on hover of avatar and set opacity of the button
+    &:hover {
+      button {
+        opacity: 1;
       }
     }
   }

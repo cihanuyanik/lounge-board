@@ -13,7 +13,7 @@ import CreateEditEvent, {
 } from "~/components/Events/CreateEditEvent";
 
 export default function Events() {
-  const { isAdmin, messageBox, busyDialog, events, API } = useAppContext();
+  const { isAdmin, messageBox, events, Executor, API } = useAppContext();
 
   let eventsBlockContainer: HTMLDivElement = null!;
   let eventsScrollableContainer: HTMLDivElement = null!;
@@ -164,49 +164,6 @@ export default function Events() {
     }
   }
 
-  async function onAddNew() {
-    const dResult =
-      await createEventDialog.ShowModal<CreateEventDialogResult>();
-    if (dResult.result === "Cancel") return;
-
-    try {
-      if (!dResult.event.startsAt) {
-        // noinspection ExceptionCaughtLocallyJS
-        throw new Error("Start date is required");
-      }
-
-      busyDialog.show("Adding event...");
-      await API.Events.add({ ...dResult.event });
-      busyDialog.close();
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
-  }
-
-  const onDeleteSelected = async () => {
-    try {
-      if (events.selectedIds.length === 0) return;
-
-      const dResult = await messageBox.question(
-        "Are you sure you want to delete event(s)?",
-      );
-      if (dResult === DialogResult.No) return;
-
-      // Start transaction for upcoming events
-      API.Events.beginTransaction();
-
-      // Delete upcoming events
-      for (const id of events.selectedIds) {
-        await API.Events.delete(events.entities[id]);
-      }
-      // Commit all transactions through upcoming events
-      await API.Events.commitTransaction();
-    } catch (e) {
-      messageBox.error(`${e}`);
-    }
-  };
-
   const eventsIcon = <Img src={EventsHeader} style={{ height: "35px" }} />;
 
   return (
@@ -214,8 +171,45 @@ export default function Events() {
       ref={eventsBlockContainer}
       title={"Events"}
       titleIcon={eventsIcon}
-      onAddNewItem={isAdmin() ? onAddNew : undefined}
-      onDeleteSelectedItems={isAdmin() ? onDeleteSelected : undefined}
+      onAddNewItem={
+        !isAdmin()
+          ? undefined
+          : async () => {
+              const dResult =
+                await createEventDialog.ShowModal<CreateEventDialogResult>();
+              if (dResult.result === "Cancel") return;
+
+              await Executor.run(
+                async () => {
+                  if (!dResult.event.startsAt)
+                    throw new Error("Start date is required");
+
+                  await API.Events.add({ ...dResult.event });
+                },
+                {
+                  busyDialogMessage: "Adding event...",
+                },
+              );
+            }
+      }
+      onDeleteSelectedItems={
+        !isAdmin()
+          ? undefined
+          : async () => {
+              if (events.selectedIds.length === 0) return;
+              const dResult = await messageBox.question(
+                "Are you sure you want to delete event(s)?",
+              );
+              if (dResult === DialogResult.No) return;
+
+              await Executor.run(
+                async () => API.Events.deleteMany(events.selectedIds),
+                {
+                  busyDialogMessage: "Deleting event(s)...",
+                },
+              );
+            }
+      }
       class={"events-block-container"}
     >
       <div class={"scroll-wrapper"}>

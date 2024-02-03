@@ -14,128 +14,9 @@ import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
 
 export default function Members() {
-  const { isAdmin, busyDialog, messageBox, members, meta, API } =
-    useAppContext();
+  const { isAdmin, messageBox, members, meta, Executor, API } = useAppContext();
 
   let createEditMemberDialog: HTMLDialogElement = null!;
-
-  async function onAddNew() {
-    const dialogResult =
-      await createEditMemberDialog.ShowModal<CreateEditMemberDialogResult>();
-    if (dialogResult.result === "Cancel") return;
-
-    try {
-      busyDialog.show("Creating a new member...");
-
-      // Begin transaction
-      API.Members.beginTransaction();
-
-      // Add new member
-      const newMemberId = await API.Members.add({
-        name: dialogResult.member.name,
-        image: dialogResult.member.image,
-        role: dialogResult.member.role,
-        isSelected: false,
-      });
-
-      // Use the same batch for updating meta
-      API.Meta.batch = API.Members.batch;
-
-      // Update meta
-      await API.Meta.update({
-        original: meta,
-        changes: {
-          membersDisplayOrder: [...meta.membersDisplayOrder, newMemberId],
-        },
-      });
-
-      // Commit transaction
-      await API.Members.commitTransaction();
-      // Clear batch in Meta
-      API.Meta.batch = undefined;
-
-      busyDialog.close();
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
-  }
-
-  async function onDeleteSelectedMembers() {
-    if (members.selectedIds.length === 0) return;
-
-    // Ask for confirmation
-    const result = await messageBox.question(
-      `Are you sure you want to delete the selected members?`,
-    );
-
-    if (result !== DialogResult.Yes) return;
-
-    try {
-      busyDialog.show("Deleting selected members...");
-
-      // Begin transaction
-      API.Members.beginTransaction();
-
-      // Iterate over selectedIds
-      for (const selectedId of members.selectedIds) {
-        await API.Members.delete(members.entities[selectedId]);
-      }
-
-      // Remove selectedIds from display order
-      const newIds = meta.membersDisplayOrder.filter(
-        (id) => !members.selectedIds.includes(id),
-      );
-
-      // Use the same batch for updating meta
-      API.Meta.batch = API.Members.batch;
-
-      // Update meta
-      await API.Meta.update({
-        original: meta,
-        changes: {
-          membersDisplayOrder: newIds,
-        },
-      });
-
-      // Commit transaction
-      await API.Members.commitTransaction();
-      // Clear batch in Meta
-      API.Meta.batch = undefined;
-
-      busyDialog.close();
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
-  }
-
-  async function onDragFinished(
-    draggingItemId: string,
-    oldIndex: number,
-    newIndex: number,
-  ) {
-    if (oldIndex === newIndex) return;
-
-    try {
-      busyDialog.show("Updating member order...");
-
-      await API.Meta.update({
-        original: meta,
-        changes: {
-          membersDisplayOrder: meta.membersDisplayOrder.toMoved(
-            oldIndex,
-            newIndex,
-          ),
-        },
-      });
-
-      busyDialog.close();
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
-  }
 
   const icon = <Img src={MembersHeader} height={"35px"} />;
 
@@ -143,15 +24,129 @@ export default function Members() {
     <BlockContainer
       title={"Members"}
       titleIcon={icon}
-      onAddNewItem={isAdmin() ? onAddNew : undefined}
-      onDeleteSelectedItems={isAdmin() ? onDeleteSelectedMembers : undefined}
-      style={{ height: "100%", width: "20%", "min-width": "20%" }}
+      class={"members-block-container"}
+      onAddNewItem={
+        !isAdmin()
+          ? undefined
+          : async () => {
+              const dResult =
+                await createEditMemberDialog.ShowModal<CreateEditMemberDialogResult>();
+              if (dResult.result === "Cancel") return;
+
+              await Executor.run(
+                async () => {
+                  API.Members.beginTransaction();
+                  const newMemberId = await API.Members.add({
+                    ...dResult.member,
+                  });
+                  API.Meta.batch = API.Members.batch;
+                  await API.Meta.update({
+                    original: meta,
+                    changes: {
+                      membersDisplayOrder: [
+                        ...meta.membersDisplayOrder,
+                        newMemberId,
+                      ],
+                    },
+                  });
+                  await API.Members.commitTransaction();
+                  API.Meta.batch = undefined;
+                },
+                {
+                  busyDialogMessage: "Creating a new member...",
+                  postAction: () => {
+                    // Scroll to the bottom
+                    const membersScrollableContainer = document.querySelector(
+                      ".members-scrollable-container",
+                    );
+                    if (membersScrollableContainer) {
+                      membersScrollableContainer.scrollTo({
+                        behavior: "smooth",
+                        top: membersScrollableContainer.scrollHeight,
+                      });
+                    }
+                  },
+                },
+              );
+            }
+      }
+      onDeleteSelectedItems={
+        !isAdmin()
+          ? undefined
+          : async () => {
+              if (members.selectedIds.length === 0) return;
+
+              // Ask for confirmation
+              const result = await messageBox.question(
+                `Are you sure you want to delete the selected members?`,
+              );
+
+              if (result !== DialogResult.Yes) return;
+
+              await Executor.run(
+                async () => {
+                  // Begin transaction
+                  API.Members.beginTransaction();
+
+                  // Iterate over selectedIds
+                  for (const selectedId of members.selectedIds) {
+                    await API.Members.delete(members.entities[selectedId]);
+                  }
+
+                  // Remove selectedIds from display order
+                  const newIds = meta.membersDisplayOrder.filter(
+                    (id) => !members.selectedIds.includes(id),
+                  );
+
+                  // Use the same batch for updating meta
+                  API.Meta.batch = API.Members.batch;
+
+                  // Update meta
+                  await API.Meta.update({
+                    original: meta,
+                    changes: {
+                      membersDisplayOrder: newIds,
+                    },
+                  });
+
+                  // Commit transaction
+                  await API.Members.commitTransaction();
+                  // Clear batch in Meta
+                  API.Meta.batch = undefined;
+                },
+                {
+                  busyDialogMessage: "Deleting selected members...",
+                },
+              );
+            }
+      }
     >
       <Show
         when={isAdmin()}
         fallback={<MemberContainer editDialog={() => createEditMemberDialog} />}
       >
-        <DragToReorder ids={members.ids} onDragFinish={onDragFinished}>
+        <DragToReorder
+          ids={members.ids}
+          onDragFinish={async (oldIndex, newIndex) => {
+            if (oldIndex === newIndex) return;
+
+            await Executor.run(
+              () =>
+                API.Meta.update({
+                  original: meta,
+                  changes: {
+                    membersDisplayOrder: meta.membersDisplayOrder.toMoved(
+                      oldIndex,
+                      newIndex,
+                    ),
+                  },
+                }),
+              {
+                busyDialogMessage: "Updating member order...",
+              },
+            );
+          }}
+        >
           <MemberContainer editDialog={() => createEditMemberDialog} />
         </DragToReorder>
       </Show>

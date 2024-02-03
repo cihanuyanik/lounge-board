@@ -11,8 +11,7 @@ import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
 
 export default function ResearchGroups() {
-  const { isAdmin, researchGroups, busyDialog, messageBox, API } =
-    useAppContext();
+  const { isAdmin, researchGroups, Executor, API } = useAppContext();
 
   let resGroupImageRef: HTMLImageElement;
   let editResearchGroupsDialog: HTMLDialogElement = null!;
@@ -26,6 +25,7 @@ export default function ResearchGroups() {
 
   onMount(() => {
     if (isAdmin()) return;
+    // TODO: Revisit this animation, add bullets at the bottom as Matteo suggested
     interval = setInterval(() => researchGroups.next(), 5000);
 
     transformOut = resGroupImageRef.animate(
@@ -86,69 +86,69 @@ export default function ResearchGroups() {
       );
     if (dialogResult.result === "Cancel") return;
 
-    try {
-      busyDialog.show("Updating research groups...");
+    await Executor.run(
+      async () => {
+        // Separate the ids into categories
+        // ============================================
+        let dResultIds = [...dialogResult.ids];
+        const dResultEntities = dialogResult.entities;
 
-      // Separate the ids into categories
-      // ============================================
-      let dResultIds = [...dialogResult.ids];
-      const dResultEntities = dialogResult.entities;
+        // Detect the new ones and the ones that were removed
+        const newGroupIds = dResultIds.filter(
+          (id) => !researchGroups.ids.includes(id),
+        );
+        // Remove the ones marked as new
+        dResultIds = dResultIds.filter((id) => !newGroupIds.includes(id));
 
-      // Detect the new ones and the ones that were removed
-      const newGroupIds = dResultIds.filter(
-        (id) => !researchGroups.ids.includes(id),
-      );
-      // Remove the ones marked as new
-      dResultIds = dResultIds.filter((id) => !newGroupIds.includes(id));
+        // Detect the removed ones
+        const removedGroupIds = researchGroups.ids.filter(
+          (id) => !dResultIds.includes(id),
+        );
+        // Remove the ones marked as removed
+        dResultIds = dResultIds.filter((id) => !removedGroupIds.includes(id));
 
-      // Detect the removed ones
-      const removedGroupIds = researchGroups.ids.filter(
-        (id) => !dResultIds.includes(id),
-      );
-      // Remove the ones marked as removed
-      dResultIds = dResultIds.filter((id) => !removedGroupIds.includes(id));
+        // Remaining ids are the ones that were updated
+        const updatedGroupIds = dResultIds;
 
-      // Remaining ids are the ones that were updated
-      const updatedGroupIds = dResultIds;
+        // ============================================
+        // Update firestore
+        // ============================================
+        API.ResearchGroups.beginTransaction();
 
-      // ============================================
-      // Update firestore
-      // ============================================
-      API.ResearchGroups.beginTransaction();
-
-      // Insert new ones
-      for (const id of newGroupIds) {
-        await API.ResearchGroups.add({
-          name: dResultEntities[id].name,
-          image: dResultEntities[id].image,
-          bannerImage: dResultEntities[id].bannerImage,
-        });
-      }
-
-      // Delete the ones that were removed
-      for (const id of removedGroupIds) {
-        await API.ResearchGroups.delete(researchGroups.entities[id]);
-      }
-
-      // Update firestore for the ones that were changed
-      for (const id of updatedGroupIds) {
-        await API.ResearchGroups.update({
-          original: researchGroups.entities[id],
-          changes: {
+        // Insert new ones
+        for (const id of newGroupIds) {
+          await API.ResearchGroups.add({
             name: dResultEntities[id].name,
             image: dResultEntities[id].image,
             bannerImage: dResultEntities[id].bannerImage,
-          },
-        });
-      }
+          });
+        }
 
-      await API.ResearchGroups.commitTransaction();
+        // Delete the ones that were removed
+        for (const id of removedGroupIds) {
+          await API.ResearchGroups.delete(researchGroups.entities[id]);
+        }
 
-      busyDialog.close();
-    } catch (e) {
-      busyDialog.close();
-      messageBox.error(`${e}`);
-    }
+        // Update firestore for the ones that were changed
+        for (const id of updatedGroupIds) {
+          await API.ResearchGroups.update({
+            original: researchGroups.entities[id],
+            changes: {
+              name: dResultEntities[id].name,
+              image: dResultEntities[id].image,
+              bannerImage: dResultEntities[id].bannerImage,
+            },
+          });
+        }
+
+        await API.ResearchGroups.commitTransaction();
+
+        // ============================================
+      },
+      {
+        busyDialogMessage: "Updating research groups...",
+      },
+    );
   }
 
   return (
