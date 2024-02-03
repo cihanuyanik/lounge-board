@@ -1,5 +1,5 @@
-import "./researchGroups.scss";
-import { createEffect, on, onCleanup, onMount, Show } from "solid-js";
+import "./researchGroups.css";
+import { createEffect, For, on, onCleanup, onMount, Show } from "solid-js";
 import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
 import Edit from "~/assets/icons/Edit";
@@ -9,6 +9,14 @@ import EditResearchGroups, {
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
+import Left from "~/assets/icons/Left";
+import Right from "~/assets/icons/Right";
+
+const TransPost = {
+  center: "translateX(0px) translateZ(0px) rotateY(0deg)",
+  left: "translateX(-50%) translateZ(-30px) rotateY(-15deg)",
+  right: "translateX(+50%) translateZ(-30px) rotateY(15deg)",
+};
 
 export default function ResearchGroups() {
   const { isAdmin, researchGroups, Executor, API } = useAppContext();
@@ -18,39 +26,93 @@ export default function ResearchGroups() {
 
   let interval: any;
 
-  let transformOut: Animation;
-  let opacityOut: Animation;
-  let transformIn: Animation;
-  let opacityIn: Animation;
+  let animRotateCenterToLeft: Animation;
+  let animRotateLeftToCenter: Animation;
+
+  let animRotateCenterToRight: Animation;
+  let animRotateRightToCenter: Animation;
+
+  function resetInterval() {
+    clearInterval(interval);
+    interval = setInterval(() => researchGroups.next(), 5000);
+  }
 
   onMount(() => {
-    if (isAdmin()) return;
-    // TODO: Revisit this animation, add bullets at the bottom as Matteo suggested
-    interval = setInterval(() => researchGroups.next(), 5000);
-
-    transformOut = resGroupImageRef.animate(
+    // Center position to left animation
+    animRotateCenterToLeft = resGroupImageRef.animate(
       [
-        { transform: "translateX(0px) translateZ(0px) rotateY(0deg)" },
-        { transform: "translateX(-50%) translateZ(-30px) rotateY(-15deg)" },
+        {
+          transform: TransPost.center,
+          offset: 0,
+        },
+        { opacity: 1, offset: 0 },
+        {
+          transform: TransPost.left,
+          offset: 1,
+        },
+        { opacity: 0, offset: 1 },
       ],
       { duration: 1000 },
     );
+    animRotateCenterToLeft.cancel();
 
-    opacityOut = resGroupImageRef.animate([{ opacity: 1 }, { opacity: 0 }], {
-      duration: 1000,
-    });
-
-    transformIn = resGroupImageRef.animate(
+    // Left position to center animation
+    animRotateLeftToCenter = resGroupImageRef.animate(
       [
-        { transform: "translateX(+50%) translateZ(-30px) rotateY(15deg)" },
-        { transform: "translateX(0px) translateZ(0px) rotateY(0deg)" },
+        {
+          transform: TransPost.left,
+          offset: 0,
+        },
+        { opacity: 0, offset: 0 },
+        {
+          transform: TransPost.center,
+          offset: 1,
+        },
+        { opacity: 1, offset: 1 },
       ],
       { duration: 1000 },
     );
+    animRotateLeftToCenter.cancel();
 
-    opacityIn = resGroupImageRef.animate([{ opacity: 0 }, { opacity: 1 }], {
-      duration: 1000,
-    });
+    // Right position to center animation
+    animRotateRightToCenter = resGroupImageRef.animate(
+      [
+        {
+          transform: TransPost.right,
+          offset: 0,
+        },
+        { opacity: 0, offset: 0 },
+        {
+          transform: TransPost.center,
+          offset: 1,
+        },
+        { opacity: 1, offset: 1 },
+      ],
+      { duration: 1000 },
+    );
+    animRotateRightToCenter.cancel();
+
+    // Center position to right animation
+    animRotateCenterToRight = resGroupImageRef.animate(
+      [
+        {
+          transform: TransPost.center,
+          offset: 0,
+        },
+        { opacity: 1, offset: 0 },
+        {
+          transform: TransPost.right,
+          offset: 1,
+        },
+        { opacity: 0, offset: 1 },
+      ],
+      { duration: 1000 },
+    );
+    animRotateCenterToRight.cancel();
+
+    if (!isAdmin()) {
+      resetInterval();
+    }
   });
 
   onCleanup(() => clearInterval(interval));
@@ -62,18 +124,24 @@ export default function ResearchGroups() {
       async () => {
         if (!researchGroups.active) return;
 
-        if (!isAdmin()) {
-          transformOut.play();
-          opacityOut.play();
-          await Promise.all([transformOut.finished, opacityOut.finished]);
+        if (researchGroups.activeChangeDirection === "next") {
+          animRotateCenterToLeft.play();
+          await animRotateCenterToLeft.finished;
+
+          resGroupImageRef.src = researchGroups.active.image;
+
+          animRotateRightToCenter.play();
+          await animRotateRightToCenter.finished;
         }
 
-        resGroupImageRef.src = researchGroups.active.image;
+        if (researchGroups.activeChangeDirection === "prev") {
+          animRotateCenterToRight.play();
+          await animRotateCenterToRight.finished;
 
-        if (!isAdmin()) {
-          transformIn.play();
-          opacityIn.play();
-          await Promise.all([transformIn.finished, opacityIn.finished]);
+          resGroupImageRef.src = researchGroups.active.image;
+
+          animRotateLeftToCenter.play();
+          await animRotateLeftToCenter.finished;
         }
       },
     ),
@@ -163,10 +231,47 @@ export default function ResearchGroups() {
       </Show>
       <Row class={"res-group-image-container"}>
         <Img ref={(el) => (resGroupImageRef = el)} />
+        <Show when={isAdmin()}>
+          <ImageShiftControls />
+        </Show>
+        <CarouselBullets />
       </Row>
       <Show when={isAdmin()}>
         <EditResearchGroups ref={editResearchGroupsDialog} />
       </Show>
     </BlockContainer>
+  );
+}
+
+function ImageShiftControls() {
+  const { researchGroups } = useAppContext();
+
+  return (
+    <Row class={"image-shift-controls"}>
+      <Button onClick={() => researchGroups.prev()}>
+        <Left />
+      </Button>
+      <Button onClick={() => researchGroups.next()}>
+        <Right />
+      </Button>
+    </Row>
+  );
+}
+
+function CarouselBullets() {
+  const { researchGroups } = useAppContext();
+
+  return (
+    <Row class={"carousel-bullets"}>
+      <For each={researchGroups.ids}>
+        {(id) => (
+          <div
+            class={"bullet"}
+            classList={{ active: researchGroups.active?.id === id }}
+            onClick={() => researchGroups.setActive(id)}
+          />
+        )}
+      </For>
+    </Row>
   );
 }

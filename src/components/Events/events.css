@@ -162,7 +162,7 @@
 }
 
 .create-edit-event-dialog {
-  width: 400px;
+  width: 450px !important;
   overflow: visible;
   background: var(--color-primary) !important;
 }
@@ -188,11 +188,10 @@
   border-top: solid 3px var(--color-primary-darker);
 }
 .create-edit-event-dialog .preview {
-  padding-bottom: var(--space-4);
-}
-.create-edit-event-dialog .preview .event-card {
-  width: 375px;
+  width: 400px;
   height: 170px;
+  align-items: stretch;
+  margin: auto auto var(--space-4);
 }
 
 /*# sourceMappingURL=events.css.map */

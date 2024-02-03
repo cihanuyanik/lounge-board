@@ -12,25 +12,13 @@
   background: var(--color-primary-darker);
 }
 .image-crop-dialog .content .control-btn {
-  position: absolute;
   right: var(--space-6);
-  padding: var(--space-2);
 }
 .image-crop-dialog .content .accept {
   bottom: var(--space-6);
-  transform: translate(50%, 50%);
-  background: lawngreen;
-}
-.image-crop-dialog .content .accept:hover {
-  background: green;
 }
 .image-crop-dialog .content .cancel {
   top: var(--space-6);
-  transform: translate(50%, -50%);
-  background: crimson;
-}
-.image-crop-dialog .content .cancel:hover {
-  background: red;
 }
 .image-crop-dialog .content .canvas {
   position: absolute;

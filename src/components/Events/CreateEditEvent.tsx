@@ -1,14 +1,11 @@
 import "./events.css";
-import Button from "~/components/common/Button";
 import { createStore } from "solid-js/store";
 import { createContext, createEffect, on, useContext } from "solid-js";
 import { Event } from "~/api/types";
 import { createMutator } from "~/utils/utils";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
-import Tick from "~/assets/icons/Tick";
-import Cross from "~/assets/icons/Cross";
-import Dialog, { DialogRef } from "~/components/common/Dialog";
+import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
 import moment from "moment";
 import Img from "~/components/common/Img";
 import EventsHeaderImage from "~/assets/images/events-header.png";
@@ -254,36 +251,30 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
       </Column>
       <Row class={"separator"} />
       <Preview />
-
-      {/*Dialog Controls*/}
-      <>
-        {/*TODO: Add input validation to make accept button enabled or disabled*/}
-        <Button
-          class={"control-btn accept"}
-          onClick={() => {
-            mutate((state) => (state.result = "Accept"));
-            const dialog = document.getElementById(
-              "create-edit-event-dialog",
-            ) as HTMLDialogElement | null;
-            dialog?.Close();
-          }}
-        >
-          <Tick />
-        </Button>
-
-        <Button
-          class={"control-btn cancel"}
-          onClick={() => {
-            mutate((state) => (state.result = "Cancel"));
-            const dialog = document.getElementById(
-              "create-edit-event-dialog",
-            ) as HTMLDialogElement | null;
-            dialog?.Close();
-          }}
-        >
-          <Cross />
-        </Button>
-      </>
+      <DialogControls
+        // Disabled when: name, details, startDateTime, endDateTime any one of them is empty and endDateTime is before startDateTime
+        disabled={
+          state.event.name === "" ||
+          state.event.details === "" ||
+          state.startDateTime === "" ||
+          state.endDateTime === "" ||
+          state.event.startsAt >= state.event.endsAt
+        }
+        onAccept={() => {
+          mutate((state) => (state.result = "Accept"));
+          const dialog = document.getElementById(
+            "create-edit-event-dialog",
+          ) as HTMLDialogElement | null;
+          dialog?.Close();
+        }}
+        onCancel={() => {
+          mutate((state) => (state.result = "Cancel"));
+          const dialog = document.getElementById(
+            "create-edit-event-dialog",
+          ) as HTMLDialogElement | null;
+          dialog?.Close();
+        }}
+      />
     </Dialog>
   );
 }
@@ -293,7 +284,6 @@ function Preview() {
 
   return (
     <Row class={"preview"}>
-      {/* TODO:  Fix Code repetition with EventItem*/}
       <Column
         class={"event-card"}
         classList={{

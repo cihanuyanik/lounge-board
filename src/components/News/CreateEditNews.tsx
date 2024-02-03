@@ -5,14 +5,12 @@ import TwitterIcon from "~/assets/images/twitter.png";
 import InstagramIcon from "~/assets/images/instagram.png";
 
 import { New } from "~/api/types";
-import Dialog, { DialogRef } from "~/components/common/Dialog";
+import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
 import { createContext, For, Match, Show, Switch, useContext } from "solid-js";
 import { createMutator } from "~/utils/utils";
 import { createStore } from "solid-js/store";
 import Column from "~/components/common/Column";
 import Button from "~/components/common/Button";
-import Tick from "~/assets/icons/Tick";
-import Cross from "~/assets/icons/Cross";
 import Row from "~/components/common/Row";
 import Img from "~/components/common/Img";
 import Dropdown, { DropdownItem } from "~/components/common/Dropdown";
@@ -163,7 +161,35 @@ function _CreateEditNews(props: { ref: DialogRef }) {
           </Switch>
           <Preview />
         </Column>
-        <DialogButtons />
+        <DialogControls
+          disabled={
+            (state.news.type === "custom" &&
+              (state.news.postTitle === "" || state.news.postHtml === "")) ||
+            (state.news.type !== "custom" && state.news.postHtml === "")
+          }
+          onAccept={() => {
+            mutate((state) => {
+              state.news.updatedAt = Timestamp.now();
+              state.news.isSelected = false;
+              state.result = "Accept";
+            });
+
+            const dialog = document.getElementById(
+              "create-news-dialog",
+            ) as HTMLDialogElement | null;
+            dialog?.Close();
+          }}
+          onCancel={() => {
+            mutate((state) => {
+              state.result = "Cancel";
+            });
+
+            const dialog = document.getElementById(
+              "create-news-dialog",
+            ) as HTMLDialogElement | null;
+            dialog?.Close();
+          }}
+        />
       </Dialog>
     </Show>
   );
@@ -371,46 +397,5 @@ function SizeAdjuster() {
         ▲
       </Button>
     </Column>
-  );
-}
-
-function DialogButtons() {
-  const { mutate } = useDialogContext();
-  return (
-    <>
-      <Button
-        class={"control-btn accept"}
-        onClick={() => {
-          mutate((state) => {
-            state.news.updatedAt = Timestamp.now();
-            state.news.isSelected = false;
-            state.result = "Accept";
-          });
-
-          const dialog = document.getElementById(
-            "create-news-dialog",
-          ) as HTMLDialogElement | null;
-          dialog?.Close();
-        }}
-      >
-        <Tick />
-      </Button>
-
-      <Button
-        class={"control-btn cancel"}
-        onClick={() => {
-          mutate((state) => {
-            state.result = "Cancel";
-          });
-
-          const dialog = document.getElementById(
-            "create-news-dialog",
-          ) as HTMLDialogElement | null;
-          dialog?.Close();
-        }}
-      >
-        <Cross />
-      </Button>
-    </>
   );
 }

@@ -14,6 +14,9 @@ export function createResearchGroupStore() {
     ...adaptor.getInitialState(),
     // @ts-ignore
     active: null as ResearchGroup,
+    activeIndex: -1,
+    activeChangeDirection: "next" as "next" | "prev",
+
     reload(researchGroups: ResearchGroup[]) {
       mutateResearchGroups((state) => {
         batch(() => {
@@ -33,6 +36,32 @@ export function createResearchGroupStore() {
           : -1;
         activeIndex = (activeIndex + 1) % state.ids.length;
         state.active = { ...state.entities[state.ids[activeIndex]] };
+        state.activeIndex = activeIndex;
+        state.activeChangeDirection = "next";
+      });
+    },
+
+    prev() {
+      mutateResearchGroups((state) => {
+        if (state.ids.length === 0) return;
+
+        let activeIndex = state.active
+          ? state.ids.indexOf(state.active.id)
+          : -1;
+        activeIndex = (activeIndex - 1 + state.ids.length) % state.ids.length;
+        state.active = { ...state.entities[state.ids[activeIndex]] };
+        state.activeIndex = activeIndex;
+        state.activeChangeDirection = "prev";
+      });
+    },
+
+    setActive(id: string) {
+      mutateResearchGroups((state) => {
+        const direction =
+          state.activeIndex < state.ids.indexOf(id) ? "next" : "prev";
+        state.active = { ...state.entities[id] };
+        state.activeIndex = state.ids.indexOf(id);
+        state.activeChangeDirection = direction;
       });
     },
   });

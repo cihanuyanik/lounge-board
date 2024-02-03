@@ -1,4 +1,4 @@
-.input-container {
+@mixin input-base() {
   --container-height: 70px;
   --label-height: 26px;
 
@@ -37,7 +37,10 @@
     border-top-left-radius: var(--radii-3xl);
     border-bottom-left-radius: var(--radii-3xl);
   }
+}
 
+.input-container {
+  @include input-base();
   > input {
     position: absolute;
     top: var(--label-height);

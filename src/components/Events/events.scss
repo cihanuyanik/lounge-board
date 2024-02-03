@@ -199,7 +199,7 @@
 }
 
 .create-edit-event-dialog {
-  width: 400px;
+  width: 450px !important;
   overflow: visible;
   background: var(--color-primary) !important;
 
@@ -230,11 +230,9 @@
   }
 
   .preview {
-    padding-bottom: var(--space-4);
-
-    .event-card {
-      width: 375px;
-      height: 170px;
-    }
+    width: 400px;
+    height: 170px;
+    align-items: stretch;
+    margin: auto auto var(--space-4);
   }
 }

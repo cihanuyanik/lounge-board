@@ -31,6 +31,15 @@
     position: absolute;
     right: 0;
     padding: var(--space-2);
+
+    &:disabled {
+      cursor: not-allowed;
+      background: var(--color-darkgray);
+
+      &:hover {
+        background: var(--color-darkgray);
+      }
+    }
   }
 
   .accept {

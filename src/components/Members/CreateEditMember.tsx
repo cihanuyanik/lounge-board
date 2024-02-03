@@ -6,10 +6,8 @@ import Edit from "~/assets/icons/Edit";
 import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
-import Tick from "~/assets/icons/Tick";
-import Cross from "~/assets/icons/Cross";
 import { Member } from "~/api/types";
-import Dialog, { DialogRef } from "~/components/common/Dialog";
+import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
 import { createMutator } from "~/utils/utils";
 import { createContext, useContext } from "solid-js";
 
@@ -88,34 +86,29 @@ function _CreateEditMember(props: { ref: DialogRef }) {
         <TextInfo />
       </Row>
 
-      <>
-        <Button
-          class={"control-btn accept"}
-          onClick={() => {
-            mutate((state) => (state.result = "Accept"));
-            const dialog = document.getElementById(
-              "create-edit-member-dialog",
-            ) as HTMLDialogElement | null;
-            dialog?.Close();
-          }}
-        >
-          <Tick />
-        </Button>
-
-        <Button
-          class={"control-btn cancel"}
-          onClick={() => {
-            // setDialogStore("result", "Cancel");
-            mutate((state) => (state.result = "Cancel"));
-            const dialog = document.getElementById(
-              "create-edit-member-dialog",
-            ) as HTMLDialogElement | null;
-            dialog?.Close();
-          }}
-        >
-          <Cross />
-        </Button>
-      </>
+      <DialogControls
+        // Disabled when: name or role or photo url is empty
+        disabled={
+          state.member.name === "" ||
+          state.member.role === "" ||
+          state.member.image === "" ||
+          state.member.image === MemberImagePlaceholder
+        }
+        onAccept={() => {
+          mutate((state) => (state.result = "Accept"));
+          const dialog = document.getElementById(
+            "create-edit-member-dialog",
+          ) as HTMLDialogElement | null;
+          dialog?.Close();
+        }}
+        onCancel={() => {
+          mutate((state) => (state.result = "Cancel"));
+          const dialog = document.getElementById(
+            "create-edit-member-dialog",
+          ) as HTMLDialogElement | null;
+          dialog?.Close();
+        }}
+      />
     </Dialog>
   );
 }

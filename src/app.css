@@ -226,6 +226,8 @@ object {
   transform: translate(-50%, -50%);
   height: 50%;
   width: 50%;
+  max-height: 85px;
+  max-width: 85px;
   border-radius: var(--radii-xl);
   animation: pulse 1s infinite;
   color: white;

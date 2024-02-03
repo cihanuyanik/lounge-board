@@ -1,4 +1,4 @@
-import "./researchGroups.scss";
+import "./researchGroups.css";
 import { createContext, For, useContext } from "solid-js";
 import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
@@ -11,10 +11,8 @@ import Delete from "~/assets/icons/Delete";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Add from "~/assets/icons/Add";
-import Tick from "~/assets/icons/Tick";
-import Cross from "~/assets/icons/Cross";
 import { ResearchGroup } from "~/api/types";
-import Dialog, { DialogRef } from "~/components/common/Dialog";
+import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
 import Dropdown, { DropdownItem } from "~/components/common/Dropdown";
 
 export type EditResearchGroupsDialogResult = {
@@ -120,41 +118,30 @@ function _EditResearchGroups(props: { ref: DialogRef }) {
         </Row>
 
         <ResearchGroupTeamImage />
-
-        <Row class={"controls"}>
-          <Button
-            class={"button-rect green"}
-            onClick={() => {
-              mutate((state) => {
-                state.result = "Accept";
-              });
-
-              const dialog = document.getElementById(
-                "edit-research-groups-dialog",
-              ) as HTMLDialogElement | null;
-
-              dialog?.Close();
-            }}
-          >
-            Accept <Tick />
-          </Button>
-
-          <Button
-            class={"button-rect red"}
-            onClick={() => {
-              mutate((state) => {
-                state.result = "Cancel";
-              });
-              const dialog = document.getElementById(
-                "edit-research-groups-dialog",
-              ) as HTMLDialogElement | null;
-              dialog?.Close();
-            }}
-          >
-            Cancel <Cross />
-          </Button>
-        </Row>
       </Column>
+
+      <DialogControls
+        onAccept={() => {
+          mutate((state) => {
+            state.result = "Accept";
+          });
+
+          const dialog = document.getElementById(
+            "edit-research-groups-dialog",
+          ) as HTMLDialogElement | null;
+
+          dialog?.Close();
+        }}
+        onCancel={() => {
+          mutate((state) => {
+            state.result = "Cancel";
+          });
+          const dialog = document.getElementById(
+            "edit-research-groups-dialog",
+          ) as HTMLDialogElement | null;
+          dialog?.Close();
+        }}
+      />
     </Dialog>
   );
 }

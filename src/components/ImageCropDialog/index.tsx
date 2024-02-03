@@ -1,13 +1,10 @@
 import "./index.css";
-import Button from "~/components/common/Button";
 import Img from "~/components/common/Img";
 import { CropBox } from "~/components/ImageCropDialog/CropBox";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
-import Cross from "~/assets/icons/Cross";
-import Tick from "~/assets/icons/Tick";
 import Canvas, { CropperCanvas } from "~/components/ImageCropDialog/Canvas";
-import Dialog, { DialogRef } from "~/components/common/Dialog";
+import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
 import { createStore } from "solid-js/store";
 import { createMutator } from "~/utils/utils";
 import { createContext, useContext } from "solid-js";
@@ -191,31 +188,22 @@ function _ImageCropDialog(props: ImageCropDialogProps) {
           <Img ref={(el) => (imageToCrop = el)} src={state.imgSrc} />
           <Canvas ref={(el) => mutate((state) => (state.canvas = el))} />
           <CropBox ref={(el) => (cropBox = el)} />
-          <Button
-            class={"control-btn cancel"}
-            onClick={() => {
-              mutate((state) => (state.result = "Cancel"));
-              const dialog = document.getElementById(
-                "image-crop-dialog",
-              ) as HTMLDialogElement | null;
-              dialog?.Close();
-            }}
-          >
-            <Cross />
-          </Button>
-
-          <Button
-            class={"control-btn accept"}
-            onClick={() => {
+          <DialogControls
+            onAccept={() => {
               mutate((state) => (state.result = "Accept"));
               const dialog = document.getElementById(
                 "image-crop-dialog",
               ) as HTMLDialogElement | null;
               dialog?.Close();
             }}
-          >
-            <Tick />
-          </Button>
+            onCancel={() => {
+              mutate((state) => (state.result = "Cancel"));
+              const dialog = document.getElementById(
+                "image-crop-dialog",
+              ) as HTMLDialogElement | null;
+              dialog?.Close();
+            }}
+          ></DialogControls>
         </Row>
       </Column>
     </Dialog>

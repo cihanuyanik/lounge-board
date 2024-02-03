@@ -29,6 +29,13 @@
   right: 0;
   padding: var(--space-2);
 }
+.dialog .control-btn:disabled {
+  cursor: not-allowed;
+  background: var(--color-darkgray);
+}
+.dialog .control-btn:disabled:hover {
+  background: var(--color-darkgray);
+}
 .dialog .accept {
   bottom: 0;
   background: lawngreen;

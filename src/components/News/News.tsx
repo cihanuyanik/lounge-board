@@ -10,15 +10,16 @@ import CreateEditNews, {
 } from "~/components/News/CreateEditNews";
 import NewsItem from "~/components/News/NewsItem";
 import { DialogResult } from "~/components/MessageBox/store";
-import { scrollWithAnimation, sleep } from "~/utils/utils";
+import ContinuesScrollAnimator from "~/utils/ContinuesScrollAnimator";
+import { sleep } from "~/utils/utils";
 
 export default function News() {
   const { isAdmin, messageBox, Executor, API, news } = useAppContext();
   let newsAnimationContainer: HTMLDivElement = null!;
   let newsScrollableContainer: HTMLDivElement = null!;
   let newsDialog: HTMLDialogElement = null!;
-  let scrollAnimation: Animation | undefined;
-  let scrollAnimationTimer: NodeJS.Timeout = null!;
+
+  let scrollAnimator: ContinuesScrollAnimator = null!;
 
   onMount(async () => {
     if (isAdmin()) {
@@ -32,49 +33,19 @@ export default function News() {
     // Wait for news to be loaded
     await sleep(3000);
 
-    // Run scroll animation
-    runScrollAnimation().then();
+    scrollAnimator = new ContinuesScrollAnimator({
+      animationContainer: () => newsAnimationContainer,
+      scrollDirection: "down",
+      totalItemDistance: () => newsAnimationContainer.scrollHeight,
+      viewPortDistance: () => newsScrollableContainer.clientHeight - 16,
+      pixelsPerSecondToScroll: 25,
+      stayAtRestDurationInMsAfterScroll: 3000,
+      pixelsPerSecondToReturnBack: 1000,
+    });
+    scrollAnimator.run().then();
   }
 
-  onCleanup(() => {
-    // Stop restart timer
-    if (scrollAnimationTimer) {
-      clearTimeout(scrollAnimationTimer);
-    }
-
-    // Cancel active animation
-    if (scrollAnimation && scrollAnimation.playState !== "finished") {
-      scrollAnimation.cancel();
-    }
-  });
-
-  // TODO: This part and Member scroll: Maybe they can be refactored into a single component
-  async function runScrollAnimation() {
-    // Start animation and wait for it to finish
-    try {
-      scrollAnimation = scrollWithAnimation({
-        animationContainer: newsAnimationContainer,
-        scrollDirection: "down",
-        totalItemDistance: newsAnimationContainer.scrollHeight,
-        viewPortDistance: newsScrollableContainer.clientHeight - 16,
-        pixelsPerSecondToScroll: 25,
-        stayAtRestDurationInMsAfterScroll: 3000,
-        pixelsPerSecondToReturnBack: 1000,
-      });
-
-      await scrollAnimation?.finished;
-
-      // Restart animation after 3 seconds
-      scrollAnimationTimer = setTimeout(() => {
-        runScrollAnimation();
-      }, 3000);
-    } catch (e) {
-      // Try to restart animation after 60 seconds
-      scrollAnimationTimer = setTimeout(() => {
-        runScrollAnimation();
-      }, 60000);
-    }
-  }
+  onCleanup(() => scrollAnimator?.stop());
 
   const icon = <Img src={NewsHeader} style={{ height: "35px" }} />;
 

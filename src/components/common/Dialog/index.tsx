@@ -1,6 +1,9 @@
 import "./index.css";
 import { JSX, onCleanup, onMount, splitProps } from "solid-js";
 import { Portal } from "solid-js/web";
+import Button from "~/components/common/Button";
+import Tick from "~/assets/icons/Tick";
+import Cross from "~/assets/icons/Cross";
 
 type DialogProps = {
   open?: boolean;
@@ -73,5 +76,27 @@ export default function Dialog(props: DialogProps) {
         {local.children}
       </dialog>
     </Portal>
+  );
+}
+
+export function DialogControls(props: {
+  disabled?: boolean;
+  onAccept: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <>
+      <Button
+        class={"control-btn accept"}
+        onClick={props.onAccept}
+        disabled={props.disabled}
+      >
+        <Tick />
+      </Button>
+
+      <Button class={"control-btn cancel"} onClick={props.onCancel}>
+        <Cross />
+      </Button>
+    </>
   );
 }

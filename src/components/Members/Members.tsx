@@ -2,7 +2,6 @@ import "./members.css";
 import { For, onCleanup, onMount, Show } from "solid-js";
 import MemberItem from "~/components/Members/MemberItem";
 import Img from "~/components/common/Img";
-import { scrollWithAnimation, sleep } from "~/utils/utils";
 import CreateEditMember, {
   CreateEditMemberDialogResult,
 } from "~/components/Members/CreateEditMember";
@@ -12,6 +11,8 @@ import DragToReorder from "~/components/DragToReorder";
 import MembersHeader from "~/assets/images/members-header.png";
 import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
+import ContinuesScrollAnimator from "~/utils/ContinuesScrollAnimator";
+import { sleep } from "~/utils/utils";
 
 export default function Members() {
   const { isAdmin, messageBox, members, meta, Executor, API } = useAppContext();
@@ -163,8 +164,8 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
 
   let membersScrollableContainer: HTMLDivElement = null!;
   let membersAnimationContainer: HTMLDivElement = null!;
-  let scrollAnimation: Animation | undefined;
-  let scrollAnimationTimer: NodeJS.Timeout = null!;
+
+  let scrollAnimator: ContinuesScrollAnimator = null!;
 
   onMount(async () => {
     if (isAdmin()) {
@@ -178,48 +179,19 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
     // Wait for news to be loaded
     await sleep(3000);
 
-    // Run scroll animation
-    runScrollAnimation().then();
+    scrollAnimator = new ContinuesScrollAnimator({
+      animationContainer: () => membersAnimationContainer,
+      scrollDirection: "down",
+      totalItemDistance: () => membersAnimationContainer.scrollHeight,
+      viewPortDistance: () => membersScrollableContainer.clientHeight - 16,
+      pixelsPerSecondToScroll: 25,
+      stayAtRestDurationInMsAfterScroll: 3000,
+      pixelsPerSecondToReturnBack: 1000,
+    });
+    scrollAnimator.run(2000).then();
   }
 
-  onCleanup(() => {
-    // Stop restart timer
-    if (scrollAnimationTimer) {
-      clearTimeout(scrollAnimationTimer);
-    }
-
-    // Cancel active animation
-    if (scrollAnimation && scrollAnimation.playState !== "finished") {
-      scrollAnimation.cancel();
-    }
-  });
-
-  async function runScrollAnimation() {
-    // Start animation and wait for it to finish
-    try {
-      scrollAnimation = scrollWithAnimation({
-        animationContainer: membersAnimationContainer,
-        scrollDirection: "down",
-        totalItemDistance: membersAnimationContainer.scrollHeight,
-        viewPortDistance: membersScrollableContainer.clientHeight - 16,
-        pixelsPerSecondToScroll: 25,
-        stayAtRestDurationInMsAfterScroll: 3000,
-        pixelsPerSecondToReturnBack: 1000,
-      });
-
-      await scrollAnimation?.finished;
-
-      // Restart animation after 2 seconds
-      scrollAnimationTimer = setTimeout(() => {
-        runScrollAnimation();
-      }, 2000);
-    } catch (e) {
-      // Try to restart animation after 60 seconds
-      scrollAnimationTimer = setTimeout(() => {
-        runScrollAnimation();
-      }, 60000);
-    }
-  }
+  onCleanup(() => scrollAnimator?.stop());
 
   return (
     <Scrollable
