@@ -2,6 +2,7 @@
   width: 100%;
   min-width: 100%;
   max-width: 100%;
+  min-height: 250px;
   flex: 1 0 0;
 }
 
@@ -20,6 +21,7 @@
   height: auto !important;
   display: flex;
   flex-direction: row;
+
   background: transparent;
 
   // Select all children
@@ -40,6 +42,9 @@
 .event-card {
   width: 40%;
   min-width: 40%;
+  // grow 1, shrink 0, basis 400px
+  flex: 1 0 400px;
+
   transition: all 250ms ease-in-out;
   transform-origin: 50% 50%;
 
