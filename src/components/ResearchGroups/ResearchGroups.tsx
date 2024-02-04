@@ -28,16 +28,19 @@ export default function ResearchGroups() {
 
   let animRotateCenterToLeft: Animation;
   let animRotateLeftToCenter: Animation;
-
   let animRotateCenterToRight: Animation;
   let animRotateRightToCenter: Animation;
 
-  function resetInterval() {
-    clearInterval(interval);
-    interval = setInterval(() => researchGroups.next(), 5000);
-  }
-
   onMount(() => {
+    createAnimations();
+    if (!isAdmin()) {
+      resetInterval();
+    }
+  });
+
+  onCleanup(() => clearInterval(interval));
+
+  function createAnimations() {
     // Center position to left animation
     animRotateCenterToLeft = resGroupImageRef.animate(
       [
@@ -109,18 +112,16 @@ export default function ResearchGroups() {
       { duration: 1000 },
     );
     animRotateCenterToRight.cancel();
+  }
 
-    if (!isAdmin()) {
-      resetInterval();
-    }
-  });
-
-  onCleanup(() => clearInterval(interval));
+  function resetInterval() {
+    clearInterval(interval);
+    interval = setInterval(() => researchGroups.next(), 5000);
+  }
 
   createEffect(
     on(
       () => researchGroups.active,
-
       async () => {
         if (!researchGroups.active) return;
 

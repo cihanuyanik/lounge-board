@@ -9,22 +9,32 @@ import Button from "~/components/common/Button";
 import Logout from "~/assets/icons/Logout";
 import { useNavigate } from "@solidjs/router";
 import { User } from "~/api/types";
+import AvatarPlaceholder from "~/assets/images/member-placeholder.png";
+import Edit from "~/assets/icons/Edit";
+import Settings from "~/assets/icons/Settings";
 
 export default function (props: { user?: User }) {
-  const { researchGroups, Executor, API } = useAppContext();
+  const { researchGroups, Executor, API, isAdmin } = useAppContext();
   const navigate = useNavigate();
 
   return (
     <Row class={"banner w-full gap-2"}>
-      <Img src={DTULogo} width={50} />
+      <Img
+        src={DTULogo}
+        class={"dtu-logo"}
+        onClick={() => {
+          !isAdmin() ? navigate("/admin") : navigate("/");
+        }}
+      />
+
       <Show when={props.user}>
         <Row class={"user"}>
-          <Img src={props.user?.photoURL as string}></Img>
+          <Img src={props.user?.photoURL || AvatarPlaceholder}></Img>
           <Column>
             <p>{"Welcome"}</p>
             <p>{props.user?.displayName}</p>
+
             <Button
-              class={"button-rect"}
               onClick={async () => {
                 await Executor.run(() => API.AuthService.signOut(), {
                   busyDialogMessage: "Signing out...",
@@ -32,7 +42,7 @@ export default function (props: { user?: User }) {
                 });
               }}
             >
-              <p>Sign Out</p>
+              Logout
               <Logout />
             </Button>
           </Column>
