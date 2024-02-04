@@ -235,7 +235,7 @@ export default function ResearchGroups() {
         <Show when={isAdmin()}>
           <ImageShiftControls />
         </Show>
-        <CarouselBullets />
+        <CarouselBullets resetInterval={resetInterval} />
       </Row>
       <Show when={isAdmin()}>
         <EditResearchGroups ref={editResearchGroupsDialog} />
@@ -259,8 +259,8 @@ function ImageShiftControls() {
   );
 }
 
-function CarouselBullets() {
-  const { researchGroups } = useAppContext();
+function CarouselBullets(props: { resetInterval: () => void }) {
+  const { researchGroups, isAdmin } = useAppContext();
 
   return (
     <Row class={"carousel-bullets"}>
@@ -269,7 +269,12 @@ function CarouselBullets() {
           <div
             class={"bullet"}
             classList={{ active: researchGroups.active?.id === id }}
-            onClick={() => researchGroups.setActive(id)}
+            onClick={() => {
+              researchGroups.setActive(id);
+              if (!isAdmin()) {
+                props.resetInterval();
+              }
+            }}
           />
         )}
       </For>
