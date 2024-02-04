@@ -114,9 +114,9 @@ function _Signup() {
             />
           </Row>
           <Input
-            label={"Name"}
+            label={"Full Name"}
             type={"text"}
-            placeholder={"... Your name ..."}
+            placeholder={"... Your full name ..."}
             class={"w-full"}
             value={name()}
             onInput={(e) => setName(e.currentTarget.value)}

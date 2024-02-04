@@ -10,6 +10,10 @@ import Tick from "~/assets/icons/Tick";
 import { useAppContext } from "~/AppContext";
 import { useNavigate } from "@solidjs/router";
 import { batch, createMemo, createSignal } from "solid-js";
+import Img from "~/components/common/Img";
+import GoogleLogo from "~/assets/images/google.png";
+import MicrosoftLogo from "~/assets/images/microsoft.png";
+import GitHubLogo from "~/assets/images/github.png";
 
 export default function (props: { ref?: DialogRef }) {
   const { API, Executor } = useAppContext();
@@ -118,6 +122,73 @@ export default function (props: { ref?: DialogRef }) {
             Sign up
           </p>
         </Row>
+
+        <Column class={"external-provider-login"}>
+          <p>Or you can login with:</p>
+          <Button
+            class={"button-rect"}
+            onClick={async () => {
+              const dialog = document.getElementById(
+                "login-dialog",
+              ) as HTMLDialogElement | null;
+
+              if (!dialog) return;
+
+              await Executor.run(() => API.AuthService.signInWithGoogle(), {
+                // busyDialogMessage: "Logging in...",
+                postAction: (userCredential) => {
+                  loggedInUser = userCredential.user;
+                  dialog?.Close();
+                },
+              });
+            }}
+          >
+            <Img src={GoogleLogo} />
+            Google
+          </Button>
+          <Button
+            class={"button-rect"}
+            onClick={async () => {
+              const dialog = document.getElementById(
+                "login-dialog",
+              ) as HTMLDialogElement | null;
+
+              if (!dialog) return;
+
+              await Executor.run(() => API.AuthService.signInWithMicrosoft(), {
+                // busyDialogMessage: "Logging in...",
+                postAction: (userCredential) => {
+                  loggedInUser = userCredential.user;
+                  dialog?.Close();
+                },
+              });
+            }}
+          >
+            <Img src={MicrosoftLogo} />
+            Microsoft
+          </Button>
+          <Button
+            class={"button-rect"}
+            onClick={async () => {
+              const dialog = document.getElementById(
+                "login-dialog",
+              ) as HTMLDialogElement | null;
+
+              if (!dialog) return;
+
+              await Executor.run(() => API.AuthService.signInWithGitHub(), {
+                // busyDialogMessage: "Logging in...",
+                postAction: (userCredential) => {
+                  loggedInUser = userCredential.user;
+                  dialog?.Close();
+                },
+              });
+            }}
+          >
+            <Img src={GitHubLogo} />
+            GitHub
+          </Button>
+        </Column>
       </Column>
     </Dialog>
   );

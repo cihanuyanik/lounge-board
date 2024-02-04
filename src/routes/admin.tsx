@@ -34,13 +34,7 @@ function _Admin() {
   function subscribeToAuthState() {
     unSubList.push(
       API.AuthService.auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          // Logged in
-          setUser(user);
-        } else {
-          // Logged out
-          setUser(null!);
-        }
+        setUser(user!);
       }),
     );
   }
@@ -53,7 +47,7 @@ function _Admin() {
 
   async function checkEmailVerification() {
     // Check email verification status
-    if (user() && !user().emailVerified) {
+    if (!API.AuthService.isUserVerified()) {
       const dResult =
         await emailVerificationDialog.ShowModal<EmailVerificationDialogResult>();
       if (dResult === "Cancel") {
@@ -93,7 +87,8 @@ function _Admin() {
         postAction: async () => {
           await login();
           await checkEmailVerification();
-          if (user() && user().emailVerified) {
+          if (API.AuthService.isUserVerified()) {
+            setUser({ ...API.AuthService.user! } as User);
             await loadData();
           }
         },

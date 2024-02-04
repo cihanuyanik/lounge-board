@@ -1,12 +1,13 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { firebaseConfig } from "~/api/config";
-import { getFirestore, Firestore } from "firebase/firestore";
+import { Firestore, getFirestore } from "firebase/firestore";
 import {
-  getStorage,
+  deleteObject,
   FirebaseStorage,
+  getDownloadURL,
+  getStorage,
   ref,
   uploadString,
-  deleteObject,
 } from "firebase/storage";
 import NewsCollection from "~/api/NewsCollection";
 import ResearchGroupsCollection from "~/api/ResearchGroupsCollection";
@@ -41,6 +42,7 @@ export class Firebase {
       this._app,
       `gs://${firebaseConfig.storageBucket}`,
     );
+
     if (!this._storage) {
       throw new Error("Firebase Storage cannot be initialized");
     }
@@ -61,14 +63,29 @@ export class Firebase {
     return this._db;
   }
 
-  async uploadImage(readableName: string, base64UrlStr: string) {
+  generateStoragePath(readableName: string, addTimeStampToUrl = true) {
+    // generate a unique path for the image
+    let storagePath = readableName.toLowerCase().replaceAll(" ", "-");
+    if (addTimeStampToUrl) {
+      storagePath += `-${Date.now()}`;
+    }
+
+    return storagePath;
+  }
+
+  async uploadImage(
+    readableName: string,
+    base64UrlStr: string,
+    addTimeStampToUrl = true,
+  ) {
     // Check if the image is a base64 string
     if (!base64UrlStr.startsWith("data:image/")) return "";
 
     // generate a unique path for the image
-    const storagePath = `${readableName
-      .toLowerCase()
-      .replaceAll(" ", "-")}-${Date.now()}`;
+    const storagePath = this.generateStoragePath(
+      readableName,
+      addTimeStampToUrl,
+    );
 
     // create a reference to the image
     const imageStoreRef = ref(this._storage, storagePath);
@@ -76,13 +93,23 @@ export class Firebase {
     // upload the image
     const result = await uploadString(imageStoreRef, base64UrlStr, "data_url");
 
-    return `https://firebasestorage.googleapis.com/v0/b/${result.metadata.bucket}/o/${result.metadata.fullPath}?alt=media`;
+    return `https://firebasestorage.googleapis.com/v0/b/${result.metadata.bucket}/o/${encodeURIComponent(result.metadata.fullPath)}?alt=media`;
   }
 
   async deleteImage(url: string) {
     if (url && url.startsWith("http")) {
       const imageRef = ref(this._storage, url);
       return deleteObject(imageRef);
+    }
+  }
+
+  // Get the download URL
+  async getDownloadURL(storagePath: string) {
+    try {
+      const imageRef = ref(this._storage, storagePath);
+      return await getDownloadURL(imageRef);
+    } catch (e) {
+      return null;
     }
   }
 }

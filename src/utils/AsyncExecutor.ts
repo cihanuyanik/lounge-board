@@ -98,6 +98,24 @@ export default class {
               "Too many requests",
             );
             break;
+          case "auth/user-cancelled":
+            this.messageBox.error(
+              "The user cancelled the operation. This usually happens when user refuses to grant permission",
+              "Cancelled",
+            );
+            break;
+          case "auth/popup-closed-by-user":
+            this.messageBox.error(
+              "The popup has been closed by the user before the operation was completed.",
+              "Popup closed",
+            );
+            break;
+          case "auth/account-exists-with-different-credential":
+            this.messageBox.error(
+              "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.",
+              "Account exists",
+            );
+            break;
           // Storage errors
           case "storage/unauthorized":
             this.messageBox.error(

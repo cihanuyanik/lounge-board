@@ -3,6 +3,7 @@ import "./DateExtensions";
 import "./EventRegisterExtension";
 import "./ArrayExtensions";
 import "./DialogExtensions";
+import "./FileReaderExtensions";
 
 /**
  * Creates a mutate function built on top of given setter function
