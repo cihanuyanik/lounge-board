@@ -12,7 +12,7 @@ export default class MembersCollection extends Collection<Member> {
       if (data.image) {
         // Upload member image
         data.image = await this._fb.uploadImage(
-          `member-${data.name}`,
+          `member/${data.name}`,
           data.image,
         );
       }
@@ -33,7 +33,7 @@ export default class MembersCollection extends Collection<Member> {
         await this._fb.deleteImage(data.original.image);
 
         data.changes.image = await this._fb.uploadImage(
-          `member-${data.original.name}`,
+          `member/${data.original.name}`,
           data.changes.image,
         );
       }

@@ -98,8 +98,12 @@ export class Firebase {
 
   async deleteImage(url: string) {
     if (url && url.startsWith("http")) {
-      const imageRef = ref(this._storage, url);
-      return deleteObject(imageRef);
+      try {
+        const imageRef = ref(this._storage, url);
+        await deleteObject(imageRef);
+      } catch (e) {
+        // Just try to delete it, no need to throw an error if it fails
+      }
     }
   }
 

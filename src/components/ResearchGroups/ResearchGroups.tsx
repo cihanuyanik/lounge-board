@@ -165,6 +165,7 @@ export default function ResearchGroups() {
         const newGroupIds = dResultIds.filter(
           (id) => !researchGroups.ids.includes(id),
         );
+
         // Remove the ones marked as new
         dResultIds = dResultIds.filter((id) => !newGroupIds.includes(id));
 

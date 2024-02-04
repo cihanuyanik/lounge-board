@@ -3,6 +3,7 @@ import { isServer } from "solid-js/web";
 export {};
 
 declare global {
+  // noinspection JSUnusedGlobalSymbols
   interface FileReader {
     readAsyncAsDataURL(file: Blob): Promise<string | ArrayBuffer | null>;
   }

@@ -124,6 +124,18 @@ function _EditResearchGroups(props: { ref: DialogRef }) {
         onAccept={() => {
           mutate((state) => {
             state.result = "Accept";
+
+            // Remove New Research Group from the list
+            const deletedIds = [] as string[];
+            for (const id of state.ids) {
+              const entity = state.entities[id];
+              if (entity.name === "New Research Group") {
+                delete state.entities[id];
+                deletedIds.push(id);
+              }
+            }
+
+            state.ids = state.ids.filter((id) => !deletedIds.includes(id));
           });
 
           const dialog = document.getElementById(
@@ -153,9 +165,9 @@ function ResearchGroupName() {
       value={state.entities[state.selectedId]?.name}
       placeholder={"Research Group Name"}
       onInput={(e) => {
-        mutate((state) => {
-          state.entities[state.selectedId].name = e.target.value;
-        });
+        mutate(
+          (state) => (state.entities[state.selectedId].name = e.target.value),
+        );
       }}
       class={"research-group-name"}
     />
@@ -317,7 +329,6 @@ function ResearchGroupSelector() {
       >
         <For each={state.ids}>
           {(id) => {
-            console.log(id);
             return (
               <DropdownItem value={id}>{state.entities[id].name}</DropdownItem>
             );

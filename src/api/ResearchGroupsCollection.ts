@@ -12,7 +12,7 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
       // Upload banner image
       if (group.bannerImage) {
         group.bannerImage = await this._fb.uploadImage(
-          `banner-${group.name}`,
+          `banner/${group.name}`,
           group.bannerImage,
         );
       }
@@ -20,7 +20,7 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
       // Upload group image
       if (group.image) {
         group.image = await this._fb.uploadImage(
-          `research-group-${group.name}`,
+          `research-group/${group.name}`,
           group.image,
         );
       }
@@ -44,7 +44,7 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
       await this._fb.deleteImage(data.original.bannerImage);
 
       data.changes.bannerImage = await this._fb.uploadImage(
-        `banner-${data.original.name}`,
+        `banner/${data.original.name}`,
         data.changes.bannerImage,
       );
     }
@@ -53,7 +53,7 @@ export default class ResearchGroupsCollection extends Collection<ResearchGroup> 
     if (data.changes.image && data.original.image !== data.changes.image) {
       await this._fb.deleteImage(data.original.image);
       data.changes.image = await this._fb.uploadImage(
-        `research-group-${data.original.name}`,
+        `research-group/${data.original.name}`,
         data.changes.image,
       );
     }
