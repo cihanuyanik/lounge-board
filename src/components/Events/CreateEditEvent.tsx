@@ -1,11 +1,13 @@
 import "./events.css";
-import { createStore } from "solid-js/store";
-import { createContext, createEffect, on, useContext } from "solid-js";
+import { createEffect, on } from "solid-js";
 import { Event } from "~/api/types";
-import { createMutator } from "~/utils/utils";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
-import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
+import Dialog, {
+  createDialogContext,
+  DialogControls,
+  DialogRef,
+} from "~/components/common/Dialog";
 import moment from "moment";
 import Img from "~/components/common/Img";
 import EventsHeaderImage from "~/assets/images/events-header.png";
@@ -28,8 +30,8 @@ export type CreateEventDialogResult = {
   endDateTime: string;
 };
 
-function createDialogStore() {
-  const [state, setState] = createStore<CreateEventDialogResult>({
+const { ContextProvider, useDialogContext } =
+  createDialogContext<CreateEventDialogResult>({
     result: "Cancel",
     event: {
       id: "",
@@ -48,7 +50,16 @@ function createDialogStore() {
     endDateTime: "",
   });
 
-  const mutate = createMutator(setState);
+export default function CreateEditEvent(props: { ref: DialogRef }) {
+  return (
+    <ContextProvider>
+      <_CreateEditEvent ref={props.ref} />
+    </ContextProvider>
+  );
+}
+
+function _CreateEditEvent(props: { ref: DialogRef }) {
+  const { state, mutate } = useDialogContext();
 
   createEffect(
     on(
@@ -71,43 +82,6 @@ function createDialogStore() {
       },
     ),
   );
-
-  return { state, mutate };
-}
-
-type ContextType = ReturnType<typeof createDialogStore>;
-
-const Context = createContext<ContextType>();
-
-function ContextProvider(props: any) {
-  const { state, mutate } = createDialogStore();
-
-  return (
-    <Context.Provider
-      value={{
-        state,
-        mutate,
-      }}
-    >
-      {props.children}
-    </Context.Provider>
-  );
-}
-
-function useDialogContext() {
-  return useContext(Context) as ContextType;
-}
-
-export default function CreateEditEvent(props: { ref: DialogRef }) {
-  return (
-    <ContextProvider>
-      <_CreateEditEvent ref={props.ref} />
-    </ContextProvider>
-  );
-}
-
-function _CreateEditEvent(props: { ref: DialogRef }) {
-  const { state, mutate } = useDialogContext();
 
   function onBeforeShow(
     ev: CustomEvent<{ event?: Event; type?: "upcoming" | "past" }>,
@@ -281,6 +255,7 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
 
 function Preview() {
   const { state } = useDialogContext();
+  if (state === undefined) return null;
 
   return (
     <Row class={"preview"}>

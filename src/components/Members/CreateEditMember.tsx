@@ -1,4 +1,4 @@
-import { createStore } from "solid-js/store";
+import { createEffect, on } from "solid-js";
 import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
 import MemberImagePlaceholder from "~/assets/images/member-placeholder.png";
@@ -7,46 +7,24 @@ import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import { Member } from "~/api/types";
-import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
-import { createMutator } from "~/utils/utils";
-import { createContext, useContext } from "solid-js";
+import Dialog, {
+  createDialogContext,
+  DialogControls,
+  DialogRef,
+} from "~/components/common/Dialog";
 
 export type CreateEditMemberDialogResult = {
   result: "Accept" | "Cancel";
+  mode: "create" | "edit";
   member: Omit<Member, "id" | "createdAt">;
 };
 
-function createDialogStore() {
-  // create store
-  const [state, setState] = createStore<CreateEditMemberDialogResult>({
+const { ContextProvider, useDialogContext } =
+  createDialogContext<CreateEditMemberDialogResult>({
     result: "Cancel",
-    // @ts-ignore
+    mode: "create",
     member: { name: "", role: "", image: "", isSelected: false },
   });
-
-  // create mutator
-  const mutate = createMutator(setState);
-
-  return { state, mutate };
-}
-
-type ContextType = {} & ReturnType<typeof createDialogStore>;
-
-const Context = createContext<ContextType>();
-
-function ContextProvider(props: any) {
-  const { state, mutate } = createDialogStore();
-
-  return (
-    <Context.Provider value={{ state, mutate }}>
-      {props.children}
-    </Context.Provider>
-  );
-}
-
-function useDialogContext() {
-  return useContext(Context) as ContextType;
-}
 
 export default function CreateEditMember(props: { ref: DialogRef }) {
   return (
@@ -58,23 +36,25 @@ export default function CreateEditMember(props: { ref: DialogRef }) {
 
 function _CreateEditMember(props: { ref: DialogRef }) {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return null;
 
   return (
     <Dialog
       id={"create-edit-member-dialog"}
       class={"create-edit-member-dialog"}
       ref={props.ref}
-      onBeforeShow={(ev: CustomEvent) => {
+      onAfterShow={(ev: CustomEvent) => {
         const member = ev.detail as Member;
         mutate((state) => {
           state.result = "Cancel";
           if (member) {
-            // Open in edit mode & copy only the properties that are needed (for safety)
+            state.mode = "edit";
             state.member.name = member.name;
             state.member.role = member.role;
             state.member.image = member.image;
             state.member.isSelected = false;
           } else {
+            state.mode = "create";
             state.member = { name: "", role: "", image: "", isSelected: false };
           }
         });
@@ -115,6 +95,8 @@ function _CreateEditMember(props: { ref: DialogRef }) {
 
 function Avatar() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return null;
+
   let imageCropDialog: HTMLDialogElement = null!;
   let imageSelectInput: HTMLInputElement;
 
@@ -136,7 +118,6 @@ function Avatar() {
         ev.target?.result as string,
       );
       if (dResult.result === "Cancel") return;
-      // setDialogStore("member", "image", dResult.croppedImage);
       mutate((state) => (state.member.image = dResult.croppedImage));
     };
 
@@ -170,6 +151,23 @@ function Avatar() {
 
 function TextInfo() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return null;
+
+  // Update height of role textarea
+  createEffect(
+    on(
+      () => state.member.role,
+      () => {
+        if (roleTextArea) {
+          roleTextArea.style.height = "";
+          roleTextArea.style.height = roleTextArea.scrollHeight + "px";
+        }
+      },
+    ),
+  );
+
+  let roleTextArea: HTMLTextAreaElement = null!;
+
   return (
     <Column class={"name-role"}>
       <input
@@ -182,13 +180,10 @@ function TextInfo() {
       />
 
       <textarea
+        ref={roleTextArea}
         value={state.member.role}
         onInput={(e) => {
-          mutate((state) => {
-            state.member.role = e.target.value || "";
-          });
-          e.currentTarget.style.height = "";
-          e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
+          mutate((state) => (state.member.role = e.currentTarget.value || ""));
         }}
         placeholder={"Member Role"}
         class={"role"}

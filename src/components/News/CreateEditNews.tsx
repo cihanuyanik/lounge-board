@@ -1,30 +1,33 @@
+import { For, Match, Show, Switch } from "solid-js";
+import { useAppContext } from "~/AppContext";
+import Dialog, {
+  createDialogContext,
+  DialogControls,
+  DialogRef,
+} from "~/components/common/Dialog";
+import { New } from "~/api/types";
+import { Timestamp } from "firebase/firestore";
+import Row from "~/components/common/Row";
+import Column from "~/components/common/Column";
+import Button from "~/components/common/Button";
+import Input from "~/components/common/Input";
+
+import Dropdown, { DropdownItem } from "~/components/common/Dropdown";
+import Scrollable from "~/components/common/Scrollable";
+
+import LinkedInPost from "~/components/News/Posts/LinkedInPost";
+import FacebookPost from "~/components/News/Posts/FacebookPost";
+import TwitterPost from "~/components/News/Posts/TwitterPost";
+import InstagramPost from "~/components/News/Posts/InstagramPost";
+import CustomPost from "~/components/News/Posts/CustomPost";
+
+import Img from "~/components/common/Img";
+import DTULogo from "~/assets/images/dtu-logo.png";
 import NewsHeader from "~/assets/images/news-header.png";
 import LinkedInIcon from "~/assets/images/linkedin.png";
 import FacebookIcon from "~/assets/images/facebook.png";
 import TwitterIcon from "~/assets/images/twitter.png";
 import InstagramIcon from "~/assets/images/instagram.png";
-
-import { New } from "~/api/types";
-import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
-import { createContext, For, Match, Show, Switch, useContext } from "solid-js";
-import { createMutator } from "~/utils/utils";
-import { createStore } from "solid-js/store";
-import Column from "~/components/common/Column";
-import Button from "~/components/common/Button";
-import Row from "~/components/common/Row";
-import Img from "~/components/common/Img";
-import Dropdown, { DropdownItem } from "~/components/common/Dropdown";
-import { useAppContext } from "~/AppContext";
-import Scrollable from "~/components/common/Scrollable";
-import LinkedInPost from "~/components/News/Posts/LinkedInPost";
-import FacebookPost from "~/components/News/Posts/FacebookPost";
-import TwitterPost from "~/components/News/Posts/TwitterPost";
-import InstagramPost from "~/components/News/Posts/InstagramPost";
-import DTULogo from "~/assets/images/dtu-logo.png";
-
-import Input from "~/components/common/Input";
-import CustomPost from "~/components/News/Posts/CustomPost";
-import { Timestamp } from "firebase/firestore";
 
 export type CreateNewsDialogResult = {
   result: "Accept" | "Cancel";
@@ -35,8 +38,8 @@ export type CreateNewsDialogResult = {
   newsTypeDisplay: Record<string, { text: string; image: string }>;
 };
 
-function createDialogStore() {
-  const [state, setState] = createStore<CreateNewsDialogResult>({
+const { ContextProvider, useDialogContext } =
+  createDialogContext<CreateNewsDialogResult>({
     result: "Cancel",
     news: {
       id: "",
@@ -78,29 +81,6 @@ function createDialogStore() {
       },
     },
   });
-
-  const mutate = createMutator(setState);
-
-  return { state, mutate };
-}
-
-type ContextType = {} & ReturnType<typeof createDialogStore>;
-
-const Context = createContext<ContextType>();
-
-function ContextProvider(props: any) {
-  const { state, mutate } = createDialogStore();
-
-  return (
-    <Context.Provider value={{ state, mutate }}>
-      {props.children}
-    </Context.Provider>
-  );
-}
-
-function useDialogContext() {
-  return useContext(Context) as ContextType;
-}
 
 export default function (props: { ref: DialogRef }) {
   return (
@@ -225,6 +205,8 @@ function NewsTypeSelection() {
 
 function CustomPostInfo() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return null;
+
   return (
     <Column class={"w-full gap-3"}>
       <Input
@@ -255,6 +237,7 @@ function CustomPostInfo() {
 
 function SocialMediaPostEmbedCode() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return null;
 
   return (
     <Column class={"w-full gap-3"}>
@@ -275,6 +258,7 @@ function SocialMediaPostEmbedCode() {
 
 function Preview() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return null;
 
   return (
     <Scrollable
@@ -335,6 +319,8 @@ function Preview() {
 
 function SizeAdjuster() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return null;
+
   return (
     <Column class={"size-adjustor"}>
       <Button

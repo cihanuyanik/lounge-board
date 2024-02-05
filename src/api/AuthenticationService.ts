@@ -94,16 +94,40 @@ export class AuthenticationService {
       throw new Error("User is not logged in");
     }
 
+    // Upload the profile photo
     profileImage = await this._fb.uploadImage(
       `profile/${name}`,
       profileImage,
       false,
     );
 
-    return await updateProfile(this.user, {
-      displayName: name,
-      photoURL: profileImage,
-    });
+    // Check if the profile photo is uploaded successfully
+    if (
+      profileImage &&
+      profileImage.startsWith("https") &&
+      name !== this.user.displayName
+    ) {
+      // Remove previous profile photo
+      await this._fb.deleteImage(this.user.photoURL as string);
+    }
+
+    // Update the profile input
+    const updateData: { displayName?: string; photoURL?: string } = {};
+    if (name !== this.user.displayName) updateData.displayName = name;
+
+    if (
+      profileImage &&
+      profileImage.startsWith("https") &&
+      profileImage !== this.user.photoURL
+    ) {
+      updateData.photoURL = profileImage;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return;
+    }
+
+    return await updateProfile(this.user, updateData);
   }
 
   async verifyEmail() {

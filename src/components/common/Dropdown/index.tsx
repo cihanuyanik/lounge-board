@@ -24,6 +24,7 @@ type Props = {
 };
 
 export default function (props: Props) {
+  // TODO: This component has serious state management issues. It should be corrected. Cross reference this by checking behavior of CreateEditNews
   const [open, setOpen] = createSignal(false);
   const [value, setValue] = createSignal(props.value || "");
   // const items = children(() => props.children).toArray();

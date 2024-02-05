@@ -1,18 +1,20 @@
 import "./researchGroups.css";
-import { createContext, For, useContext } from "solid-js";
+import { For } from "solid-js";
 import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
-import { createStore } from "solid-js/store";
 import BannerPlaceholder from "~/assets/images/banner_placeholder.png";
 import ResearchGroupPlaceholder from "~/assets/images/research-group-placeholder.png";
-import { createMutator } from "~/utils/utils";
 import { v4 as uuid } from "uuid";
 import Delete from "~/assets/icons/Delete";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Add from "~/assets/icons/Add";
 import { ResearchGroup } from "~/api/types";
-import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
+import Dialog, {
+  createDialogContext,
+  DialogControls,
+  DialogRef,
+} from "~/components/common/Dialog";
 import Dropdown, { DropdownItem } from "~/components/common/Dropdown";
 
 export type EditResearchGroupsDialogResult = {
@@ -22,38 +24,13 @@ export type EditResearchGroupsDialogResult = {
   entities: Record<string, ResearchGroup>;
 };
 
-function createDialogStore() {
-  // create store
-  const [state, setState] = createStore<EditResearchGroupsDialogResult>({
+const { ContextProvider, useDialogContext } =
+  createDialogContext<EditResearchGroupsDialogResult>({
     result: "Cancel",
     selectedId: "",
     ids: [],
     entities: {},
   });
-
-  // create mutator
-  const mutate = createMutator(setState);
-
-  return { state, mutate };
-}
-
-type ContextType = {} & ReturnType<typeof createDialogStore>;
-
-const Context = createContext<ContextType>();
-
-function ContextProvider(props: any) {
-  const { state, mutate } = createDialogStore();
-
-  return (
-    <Context.Provider value={{ state, mutate }}>
-      {props.children}
-    </Context.Provider>
-  );
-}
-
-function useDialogContext() {
-  return useContext(Context) as ContextType;
-}
 
 export default function EditResearchGroupsDialog(props: { ref: DialogRef }) {
   return (
@@ -160,6 +137,8 @@ function _EditResearchGroups(props: { ref: DialogRef }) {
 
 function ResearchGroupName() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return;
+
   return (
     <input
       value={state.entities[state.selectedId]?.name}
@@ -176,32 +155,9 @@ function ResearchGroupName() {
 
 function BannerImage() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return;
 
   let bannerImageInput: HTMLInputElement;
-
-  function onImageSelected() {
-    if (!bannerImageInput.files) return;
-    if (bannerImageInput.files.length === 0) return;
-    if (
-      bannerImageInput.files[0].type !== "image/png" &&
-      bannerImageInput.files[0].type !== "image/jpeg"
-    )
-      return;
-
-    const image = bannerImageInput.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (ev) => {
-      if (ev.target === null) return;
-
-      mutate((state) => {
-        state.entities[state.selectedId].bannerImage = ev.target
-          ?.result as string;
-      });
-    };
-
-    reader.readAsDataURL(image);
-  }
 
   return (
     <Row class={"banner-image"} onclick={() => bannerImageInput.click()}>
@@ -217,7 +173,25 @@ function BannerImage() {
         type="file"
         accept="image/png, image/jpeg"
         hidden
-        onInput={onImageSelected}
+        onInput={async () => {
+          if (!bannerImageInput.files) return;
+          if (bannerImageInput.files.length === 0) return;
+          if (
+            bannerImageInput.files[0].type !== "image/png" &&
+            bannerImageInput.files[0].type !== "image/jpeg"
+          )
+            return;
+
+          const image = bannerImageInput.files[0];
+          const reader = new FileReader();
+          const result = await reader.readAsyncAsDataURL(image);
+          if (result === null || typeof result !== "string" || result === "")
+            return;
+
+          mutate(
+            (state) => (state.entities[state.selectedId].bannerImage = result),
+          );
+        }}
       />
     </Row>
   );
@@ -225,31 +199,9 @@ function BannerImage() {
 
 function ResearchGroupTeamImage() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return;
 
   let rgImageInput: HTMLInputElement;
-
-  function onImageSelected() {
-    if (!rgImageInput.files) return;
-    if (rgImageInput.files.length === 0) return;
-    if (
-      rgImageInput.files[0].type !== "image/png" &&
-      rgImageInput.files[0].type !== "image/jpeg"
-    )
-      return;
-
-    const image = rgImageInput.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (ev) => {
-      if (ev.target === null) return;
-
-      mutate((state) => {
-        state.entities[state.selectedId].image = ev.target?.result as string;
-      });
-    };
-
-    reader.readAsDataURL(image);
-  }
 
   return (
     <Row
@@ -268,7 +220,23 @@ function ResearchGroupTeamImage() {
         type="file"
         accept="image/png, image/jpeg"
         hidden
-        onInput={onImageSelected}
+        onInput={async () => {
+          if (!rgImageInput.files) return;
+          if (rgImageInput.files.length === 0) return;
+          if (
+            rgImageInput.files[0].type !== "image/png" &&
+            rgImageInput.files[0].type !== "image/jpeg"
+          )
+            return;
+
+          const image = rgImageInput.files[0];
+          const reader = new FileReader();
+          const result = await reader.readAsyncAsDataURL(image);
+          if (result === null || typeof result !== "string" || result === "")
+            return;
+
+          mutate((state) => (state.entities[state.selectedId].image = result));
+        }}
       />
     </Row>
   );
@@ -276,6 +244,7 @@ function ResearchGroupTeamImage() {
 
 function ResearchGroupSelector() {
   const { state, mutate } = useDialogContext();
+  if (state === undefined) return;
 
   function onNewResearchGroup() {
     mutate((state) => {

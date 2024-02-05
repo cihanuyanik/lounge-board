@@ -4,7 +4,11 @@ import { CropBox } from "~/components/ImageCropDialog/CropBox";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Canvas, { CropperCanvas } from "~/components/ImageCropDialog/Canvas";
-import Dialog, { DialogControls, DialogRef } from "~/components/common/Dialog";
+import Dialog, {
+  createDialogContext,
+  DialogControls,
+  DialogRef,
+} from "~/components/common/Dialog";
 import { createStore } from "solid-js/store";
 import { createMutator } from "~/utils/utils";
 import { createContext, useContext } from "solid-js";
@@ -24,8 +28,8 @@ export type ImageCropResult = {
   rounded?: "none" | "full" | number;
 };
 
-function createDialogStore() {
-  const [state, setState] = createStore<ImageCropResult>({
+export const { ContextProvider, useDialogContext } =
+  createDialogContext<ImageCropResult>({
     result: "Cancel",
     imgSrc: "",
     cropRegion: { x: 0, y: 0, width: 0, height: 0 },
@@ -34,29 +38,6 @@ function createDialogStore() {
     aspectRatio: undefined,
     rounded: undefined,
   });
-
-  const mutate = createMutator(setState);
-
-  return { state, mutate };
-}
-
-type ContextType = {} & ReturnType<typeof createDialogStore>;
-
-const Context = createContext<ContextType>();
-
-function ContextProvider(props: any) {
-  const { state, mutate } = createDialogStore();
-
-  return (
-    <Context.Provider value={{ state, mutate }}>
-      {props.children}
-    </Context.Provider>
-  );
-}
-
-export function useDialogContext() {
-  return useContext(Context) as ContextType;
-}
 
 type ImageCropDialogProps = {
   ref: DialogRef;

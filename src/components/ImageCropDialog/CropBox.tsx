@@ -6,6 +6,7 @@ import { useDialogContext } from "~/components/ImageCropDialog/index";
 
 export function CropBox(props: { ref: (el: HTMLDivElement) => void }) {
   const { state } = useDialogContext();
+  if (state === undefined) return;
 
   createEffect(() => {
     if (state.rounded === "none") {

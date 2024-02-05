@@ -108,7 +108,11 @@ function _Admin() {
     <main>
       <Title>Lounge Board - Admin</Title>
       <div class="app-container">
-        <Banner user={user()} />
+        <Banner
+          title={"Digital Health - Admin"}
+          user={user()}
+          showResearchGroups={true}
+        />
         <Row class={"flex-1 w-full gap-2"}>
           <Members />
           <Column class={"flex-1 h-full gap-2"}>

@@ -1,9 +1,20 @@
 import "./index.css";
-import { JSX, onCleanup, onMount, splitProps } from "solid-js";
+import "~/utils/DialogExtensions";
+
+import {
+  createContext,
+  JSX,
+  onCleanup,
+  onMount,
+  splitProps,
+  useContext,
+} from "solid-js";
 import { Portal } from "solid-js/web";
 import Button from "~/components/common/Button";
 import Tick from "~/assets/icons/Tick";
 import Cross from "~/assets/icons/Cross";
+import { createStore } from "solid-js/store";
+import { createMutator } from "~/utils/utils";
 
 type DialogProps = {
   open?: boolean;
@@ -79,11 +90,13 @@ export default function Dialog(props: DialogProps) {
   );
 }
 
-export function DialogControls(props: {
+type DialogControlsProps = {
   disabled?: boolean;
   onAccept: () => void;
   onCancel: () => void;
-}) {
+};
+
+export function DialogControls(props: DialogControlsProps) {
   return (
     <>
       <Button
@@ -99,4 +112,36 @@ export function DialogControls(props: {
       </Button>
     </>
   );
+}
+
+///////////////////////////////////////////////////////////
+// Dialog Context Generator
+///////////////////////////////////////////////////////////
+export function createDialogContext<T extends object>(storeInitializer: T) {
+  // Create store, and mutator
+  function createDialogStore() {
+    const [state, setState] = createStore(storeInitializer);
+    const mutate = createMutator(setState);
+    return { state, mutate };
+  }
+
+  // Create context
+  type ContextType = {} & ReturnType<typeof createDialogStore>;
+  const Context = createContext<ContextType>();
+
+  // Create context provider
+  function ContextProvider(props: any) {
+    const { state, mutate } = createDialogStore();
+    return (
+      <Context.Provider value={{ state, mutate }}>
+        {props.children}
+      </Context.Provider>
+    );
+  }
+
+  function useDialogContext() {
+    return (useContext(Context) as ContextType) || {};
+  }
+
+  return { ContextProvider, useDialogContext };
 }

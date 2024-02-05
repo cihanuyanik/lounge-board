@@ -10,10 +10,15 @@ import Logout from "~/assets/icons/Logout";
 import { useNavigate } from "@solidjs/router";
 import { User } from "~/api/types";
 import AvatarPlaceholder from "~/assets/images/member-placeholder.png";
-import Edit from "~/assets/icons/Edit";
 import Settings from "~/assets/icons/Settings";
 
-export default function (props: { user?: User }) {
+type BannerProps = {
+  title: string;
+  user?: User;
+  showResearchGroups?: boolean;
+};
+
+export default function (props: BannerProps) {
   const { researchGroups, Executor, API, isAdmin } = useAppContext();
   const navigate = useNavigate();
 
@@ -33,27 +38,38 @@ export default function (props: { user?: User }) {
           <Column>
             <p>{"Welcome"}</p>
             <p>{props.user?.displayName}</p>
-
-            <Button
-              onClick={async () => {
-                await Executor.run(() => API.AuthService.signOut(), {
-                  busyDialogMessage: "Signing out...",
-                  postAction: () => navigate("/", {}),
-                });
-              }}
-            >
-              Logout
-              <Logout />
-            </Button>
+            <Row class={"gap-1"}>
+              <Button
+                onClick={async () => {
+                  await Executor.run(() => API.AuthService.signOut(), {
+                    busyDialogMessage: "Signing out...",
+                    postAction: () => navigate("/", {}),
+                  });
+                }}
+              >
+                Out
+                <Logout />
+              </Button>
+              <Button
+                onClick={() => {
+                  navigate("/profile");
+                }}
+              >
+                <Settings />
+              </Button>
+            </Row>
           </Column>
         </Row>
       </Show>
-      <Row class={"name flex-1"}>Digital Health</Row>
-      <Row class={"group-images gap-4"}>
-        <For each={researchGroups.ids}>
-          {(id) => <Img src={researchGroups.entities[id].bannerImage} />}
-        </For>
-      </Row>
+      <Row class={"name"}>{props.title}</Row>
+      <Row class={"flex-1"} />
+      <Show when={props.showResearchGroups}>
+        <Row class={"group-images gap-4"}>
+          <For each={researchGroups.ids}>
+            {(id) => <Img src={researchGroups.entities[id].bannerImage} />}
+          </For>
+        </Row>
+      </Show>
     </Row>
   );
 }

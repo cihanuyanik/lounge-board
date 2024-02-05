@@ -42,7 +42,7 @@ function _Home() {
     <main>
       <Title>Lounge Board</Title>
       <div class="app-container">
-        <Banner />
+        <Banner title={"Digital Health"} showResearchGroups={true} />
         <Row class={"flex-1 w-full gap-2"}>
           <Members />
           <Column class={"flex-1 h-full gap-2"}>
