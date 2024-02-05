@@ -4,12 +4,9 @@ import { Title } from "@solidjs/meta";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Img from "~/components/common/Img";
-import DTULogo from "~/assets/images/dtu-logo.png";
 import Button from "~/components/common/Button";
-import Edit from "~/assets/icons/Edit";
 import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
 import Input from "~/components/common/Input";
-import Email from "~/assets/icons/Email";
 import Tick from "~/assets/icons/Tick";
 import Footer from "~/components/Footer";
 import BusyDialog from "~/components/BusyDialog";
@@ -28,6 +25,7 @@ import { waitUntil } from "~/utils/utils";
 import { useNavigate } from "@solidjs/router";
 import Banner from "~/components/Banner";
 import { isServer } from "solid-js/web";
+import ImageSelectInput from "~/components/ImageSelectInput";
 
 export default function Home() {
   return (
@@ -117,26 +115,6 @@ function _Profile() {
     () => !isProviderUpdatable() || name() === "" || avatar() === DefaultAvatar,
   );
 
-  async function onImageSelected() {
-    if (!imageSelectInput.files) return;
-    if (imageSelectInput.files.length === 0) return;
-    if (
-      imageSelectInput.files[0].type !== "image/png" &&
-      imageSelectInput.files[0].type !== "image/jpeg"
-    )
-      return;
-
-    const image = imageSelectInput.files[0];
-    const reader = new FileReader();
-    const result = await reader.readAsyncAsDataURL(image);
-    if (!result || typeof result !== "string" || result === "") return;
-
-    const dResult = await imageCropDialog.ShowModal<ImageCropResult>(result);
-    if (dResult.result === "Cancel") return;
-    setAvatar(dResult.croppedImage);
-  }
-
-  let imageSelectInput: HTMLInputElement = null!;
   let imageCropDialog: HTMLDialogElement = null!;
 
   return (
@@ -149,16 +127,18 @@ function _Profile() {
           <Row class={"profile-image"}>
             <Img src={avatar()} />
             <Show when={isProviderUpdatable()}>
-              <Button onClick={() => imageSelectInput.click()}>
-                <Edit />
-              </Button>
-              <input
-                ref={(el) => (imageSelectInput = el)}
-                type="file"
-                accept="image/png, image/jpeg"
-                hidden
-                onClick={(e) => (e.currentTarget.value = "")}
-                onInput={onImageSelected}
+              <ImageSelectInput
+                onImageSelected={async (image) => {
+                  const reader = new FileReader();
+                  const result = await reader.readAsyncAsDataURL(image);
+                  if (!result || typeof result !== "string" || result === "")
+                    return;
+
+                  const dResult =
+                    await imageCropDialog.ShowModal<ImageCropResult>(result);
+                  if (dResult.result === "Cancel") return;
+                  setAvatar(dResult.croppedImage);
+                }}
               />
 
               <ImageCropDialog

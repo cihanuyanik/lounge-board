@@ -16,6 +16,7 @@ import Dialog, {
   DialogRef,
 } from "~/components/common/Dialog";
 import Dropdown, { DropdownItem } from "~/components/common/Dropdown";
+import ImageSelectInput from "~/components/ImageSelectInput";
 
 export type EditResearchGroupsDialogResult = {
   result: "Accept" | "Cancel";
@@ -157,10 +158,8 @@ function BannerImage() {
   const { state, mutate } = useDialogContext();
   if (state === undefined) return;
 
-  let bannerImageInput: HTMLInputElement;
-
   return (
-    <Row class={"banner-image"} onclick={() => bannerImageInput.click()}>
+    <Row class={"banner-image"}>
       <Img
         src={
           !state.entities[state.selectedId]?.bannerImage
@@ -168,21 +167,8 @@ function BannerImage() {
             : state.entities[state.selectedId]?.bannerImage
         }
       />
-      <input
-        ref={(el) => (bannerImageInput = el)}
-        type="file"
-        accept="image/png, image/jpeg"
-        hidden
-        onInput={async () => {
-          if (!bannerImageInput.files) return;
-          if (bannerImageInput.files.length === 0) return;
-          if (
-            bannerImageInput.files[0].type !== "image/png" &&
-            bannerImageInput.files[0].type !== "image/jpeg"
-          )
-            return;
-
-          const image = bannerImageInput.files[0];
+      <ImageSelectInput
+        onImageSelected={async (image) => {
           const reader = new FileReader();
           const result = await reader.readAsyncAsDataURL(image);
           if (result === null || typeof result !== "string" || result === "")
@@ -201,13 +187,8 @@ function ResearchGroupTeamImage() {
   const { state, mutate } = useDialogContext();
   if (state === undefined) return;
 
-  let rgImageInput: HTMLInputElement;
-
   return (
-    <Row
-      class={"research-group-team-image"}
-      onclick={() => rgImageInput.click()}
-    >
+    <Row class={"research-group-team-image"}>
       <Img
         src={
           !state.entities[state.selectedId]?.image
@@ -215,21 +196,8 @@ function ResearchGroupTeamImage() {
             : state.entities[state.selectedId]?.image
         }
       />
-      <input
-        ref={(el) => (rgImageInput = el)}
-        type="file"
-        accept="image/png, image/jpeg"
-        hidden
-        onInput={async () => {
-          if (!rgImageInput.files) return;
-          if (rgImageInput.files.length === 0) return;
-          if (
-            rgImageInput.files[0].type !== "image/png" &&
-            rgImageInput.files[0].type !== "image/jpeg"
-          )
-            return;
-
-          const image = rgImageInput.files[0];
+      <ImageSelectInput
+        onImageSelected={async (image) => {
           const reader = new FileReader();
           const result = await reader.readAsyncAsDataURL(image);
           if (result === null || typeof result !== "string" || result === "")

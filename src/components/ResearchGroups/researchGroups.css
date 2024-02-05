@@ -105,10 +105,24 @@
   height: 75px;
   width: 75px;
   cursor: pointer;
+  position: relative;
 }
 .edit-research-groups-dialog .content .selected-group .banner-image > img {
   border-radius: var(--radii-2xl);
   box-shadow: 0 0 var(--space-4) var(--color-primary-lighter);
+}
+.edit-research-groups-dialog .content .selected-group .banner-image > button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 40px;
+  width: 40px;
+  padding: var(--space-1);
+  background: transparent;
+  opacity: 0;
+}
+.edit-research-groups-dialog .content .selected-group .banner-image:hover > button {
+  opacity: 1;
 }
 .edit-research-groups-dialog .content .research-group-team-image {
   height: 300px;
@@ -121,9 +135,23 @@
   margin-right: var(--space-4);
   margin-bottom: var(--space-4);
   cursor: pointer;
+  position: relative;
 }
 .edit-research-groups-dialog .content .research-group-team-image > img {
   border-radius: 10px;
+}
+.edit-research-groups-dialog .content .research-group-team-image > button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 40px;
+  width: 40px;
+  padding: var(--space-1);
+  background: transparent;
+  opacity: 0;
+}
+.edit-research-groups-dialog .content .research-group-team-image:hover > button {
+  opacity: 1;
 }
 .edit-research-groups-dialog .content .controls {
   margin: var(--space-2);

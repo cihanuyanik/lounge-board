@@ -9,9 +9,6 @@ import Dialog, {
   DialogControls,
   DialogRef,
 } from "~/components/common/Dialog";
-import { createStore } from "solid-js/store";
-import { createMutator } from "~/utils/utils";
-import { createContext, useContext } from "solid-js";
 
 export type ImageCropResult = {
   result: "Accept" | "Cancel";

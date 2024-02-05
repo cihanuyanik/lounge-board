@@ -1,8 +1,6 @@
 import { createEffect, on } from "solid-js";
 import Img from "~/components/common/Img";
-import Button from "~/components/common/Button";
 import MemberImagePlaceholder from "~/assets/images/member-placeholder.png";
-import Edit from "~/assets/icons/Edit";
 import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
@@ -12,6 +10,7 @@ import Dialog, {
   DialogControls,
   DialogRef,
 } from "~/components/common/Dialog";
+import ImageSelectInput from "~/components/ImageSelectInput";
 
 export type CreateEditMemberDialogResult = {
   result: "Accept" | "Cancel";
@@ -98,46 +97,20 @@ function Avatar() {
   if (state === undefined) return null;
 
   let imageCropDialog: HTMLDialogElement = null!;
-  let imageSelectInput: HTMLInputElement;
-
-  function onImageSelected() {
-    if (!imageSelectInput.files) return;
-    if (imageSelectInput.files.length === 0) return;
-    if (
-      imageSelectInput.files[0].type !== "image/png" &&
-      imageSelectInput.files[0].type !== "image/jpeg"
-    )
-      return;
-
-    const image = imageSelectInput.files[0];
-    const reader = new FileReader();
-
-    reader.onload = async (ev) => {
-      if (ev.target === null) return;
-      const dResult = await imageCropDialog.ShowModal<ImageCropResult>(
-        ev.target?.result as string,
-      );
-      if (dResult.result === "Cancel") return;
-      mutate((state) => (state.member.image = dResult.croppedImage));
-    };
-
-    reader.readAsDataURL(image);
-  }
 
   return (
     <Row class={"avatar"}>
       <Img src={state.member.image || MemberImagePlaceholder} />
-
-      <Button id={"edit-member-image"} onClick={() => imageSelectInput.click()}>
-        <Edit />
-      </Button>
-      <input
-        ref={(el) => (imageSelectInput = el)}
-        type="file"
-        accept="image/png, image/jpeg"
-        hidden
-        onClick={(e) => (e.currentTarget.value = "")}
-        onInput={onImageSelected}
+      <ImageSelectInput
+        onImageSelected={async (image) => {
+          const reader = new FileReader();
+          const result = await reader.readAsyncAsDataURL(image);
+          if (!result || typeof result !== "string" || result === "") return;
+          const dResult =
+            await imageCropDialog.ShowModal<ImageCropResult>(result);
+          if (dResult.result === "Cancel") return;
+          mutate((state) => (state.member.image = dResult.croppedImage));
+        }}
       />
 
       <ImageCropDialog
