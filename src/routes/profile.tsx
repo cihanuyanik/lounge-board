@@ -24,9 +24,10 @@ import {
   Show,
 } from "solid-js";
 import DefaultAvatar from "~/assets/images/member-placeholder.png";
-import { sleep } from "~/utils/utils";
+import { waitUntil } from "~/utils/utils";
 import { useNavigate } from "@solidjs/router";
 import Banner from "~/components/Banner";
+import { isServer } from "solid-js/web";
 
 export default function Home() {
   return (
@@ -52,17 +53,13 @@ function _Profile() {
   }
 
   onMount(async () => {
+    if (isServer) return;
     subscribeToAuthState();
-    // Wait for a little to let BusyDialog to be rendered
-    await sleep(200);
+    await waitUntil(() => busyDialog.isValid, 50, 2000);
     busyDialog.show("Loading profile...");
 
     // Wait for the user to be set
-    let tryCount = 0;
-    while (!user() && tryCount < 10) {
-      await sleep(200);
-      tryCount++;
-    }
+    await waitUntil(() => user() !== null && user() !== undefined, 50, 2000);
 
     busyDialog.close();
 

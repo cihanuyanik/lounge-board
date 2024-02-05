@@ -3,7 +3,7 @@ import Events from "~/components/Events/Events";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
 import News from "~/components/News/News";
 import { onCleanup, onMount } from "solid-js";
-import { AppContextProvider, useDataLoader } from "~/AppContext";
+import { AppContextProvider, useAppContext, useDataLoader } from "~/AppContext";
 import Members from "~/components/Members/Members";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
@@ -12,7 +12,7 @@ import BusyDialog from "~/components/BusyDialog";
 import MessageBox from "~/components/MessageBox";
 import Footer from "~/components/Footer";
 import { isServer } from "solid-js/web";
-import { sleep } from "~/utils/utils";
+import { waitUntil } from "~/utils/utils";
 
 export default function Home() {
   return (
@@ -23,13 +23,12 @@ export default function Home() {
 }
 
 function _Home() {
+  const { busyDialog } = useAppContext();
   const { loadData, unSubList } = useDataLoader();
 
   onMount(async () => {
     if (isServer) return;
-
-    // Wait for 100ms to let BusyDialog object to be created
-    await sleep(100);
+    await waitUntil(() => busyDialog.isValid, 50, 2000);
     await loadData();
   });
 

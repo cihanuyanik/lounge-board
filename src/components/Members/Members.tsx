@@ -176,7 +176,7 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
   });
 
   async function onMountClient() {
-    // Wait for news to be loaded
+    // Wait for members to be loaded
     await sleep(3000);
 
     scrollAnimator = new ContinuesScrollAnimator({

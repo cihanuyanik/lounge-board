@@ -7,6 +7,7 @@ export type Store = {
   isOpen: boolean;
   show: (message: string) => void;
   close: () => void;
+  isValid: boolean;
 };
 
 export function createBusyDialogStore() {
@@ -14,6 +15,9 @@ export function createBusyDialogStore() {
     dialogRef: null,
     message: "",
     isOpen: false,
+    get isValid() {
+      return this.dialogRef !== null && this.dialogRef !== undefined;
+    },
     show: (message: string) => {
       mutateBusyDialog((state) => {
         state.message = message;

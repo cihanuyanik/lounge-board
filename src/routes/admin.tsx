@@ -12,7 +12,7 @@ import BusyDialog from "~/components/BusyDialog";
 import MessageBox from "~/components/MessageBox";
 import Footer from "~/components/Footer";
 import { isServer } from "solid-js/web";
-import { sleep } from "~/utils/utils";
+import { waitUntil } from "~/utils/utils";
 import LoginDialog from "~/components/LoginDialog";
 import { User } from "~/api/types";
 import EmailVerificationDialog, {
@@ -28,7 +28,8 @@ export default function Home() {
 }
 
 function _Admin() {
-  const { user, setUser, Executor, API, messageBox } = useAppContext();
+  const { user, setUser, Executor, API, messageBox, busyDialog } =
+    useAppContext();
   const { loadData, unSubList } = useDataLoader();
 
   function subscribeToAuthState() {
@@ -68,19 +69,18 @@ function _Admin() {
   onMount(async () => {
     if (isServer) return;
 
-    // Wait for 200ms to let BusyDialog object to be created
-    await sleep(200);
+    await waitUntil(() => busyDialog.isValid, 50, 2000);
 
     await Executor.run(
       async () => {
         subscribeToAuthState();
 
         // Wait for user to be set by checking it out, it will wait 2secs in total
-        let checkCount = 0;
-        while (!user() && checkCount < 20) {
-          await sleep(100);
-          checkCount++;
-        }
+        await waitUntil(
+          () => user() !== null && user() !== undefined,
+          50,
+          2000,
+        );
       },
       {
         busyDialogMessage: "Signing in...",

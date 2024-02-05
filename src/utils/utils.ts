@@ -30,3 +30,26 @@ export function detectChanges<T>(original: T, updated: T) {
   }
   return changes;
 }
+
+type WaitUntilReturnType = {
+  success: boolean;
+  waitTime: number;
+};
+
+export async function waitUntil(
+  statusChecker: () => boolean,
+  checkInterval: number,
+  maxWaitTime: number,
+): Promise<WaitUntilReturnType> {
+  const startMaxWaitTime = maxWaitTime;
+  while (true) {
+    if (statusChecker()) {
+      return { success: true, waitTime: startMaxWaitTime - maxWaitTime };
+    }
+    if (maxWaitTime <= 0) {
+      return { success: false, waitTime: startMaxWaitTime - maxWaitTime };
+    }
+    maxWaitTime -= checkInterval;
+    await sleep(checkInterval);
+  }
+}
