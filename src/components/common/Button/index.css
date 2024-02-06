@@ -19,7 +19,12 @@
   box-shadow: 0 0 10px 3px var(--color-primary-lighter);
   background: var(--color-tertiary);
 }
+.button-base:hover svg {
+  animation: shake 700ms ease-in-out infinite;
+  color: var(--color-secondary-darker);
+}
 .button-base svg {
+  transition: all 0.2s ease-in-out;
   height: 100%;
   width: 100%;
 }

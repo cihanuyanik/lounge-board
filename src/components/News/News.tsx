@@ -47,12 +47,10 @@ export default function News() {
 
   onCleanup(() => scrollAnimator?.stop());
 
-  const icon = <Img src={NewsHeader} style={{ height: "35px" }} />;
-
   return (
     <BlockContainer
       title={"News"}
-      titleIcon={icon}
+      titleIcon={NewsHeader}
       class={"news-block-container"}
       onAddNewItem={
         !isAdmin()

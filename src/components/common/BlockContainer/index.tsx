@@ -1,15 +1,16 @@
 import "./index.css";
-import { createEffect, JSX, on, Show } from "solid-js";
+import { createEffect, JSX, Match, on, Show, Switch } from "solid-js";
 import Button from "~/components/common/Button";
 import Delete from "~/assets/icons/Delete";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Add from "~/assets/icons/Add";
+import Img from "~/components/common/Img";
 
 type BlockContainerProps = {
   ref?: HTMLDivElement | ((el: HTMLDivElement) => void);
   title: string;
-  titleIcon?: JSX.Element;
+  titleIcon?: string | JSX.Element;
   children: JSX.Element | JSX.Element[];
   class?: string;
   style?: string | JSX.CSSProperties;
@@ -41,7 +42,16 @@ export default function (props: BlockContainerProps) {
         <Row class={"title"} ref={(el) => (titleRef = el)}>
           {""}
         </Row>
-        <Show when={props.titleIcon}>{props.titleIcon}</Show>
+        <Show when={props.titleIcon}>
+          <Switch>
+            <Match when={typeof props.titleIcon === "string"}>
+              <Img src={props.titleIcon as string} />
+            </Match>
+            <Match when={typeof props.titleIcon === "function"}>
+              {props.titleIcon}
+            </Match>
+          </Switch>
+        </Show>
         <Row class={"flex-1"}>{""}</Row>
         <Show when={props.onDeleteSelectedItems}>
           <Button

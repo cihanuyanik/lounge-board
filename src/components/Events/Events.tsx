@@ -164,13 +164,11 @@ export default function Events() {
     }
   }
 
-  const eventsIcon = <Img src={EventsHeader} style={{ height: "35px" }} />;
-
   return (
     <BlockContainer
       ref={eventsBlockContainer}
       title={"Events"}
-      titleIcon={eventsIcon}
+      titleIcon={EventsHeader}
       onAddNewItem={
         !isAdmin()
           ? undefined

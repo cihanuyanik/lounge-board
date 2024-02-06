@@ -44,19 +44,26 @@
   }
 
   .name {
-    color: var(--color-text);
+    font-family: "Rockwell", serif;
     font-weight: 900;
-    font-size: 2rem;
+    font-size: 3rem;
     text-align: center;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    height: 80px;
+    background: url("../../assets/images/flame.gif");
+    background-size: contain;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .spacer {
     flex: 1;
   }
+
   .group-images {
     img {
       border-radius: var(--radii-2xl);

@@ -19,12 +19,10 @@ export default function Members() {
 
   let createEditMemberDialog: HTMLDialogElement = null!;
 
-  const icon = <Img src={MembersHeader} height={"35px"} />;
-
   return (
     <BlockContainer
       title={"Members"}
-      titleIcon={icon}
+      titleIcon={MembersHeader}
       class={"members-block-container"}
       onAddNewItem={
         !isAdmin()

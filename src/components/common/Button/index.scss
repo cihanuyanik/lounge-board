@@ -19,9 +19,15 @@
   &:hover {
     box-shadow: 0 0 10px 3px var(--color-primary-lighter);
     background: var(--color-tertiary);
+
+    & svg {
+      animation: shake 700ms ease-in-out infinite;
+      color: var(--color-secondary-darker);
+    }
   }
 
   & svg {
+    transition: all 0.2s ease-in-out;
     height: 100%;
     width: 100%;
   }

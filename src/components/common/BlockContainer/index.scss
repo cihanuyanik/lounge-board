@@ -12,6 +12,11 @@
     padding-right: var(--space-2);
     gap: var(--space-2);
     color: var(--color-text);
+
+    > img,
+    > svg {
+      padding: var(--space-1);
+    }
   }
 
   .title {
