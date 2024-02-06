@@ -72,6 +72,11 @@
       cursor: pointer;
       transition: all 200ms ease-in-out;
 
+      // Select all children of .item and remove pointer events
+      & * {
+        pointer-events: none;
+      }
+
       &:hover {
         background: var(--color-tertiary-darker);
       }

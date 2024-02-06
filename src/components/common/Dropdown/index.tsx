@@ -1,13 +1,13 @@
 import "./index.css";
 import {
   Accessor,
-  children,
   createEffect,
-  createMemo,
   createSignal,
   JSX,
+  on,
   onCleanup,
 } from "solid-js";
+import { waitUntil } from "~/utils/utils";
 
 type DropDownItemProps = {
   value: string;
@@ -19,45 +19,56 @@ type Props = {
   class?: string;
   rootStyle?: JSX.CSSProperties;
   children: JSX.Element | JSX.Element[];
-  value?: string;
-  onValueChanged?: (event: { value: string; target: HTMLDivElement }) => void;
+  value: string;
+  onValueChanged: (event: { value: string; target: HTMLDivElement }) => void;
 };
 
 export default function (props: Props) {
-  // TODO: This component has serious state management issues. It should be corrected. Cross reference this by checking behavior of CreateEditNews
   const [open, setOpen] = createSignal(false);
-  const [value, setValue] = createSignal(props.value || "");
-  // const items = children(() => props.children).toArray();
-  const [itemMap, setItemMap] = createSignal<Record<string, HTMLDivElement>>(
-    {},
+  const [dropdownMenu, setDropdownMenu] = createSignal<HTMLDivElement>(null!);
+  const [valueVisual, setValueVisual] = createSignal<HTMLElement>(null!);
+
+  createEffect(
+    on(
+      [() => props.value, () => dropdownMenu()],
+      ({ 0: newValue, 1: dropdownMenu }) => {
+        if (!newValue) {
+          setValueVisual(null!);
+          return;
+        }
+        if (!dropdownMenu) {
+          setValueVisual(null!);
+          return;
+        }
+
+        // There is a chance that the items are not yet rendered, waiting for the next tick
+        waitUntil(() => dropdownMenu.children.length > 0, 50, 500).then(() => {
+          const items = dropdownMenu.querySelectorAll(".item");
+
+          if (!items || items.length === 0) {
+            setValueVisual(null!);
+            return;
+          }
+
+          for (const item of items) {
+            if (item.id === newValue) {
+              setValueVisual(item.cloneNode(true) as HTMLDivElement);
+              return;
+            }
+          }
+
+          setValueVisual(null!);
+          return;
+        });
+      },
+    ),
   );
 
-  const items = createMemo(() => {
-    return children(() => props.children).toArray();
-  });
+  const unSubList: Unsubscribe[] = [];
 
-  createEffect(() => {
-    // Handles the case when the value is driven by external prop value
-    setValue(props.value || "");
-  });
-
-  createEffect(() => {
-    const itemMap: Record<string, HTMLDivElement> = {};
-
-    items().forEach((item) => {
-      if (item instanceof HTMLDivElement && item.dataset.value) {
-        item.onclick = () => {
-          const newValue = item.dataset.value as string;
-          props.onValueChanged?.({ value: newValue, target: item });
-          if (value() !== newValue) {
-            setValue(newValue);
-          }
-        };
-        itemMap[item.dataset.value] = item;
-      }
-    });
-
-    setItemMap(itemMap);
+  onCleanup(() => {
+    unSubList.forEach((unSub) => unSub());
+    unSubList.slice(0, unSubList.length);
   });
 
   // noinspection HtmlUnknownAttribute
@@ -69,18 +80,52 @@ export default function (props: Props) {
       // @ts-ignore
       use:clickOutside={() => setOpen(false)}
     >
-      <div class={"toggle"}>{itemMap()[value()]?.cloneNode(true)}</div>
+      <div class={"toggle"}>{valueVisual()}</div>
       <div class={"arrow"} classList={{ rotate: open() }}>
         <p>▼</p>
       </div>
-      <div class={`menu${open() ? " open" : ""}`}>{items()}</div>
+      <div
+        ref={(el) => {
+          setDropdownMenu(el);
+          if (el) {
+            unSubList.push(
+              el.registerEventListener("item-click", (e: CustomEvent) => {
+                const newValue = e.detail.value as string;
+                if (props.value !== newValue) {
+                  props.onValueChanged?.({
+                    value: e.detail.value as string,
+                    target: e.detail.source as HTMLDivElement,
+                  });
+                }
+              }),
+            );
+          }
+        }}
+        class={`menu${open() ? " open" : ""}`}
+      >
+        {props.children}
+      </div>
     </div>
   );
 }
 
 export function DropdownItem(props: DropDownItemProps) {
   return (
-    <div class={"item"} onClick={props.onClick} data-value={props.value}>
+    <div
+      id={props.value}
+      class={"item"}
+      onClick={(e) => {
+        // Access parent menu div
+        const menuNode = e.target.parentNode as HTMLDivElement;
+        if (menuNode.classList.contains("menu")) {
+          menuNode.dispatchEvent(
+            new CustomEvent("item-click", {
+              detail: { value: props.value, source: e.target },
+            }),
+          );
+        }
+      }}
+    >
       {props.children}
     </div>
   );

@@ -63,6 +63,9 @@
   cursor: pointer;
   transition: all 200ms ease-in-out;
 }
+.dropdown .menu .item * {
+  pointer-events: none;
+}
 .dropdown .menu .item:hover {
   background: var(--color-tertiary-darker);
 }
