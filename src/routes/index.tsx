@@ -2,7 +2,7 @@ import { Title } from "@solidjs/meta";
 import Events from "~/components/Events/Events";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
 import News from "~/components/News/News";
-import { onCleanup, onMount } from "solid-js";
+import { createMemo, createSignal, onCleanup, onMount } from "solid-js";
 import { AppContextProvider, useAppContext, useDataLoader } from "~/AppContext";
 import Members from "~/components/Members/Members";
 import Row from "~/components/common/Row";
@@ -25,45 +25,32 @@ export default function Home() {
 function _Home() {
   const { busyDialog } = useAppContext();
   const { loadData, unSubList } = useDataLoader();
-
-  // Color palette alter animation
-  const colorPalettes = [
-    "dtu-red",
-    "dtu-blue",
-    "dtu-green",
-    "dtu-navy-blue",
-    "dtu-orange",
-    "dtu-purple",
-  ];
-  let colorPaletteIndex = 0;
-  let colorPaletteTransitionTimer: NodeJS.Timeout = null!;
+  const colorPalette = useColorPaletteTransition({
+    colorPalettes: [
+      "dtu-red",
+      "dtu-blue",
+      "dtu-green",
+      "dtu-navy-blue",
+      "dtu-orange",
+      "dtu-purple",
+    ],
+  });
 
   onMount(async () => {
     if (isServer) return;
     await waitUntil(() => busyDialog.isValid, 50, 2000);
     await loadData();
-
-    colorPaletteTransitionTimer = setInterval(() => {
-      // Remove current color palette from class list
-      appContainer.classList.remove(colorPalettes[colorPaletteIndex]);
-      // Add next color palette to class list
-      colorPaletteIndex = (colorPaletteIndex + 1) % colorPalettes.length;
-      appContainer.classList.add(colorPalettes[colorPaletteIndex]);
-    }, 10000);
   });
 
   onCleanup(() => {
     unSubList.forEach((unSub) => unSub());
     unSubList.splice(0, unSubList.length);
-    clearInterval(colorPaletteTransitionTimer);
   });
-
-  let appContainer: HTMLDivElement = null!;
 
   return (
     <main>
       <Title>Lounge Board</Title>
-      <div ref={appContainer} class="app-container color-palette-transition">
+      <div class={`app-container color-palette-transition ${colorPalette()}`}>
         <Banner title={"Digital Health"} showResearchGroups={true} />
         <Row class={"flex-1 w-full gap-2"}>
           <Members />
@@ -79,4 +66,26 @@ function _Home() {
       </div>
     </main>
   );
+}
+
+function useColorPaletteTransition(props: {
+  transitionInterval?: number;
+  colorPalettes: string[];
+}) {
+  const [index, setIndex] = createSignal(0);
+  let colorPaletteTransitionTimer: NodeJS.Timeout = null!;
+
+  const colorPalette = createMemo(() => {
+    return props.colorPalettes[index()];
+  });
+
+  onMount(() => {
+    colorPaletteTransitionTimer = setInterval(() => {
+      setIndex((index() + 1) % props.colorPalettes.length);
+    }, props.transitionInterval || 10000);
+  });
+
+  onCleanup(() => clearInterval(colorPaletteTransitionTimer));
+
+  return colorPalette;
 }
