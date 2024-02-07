@@ -28,12 +28,12 @@ function _Home() {
 
   // Color palette alter animation
   const colorPalettes = [
+    "dtu-red",
     "dtu-blue",
     "dtu-green",
     "dtu-navy-blue",
     "dtu-orange",
     "dtu-purple",
-    "dtu-red",
   ];
   let colorPaletteIndex = 0;
   let colorPaletteTransitionTimer: NodeJS.Timeout = null!;
