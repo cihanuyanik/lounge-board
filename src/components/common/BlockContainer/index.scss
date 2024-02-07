@@ -1,5 +1,7 @@
 .block-container {
-  background: var(--color-primary);
+  background-color: var(--color-primary);
+  //transition: background-color 1s ease-in-out;
+
   border-radius: var(--radii-2xl);
   padding: var(--space-2);
   gap: var(--space-1);

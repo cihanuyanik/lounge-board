@@ -14,13 +14,13 @@
 
   transition: all 0.2s ease-in-out;
   box-shadow: 0 0 10px 0 black;
-  background: transparent;
+  background-color: transparent;
 
   position: relative;
 
   &:hover {
     box-shadow: 0 0 10px 3px var(--color-primary-lighter);
-    background: var(--color-tertiary);
+    background-color: var(--color-tertiary);
 
     & svg {
       animation: shake 700ms ease-in-out infinite;
@@ -41,7 +41,7 @@
 
   &:disabled:hover {
     box-shadow: 0 0 10px 0 black;
-    background: transparent;
+    background-color: transparent;
   }
 }
 
@@ -49,18 +49,17 @@
   flex: 1 1 auto;
   height: 36px;
   border-radius: var(--radii-md);
-  background: var(--color-primary-darker);
   color: var(--color-text);
   gap: var(--space-2);
   padding: var(--space-2);
-  background: var(--color-tertiary-darker);
+  background-color: var(--color-tertiary-darker);
 
   &:hover {
-    background: var(--color-tertiary);
+    background-color: var(--color-tertiary);
   }
 
   &:disabled:hover {
-    background: var(--color-tertiary-darker);
+    background-color: var(--color-tertiary-darker);
   }
 
   svg {

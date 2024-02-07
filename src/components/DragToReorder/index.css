@@ -22,7 +22,7 @@
   height: 40px;
   cursor: grab;
   color: white;
-  background: transparent;
+  background-color: transparent;
   border-radius: 50%;
   box-shadow: 0 0 10px 0 black;
   transition: all 200ms ease-in-out;

@@ -26,10 +26,29 @@ function _Home() {
   const { busyDialog } = useAppContext();
   const { loadData, unSubList } = useDataLoader();
 
+  // Color palette alter animation
+  const colorPalettes = [
+    "dtu-red",
+    "dtu-blue",
+    "dtu-green",
+    "dtu-navy-blue",
+    "dtu-orange",
+    "dtu-purple",
+  ];
+  let colorPaletteIndex = 0;
+
   onMount(async () => {
     if (isServer) return;
     await waitUntil(() => busyDialog.isValid, 50, 2000);
     await loadData();
+
+    setInterval(() => {
+      // Remove current color palette from class list
+      appContainer.classList.remove(colorPalettes[colorPaletteIndex]);
+      // Add next color palette to class list
+      colorPaletteIndex = (colorPaletteIndex + 1) % colorPalettes.length;
+      appContainer.classList.add(colorPalettes[colorPaletteIndex]);
+    }, 10000);
   });
 
   onCleanup(() => {
@@ -37,10 +56,12 @@ function _Home() {
     unSubList.splice(0, unSubList.length);
   });
 
+  let appContainer: HTMLDivElement = null!;
+
   return (
     <main>
       <Title>Lounge Board</Title>
-      <div class="app-container">
+      <div ref={appContainer} class="app-container color-palette-transition">
         <Banner title={"Digital Health"} showResearchGroups={true} />
         <Row class={"flex-1 w-full gap-2"}>
           <Members />

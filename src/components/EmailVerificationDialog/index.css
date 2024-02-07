@@ -1,5 +1,5 @@
 .email-verification-dialog {
-  background: var(--color-secondary-darker) !important;
+  background-color: var(--color-secondary-darker) !important;
   gap: var(--space-4);
   padding: var(--space-3);
   width: 800px !important;
@@ -25,7 +25,7 @@
   color: var(--color-text);
 }
 .email-verification-dialog .message > .resend {
-  background: transparent;
+  background-color: transparent;
   width: auto;
 }
 .email-verification-dialog .control-buttons {

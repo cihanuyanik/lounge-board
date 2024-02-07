@@ -15,15 +15,15 @@
 
   z-index: 100;
   color: var(--color-text);
-  background: transparent;
+  background-color: transparent;
 
   &::backdrop {
-    background: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
   }
 
   .title {
     height: 40px;
-    background: var(--color-primary-darker);
+    background-color: var(--color-primary-darker);
     border-bottom: 5px solid var(--color-primary-darker);
   }
 
@@ -34,29 +34,29 @@
 
     &:disabled {
       cursor: not-allowed;
-      background: var(--color-darkgray);
+      background-color: var(--color-darkgray);
 
       &:hover {
-        background: var(--color-darkgray);
+        background-color: var(--color-darkgray);
       }
     }
   }
 
   .accept {
     bottom: 0;
-    background: lawngreen;
+    background-color: lawngreen;
     transform: translate(50%, 50%);
     &:hover {
-      background: green;
+      background-color: green;
     }
   }
 
   .cancel {
     top: 0;
-    background: crimson;
+    background-color: crimson;
     transform: translate(50%, -50%);
     &:hover {
-      background: red;
+      background-color: red;
     }
   }
 }

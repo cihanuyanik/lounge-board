@@ -11,7 +11,7 @@
   flex: 1 0 0;
   display: flex;
   flex-direction: column;
-  background: var(--color-primary-darker);
+  background-color: var(--color-primary-darker);
   border-radius: var(--radii-2xl);
   padding: var(--space-2);
   gap: var(--space-2);
@@ -117,7 +117,7 @@
 }
 .create-news-dialog > .content .html-code:focus {
   box-shadow: 0 0 10px 10px var(--color-tertiary);
-  background: var(--color-secondary-lighter);
+  background-color: var(--color-secondary-lighter);
 }
 .create-news-dialog > .content .preview {
   padding-top: var(--space-1);
@@ -129,7 +129,7 @@
 }
 .create-news-dialog > .content .size-adjustor {
   position: absolute;
-  background: var(--color-primary-darker);
+  background-color: var(--color-primary-darker);
   top: 50%;
   right: var(--space-1);
   transform: translate(0, -50%);
@@ -142,7 +142,7 @@
 .create-news-dialog > .content .size-adjustor > input {
   border: none;
   outline: none;
-  background: transparent;
+  background-color: transparent;
   width: 50px;
   color: white;
   text-align: center;

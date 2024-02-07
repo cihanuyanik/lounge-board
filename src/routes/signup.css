@@ -6,7 +6,7 @@
 .sign-up-container > .title {
   height: 100px;
   width: 100%;
-  background: var(--color-primary);
+  background-color: var(--color-primary);
   border-bottom: var(--space-3) solid var(--color-primary-darker);
   box-shadow: 0 0 10px 5px var(--color-secondary-darker);
   border-bottom-left-radius: var(--radii-2xl);
@@ -47,7 +47,7 @@
   height: 40px;
   width: 40px;
   padding: var(--space-1);
-  background: transparent;
+  background-color: transparent;
   opacity: 0;
 }
 .sign-up-container .profile-image:hover button {

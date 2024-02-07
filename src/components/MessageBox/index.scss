@@ -1,10 +1,10 @@
 .message-box {
-  background: var(--color-primary);
+  background-color: var(--color-primary);
 
   .content {
     justify-content: stretch;
     padding: var(--space-3) var(--space-1);
-    background: var(--color-tertiary);
+    background-color: var(--color-tertiary);
     font-size: var(--font-sizes-md);
     border: 3px solid var(--color-primary);
   }

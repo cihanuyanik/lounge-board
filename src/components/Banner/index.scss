@@ -1,8 +1,9 @@
 .banner {
   height: 100px;
-  background: var(--color-primary);
+  background-color: var(--color-primary);
+
   border-bottom: var(--space-3) solid var(--color-primary-darker);
-  box-shadow: 0 0 10px 5px var(--color-secondary-darker);
+  box-shadow: 0 0 10px 5px var(--color-primary-darker);
   border-radius: var(--radii-2xl);
   padding-left: var(--space-4);
   padding-right: var(--space-4);

@@ -4,13 +4,15 @@
   align-items: center;
   justify-content: center;
   flex-wrap: nowrap;
-  background: var(--color-primary);
+  background-color: var(--color-primary);
   color: var(--color-text);
   width: 100%;
   font-size: var(--font-sizes-xl);
   gap: var(--space-2);
   border-radius: var(--radii-xl);
   animation: pulse 1s ease-in-out infinite alternate;
+  margin-bottom: calc(-1 * var(--space-2));
+  box-shadow: 0 0 10px 5px var(--color-primary-darker);
 
   span {
     text-decoration: underline;

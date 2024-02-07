@@ -17,7 +17,7 @@
   border: none;
   outline: none;
   user-select: none;
-  background: transparent;
+  background-color: transparent;
   font-weight: bolder;
 }
 .time-input > #hour::-webkit-inner-spin-button, .time-input > #hour::-webkit-outer-spin-button,

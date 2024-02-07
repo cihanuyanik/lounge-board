@@ -1,6 +1,6 @@
 .date-input {
   gap: var(--space-1);
-  background: white;
+  background-color: white;
   pointer-events: auto;
 }
 .date-input > svg {
@@ -11,7 +11,7 @@
   flex: 1;
   outline: none;
   border: none;
-  background: white;
+  background-color: white;
 }
 .date-input > input::before {
   content: attr(data-value);
@@ -20,8 +20,6 @@
   font-weight: inherit;
   color: var(--color-darkgray);
 }
-
-/*noinspection CssInvalidPseudoSelector*/
 .date-input > input::-webkit-datetime-edit {
   display: none;
 }

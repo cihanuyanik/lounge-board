@@ -1,7 +1,7 @@
 .dropdown {
   position: relative;
   color: var(--color-text);
-  background: var(--color-tertiary-darker);
+  background-color: var(--color-tertiary-darker);
   box-shadow: 0 0 10px 0 black;
   height: 36px;
   width: 200px;
@@ -14,7 +14,7 @@
 }
 .dropdown:hover {
   box-shadow: 0 0 10px 3px var(--color-primary-lighter);
-  background: var(--color-tertiary);
+  background-color: var(--color-tertiary);
   cursor: pointer;
 }
 .dropdown .toggle {
@@ -44,7 +44,7 @@
   right: 0;
   z-index: 1000;
   margin-top: 5px;
-  background: var(--color-tertiary);
+  background-color: var(--color-tertiary);
   box-shadow: 0 0 10px 4px var(--color-primary-lighter);
   overflow: hidden;
   border-radius: var(--radii-md);
@@ -67,7 +67,7 @@
   pointer-events: none;
 }
 .dropdown .menu .item:hover {
-  background: var(--color-tertiary-darker);
+  background-color: var(--color-tertiary-darker);
 }
 
 /*# sourceMappingURL=index.css.map */

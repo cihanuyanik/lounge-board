@@ -9,7 +9,7 @@
 .scroll-wrapper {
   flex: 1 0 0;
   width: 100%;
-  background: var(--color-primary-darker);
+  background-color: var(--color-primary-darker);
   border-radius: var(--radii-2xl);
   position: relative;
 }
@@ -21,7 +21,7 @@
   height: auto !important;
   display: flex;
   flex-direction: row;
-  background: transparent;
+  background-color: transparent;
   perspective: 500px;
   perspective-origin: center center;
 }
@@ -164,7 +164,7 @@
 .create-edit-event-dialog {
   width: 450px !important;
   overflow: visible;
-  background: var(--color-primary) !important;
+  background-color: var(--color-primary) !important;
 }
 .create-edit-event-dialog .header {
   background-color: var(--color-primary-darker);
