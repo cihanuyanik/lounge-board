@@ -6,6 +6,7 @@ import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Add from "~/assets/icons/Add";
 import Img from "~/components/common/Img";
+import { Direction } from "~/components/common/HoverPopup";
 
 type BlockContainerProps = {
   ref?: HTMLDivElement | ((el: HTMLDivElement) => void);
@@ -16,6 +17,7 @@ type BlockContainerProps = {
   style?: string | JSX.CSSProperties;
   onAddNewItem?: () => void;
   onDeleteSelectedItems?: () => void;
+  popupDirection?: Direction;
 };
 
 export default function (props: BlockContainerProps) {
@@ -55,6 +57,8 @@ export default function (props: BlockContainerProps) {
         <Row class={"flex-1"}>{""}</Row>
         <Show when={props.onDeleteSelectedItems}>
           <Button
+            popupContent={"Delete selected items from this block"}
+            popupDirection={props.popupDirection}
             style={{ height: "40px", width: "40px", padding: "0.25rem" }}
             onClick={props.onDeleteSelectedItems}
           >
@@ -63,6 +67,8 @@ export default function (props: BlockContainerProps) {
         </Show>
         <Show when={props.onAddNewItem}>
           <Button
+            popupContent={"Add new item to this block"}
+            popupDirection={props.popupDirection}
             style={{ height: "40px", width: "40px", padding: "0.25rem" }}
             onClick={props.onAddNewItem}
           >

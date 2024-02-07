@@ -40,6 +40,9 @@ export default function (props: BannerProps) {
             <p>{props.user?.displayName}</p>
             <Row class={"gap-1"}>
               <Button
+                popupContent={
+                  "Sign out from admin account and go to index page"
+                }
                 onClick={async () => {
                   await Executor.run(() => API.AuthService.signOut(), {
                     busyDialogMessage: "Signing out...",
@@ -51,6 +54,7 @@ export default function (props: BannerProps) {
                 <Logout />
               </Button>
               <Button
+                popupContent={"Go to profile update page"}
                 onClick={() => {
                   navigate("/profile");
                 }}

@@ -18,6 +18,7 @@ import { User } from "~/api/types";
 import EmailVerificationDialog, {
   EmailVerificationDialogResult,
 } from "~/components/EmailVerificationDialog";
+// import HoverPopup from "~/components/HoverPopup";
 
 export default function Home() {
   return (
@@ -122,10 +123,12 @@ function _Admin() {
           <News />
         </Row>
         <Footer />
+
         <BusyDialog />
         <MessageBox />
         <LoginDialog ref={loginDialog} />
         <EmailVerificationDialog ref={emailVerificationDialog} />
+        {/*<HoverPopup />*/}
       </div>
     </main>
   );

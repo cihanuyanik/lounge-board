@@ -324,6 +324,7 @@ function SizeAdjuster() {
   return (
     <Column class={"size-adjustor"}>
       <Button
+        popupContent={"Decrease frame height"}
         onPointerDown={(e) => {
           e.currentTarget.setPointerCapture(e.pointerId);
           mutate((state) => {
@@ -360,7 +361,7 @@ function SizeAdjuster() {
         }}
       />
       <Button
-        style={{ rotate: "180deg" }}
+        popupContent={"Increase frame height"}
         onPointerDown={(e) => {
           e.currentTarget.setPointerCapture(e.pointerId);
           mutate((state) => {
@@ -380,7 +381,7 @@ function SizeAdjuster() {
           });
         }}
       >
-        ▲
+        <p style={{ rotate: "180deg" }}>▲</p>
       </Button>
     </Column>
   );

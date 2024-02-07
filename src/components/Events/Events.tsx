@@ -3,7 +3,6 @@ import BlockContainer from "~/components/common/BlockContainer";
 import { For, onCleanup, onMount, Show } from "solid-js";
 import Scrollable from "~/components/common/Scrollable";
 import { useAppContext } from "~/AppContext";
-import Img from "~/components/common/Img";
 import EventsHeader from "~/assets/images/events-header.png";
 import { DialogResult } from "~/components/MessageBox/store";
 import EventItem from "~/components/Events/EventItem";
@@ -13,7 +12,7 @@ import CreateEditEvent, {
 } from "~/components/Events/CreateEditEvent";
 
 export default function Events() {
-  const { isAdmin, messageBox, events, Executor, API } = useAppContext();
+  const { isAdmin, messageBox, events, Executor, API, popup } = useAppContext();
 
   let eventsBlockContainer: HTMLDivElement = null!;
   let eventsScrollableContainer: HTMLDivElement = null!;
@@ -169,6 +168,7 @@ export default function Events() {
       ref={eventsBlockContainer}
       title={"Events"}
       titleIcon={EventsHeader}
+      popupStore={popup}
       onAddNewItem={
         !isAdmin()
           ? undefined

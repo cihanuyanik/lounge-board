@@ -19,7 +19,7 @@ const TransPost = {
 };
 
 export default function ResearchGroups() {
-  const { isAdmin, researchGroups, Executor, API } = useAppContext();
+  const { isAdmin, researchGroups, Executor, API, popup } = useAppContext();
 
   let resGroupImageRef: HTMLImageElement;
   let editResearchGroupsDialog: HTMLDialogElement = null!;
@@ -227,7 +227,12 @@ export default function ResearchGroups() {
       class={"research-groups-container"}
     >
       <Show when={isAdmin()}>
-        <Button class={"btn-edit-res-groups"} onClick={onEditResearchGroups}>
+        <Button
+          class={"btn-edit-res-groups"}
+          onClick={onEditResearchGroups}
+          popupStore={popup}
+          popupContent={"Edit research groups"}
+        >
           <Edit />
         </Button>
       </Show>

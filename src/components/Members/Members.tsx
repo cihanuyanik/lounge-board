@@ -1,7 +1,6 @@
 import "./members.css";
 import { For, onCleanup, onMount, Show } from "solid-js";
 import MemberItem from "~/components/Members/MemberItem";
-import Img from "~/components/common/Img";
 import CreateEditMember, {
   CreateEditMemberDialogResult,
 } from "~/components/Members/CreateEditMember";

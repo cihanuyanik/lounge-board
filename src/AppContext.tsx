@@ -33,7 +33,6 @@ type AppContextType = {
   ReturnType<typeof createMetaStore> &
   ReturnType<typeof createBusyDialogStore> &
   ReturnType<typeof createMessageBoxStore>;
-
 export function createMetaStore() {
   const [meta, setMeta] = createStore<Meta>({
     id: "meta",

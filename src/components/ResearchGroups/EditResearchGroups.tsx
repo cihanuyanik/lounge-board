@@ -273,11 +273,19 @@ function ResearchGroupSelector() {
         </For>
       </Dropdown>
 
-      <Button onClick={onDeleteResearchGroup}>
+      <Button
+        onClick={onDeleteResearchGroup}
+        popupContent={"Delete active research group."}
+        popupDirection={"bottom-left"}
+      >
         <Delete />
       </Button>
 
-      <Button onClick={onNewResearchGroup}>
+      <Button
+        onClick={onNewResearchGroup}
+        popupContent={"Add new research group."}
+        popupDirection={"bottom-left"}
+      >
         <Add />
       </Button>
     </Row>

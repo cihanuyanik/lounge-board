@@ -1,6 +1,5 @@
 import "./news.css";
 import BlockContainer from "~/components/common/BlockContainer";
-import Img from "~/components/common/Img";
 import NewsHeader from "~/assets/images/news-header.png";
 import Scrollable from "~/components/common/Scrollable";
 import { For, onCleanup, onMount, Show } from "solid-js";
@@ -52,6 +51,7 @@ export default function News() {
       title={"News"}
       titleIcon={NewsHeader}
       class={"news-block-container"}
+      popupDirection={"bottom-left"}
       onAddNewItem={
         !isAdmin()
           ? undefined

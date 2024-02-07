@@ -1,16 +1,69 @@
 import "./index.css";
-import { JSX, splitProps } from "solid-js";
+import { JSX, Show, splitProps } from "solid-js";
+import HoverPopup, {
+  Direction,
+  HoverPopupRef,
+} from "~/components/common/HoverPopup";
 
-export default function (props: JSX.ButtonHTMLAttributes<HTMLButtonElement>) {
+type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  popupContent?: JSX.Element;
+  popupDelay?: number;
+  popupDirection?: Direction;
+};
+
+export default function (props: ButtonProps) {
   // Split props into local and rest
-  const [local, rest] = splitProps(props, ["class"]);
+  const [local, rest] = splitProps(props, [
+    "class",
+    "popupContent",
+    "popupDelay",
+    "popupDirection",
+  ]);
+
+  function popupPointerEnter(e: PointerEvent & { currentTarget: HTMLElement }) {
+    const button = e.target as HTMLButtonElement;
+    const removeEvent = button.registerEventListener("pointerleave", () => {
+      // Cancel started popup timer
+      clearTimeout(popupTimer);
+      // Close popup, this has no effect if it is not open
+      popup.close();
+      // Remove pointer leave event handler
+      removeEvent();
+    });
+
+    // Show popup after if the user is still hovering after some time
+    const popupTimer = setTimeout(() => {
+      // Get target position with respect to body
+      const targetRect = button.getBoundingClientRect();
+
+      let x = targetRect.width;
+      if (local.popupDirection && local.popupDirection.endsWith("left")) x = 0;
+
+      let y = targetRect.height;
+      if (local.popupDirection && local.popupDirection.startsWith("top")) y = 0;
+
+      popup.show(x, y);
+    }, local.popupDelay || 500);
+  }
+
+  let popup: HoverPopupRef;
 
   return (
     <button
+      // onPointerEnter={local.popupStore ? popupPointerEnter : undefined}
+      onPointerEnter={local.popupContent ? popupPointerEnter : undefined}
       class={`button-base${local.class ? " " + local.class : ""}`}
       {...rest}
     >
       {props.children}
+      <Show when={local.popupContent}>
+        <HoverPopup
+          ref={(el) => (popup = el)}
+          direction={local.popupDirection || "bottom-right"}
+        >
+          {local.popupContent}
+        </HoverPopup>
+      </Show>
     </button>
   );
 }
