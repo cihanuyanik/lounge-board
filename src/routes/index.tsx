@@ -36,13 +36,14 @@ function _Home() {
     "dtu-purple",
   ];
   let colorPaletteIndex = 0;
+  let colorPaletteTransitionTimer: NodeJS.Timeout = null!;
 
   onMount(async () => {
     if (isServer) return;
     await waitUntil(() => busyDialog.isValid, 50, 2000);
     await loadData();
 
-    setInterval(() => {
+    colorPaletteTransitionTimer = setInterval(() => {
       // Remove current color palette from class list
       appContainer.classList.remove(colorPalettes[colorPaletteIndex]);
       // Add next color palette to class list
@@ -54,6 +55,7 @@ function _Home() {
   onCleanup(() => {
     unSubList.forEach((unSub) => unSub());
     unSubList.splice(0, unSubList.length);
+    clearInterval(colorPaletteTransitionTimer);
   });
 
   let appContainer: HTMLDivElement = null!;
