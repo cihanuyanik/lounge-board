@@ -111,7 +111,9 @@ function startScrollAnimation(props: {
     delayMs: props.switchInterval || 3000,
   });
 
-  onMount(timer.start);
+  onMount(() => {
+    timer.start();
+  });
 
   function getPrevSibling(activeElement: HTMLElement) {
     let prevSibling = activeElement.previousElementSibling;
@@ -219,5 +221,7 @@ function startDueTimeChecker(checkInterval: number) {
     repeat: true,
   });
 
-  onMount(timer.start);
+  onMount(() => {
+    timer.start();
+  });
 }

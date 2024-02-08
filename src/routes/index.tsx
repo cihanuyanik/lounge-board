@@ -84,7 +84,9 @@ function useColorPaletteTransition(props: {
     delayMs: props.transitionInterval || 10000,
   });
 
-  onMount(timer.start);
+  onMount(() => {
+    timer.start();
+  });
 
   return colorPalette;
 }
