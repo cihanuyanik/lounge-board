@@ -74,7 +74,9 @@ export function useTimer(props: TimerProps) {
     }
   });
 
-  onCleanup(stop);
+  onCleanup(() => {
+    stop();
+  });
 
   function start() {
     switch (props.type) {
