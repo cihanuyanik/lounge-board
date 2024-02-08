@@ -1,6 +1,6 @@
 import "./events.css";
 import BlockContainer from "~/components/common/BlockContainer";
-import { For, onCleanup, onMount, Show } from "solid-js";
+import { For, onMount, Show } from "solid-js";
 import Scrollable from "~/components/common/Scrollable";
 import { useAppContext } from "~/AppContext";
 import EventsHeader from "~/assets/images/events-header.png";
@@ -8,6 +8,7 @@ import { DialogResult } from "~/components/MessageBox/store";
 import EventItem from "~/components/Events/EventItem";
 import { Timestamp } from "firebase/firestore";
 import CreateEditEvent from "~/components/Events/CreateEditEvent";
+import { useTimer } from "~/utils/utils";
 
 export default function Events() {
   const { isAdmin, messageBox, events, Executor, API } = useAppContext();
@@ -82,11 +83,10 @@ function startScrollAnimation(props: {
   scrollContainer: () => HTMLDivElement;
   switchInterval?: number;
 }) {
-  let scrollTimer: NodeJS.Timeout;
   let activeChildIndex = -1;
 
-  onMount(() => {
-    scrollTimer = setInterval(async () => {
+  const timer = useTimer({
+    handler: async () => {
       // Next item
       const childElement = getActiveElement();
       if (!childElement) return;
@@ -106,10 +106,12 @@ function startScrollAnimation(props: {
       childElement.prevElem?.classList.add("left");
       childElement.activeElem.classList.add("active");
       childElement.nextElem?.classList.add("right");
-    }, props.switchInterval || 3000);
+    },
+    type: "interval",
+    delayMs: props.switchInterval || 3000,
   });
 
-  onCleanup(() => clearInterval(scrollTimer));
+  onMount(timer.start);
 
   function getPrevSibling(activeElement: HTMLElement) {
     let prevSibling = activeElement.previousElementSibling;
@@ -176,47 +178,46 @@ function startScrollAnimation(props: {
 }
 
 // Call time out handler after 10 minutes
-function startDueTimeChecker(checkInterval: number = 10 * 60 * 1000) {
+function startDueTimeChecker(checkInterval: number) {
   const { events, API } = useAppContext();
 
-  let timer: NodeJS.Timeout;
+  const timer = useTimer({
+    handler: async () => {
+      // Start transaction
+      API.Events.beginTransaction();
 
-  onMount(() => (timer = setTimeout(timeOutHandler, checkInterval)));
+      // Iterate over events and compare with current time
+      // If event is due, update its isPast property
+      const now = Timestamp.now();
+      for (const eventId of events.ids) {
+        const event = events.entities[eventId];
 
-  onCleanup(() => clearTimeout(timer));
+        // Check if event is due
+        if (event.startsAt < now && event.isPast === false) {
+          // Update event
+          await API.Events.update({
+            original: event,
+            changes: { isPast: true },
+          });
+        }
 
-  async function timeOutHandler() {
-    // Start transaction
-    API.Events.beginTransaction();
-
-    // Iterate over events and compare with current time
-    // If event is due, update its isPast property
-    const now = Timestamp.now();
-    for (const eventId of events.ids) {
-      const event = events.entities[eventId];
-
-      // Check if event is due
-      if (event.startsAt < now && event.isPast === false) {
-        // Update event
-        await API.Events.update({
-          original: event,
-          changes: { isPast: true },
-        });
+        // Check if event is upcoming and marked as past by mistake
+        if (event.startsAt > now && event.isPast === true) {
+          // Update event
+          await API.Events.update({
+            original: event,
+            changes: { isPast: false },
+          });
+        }
       }
 
-      // Check if event is upcoming and marked as past by mistake
-      if (event.startsAt > now && event.isPast === true) {
-        // Update event
-        await API.Events.update({
-          original: event,
-          changes: { isPast: false },
-        });
-      }
-    }
+      // Commit transaction
+      await API.Events.commitTransaction();
+    },
+    type: "timeout",
+    delayMs: checkInterval,
+    repeat: true,
+  });
 
-    // Commit transaction
-    await API.Events.commitTransaction();
-
-    timer = setTimeout(timeOutHandler, checkInterval);
-  }
+  onMount(timer.start);
 }

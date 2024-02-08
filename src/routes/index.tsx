@@ -12,7 +12,7 @@ import BusyDialog from "~/components/BusyDialog";
 import MessageBox from "~/components/MessageBox";
 import Footer from "~/components/Footer";
 import { isServer } from "solid-js/web";
-import { waitUntil } from "~/utils/utils";
+import { useTimer, waitUntil } from "~/utils/utils";
 
 export default function Home() {
   return (
@@ -73,19 +73,18 @@ function useColorPaletteTransition(props: {
   colorPalettes: string[];
 }) {
   const [index, setIndex] = createSignal(0);
-  let colorPaletteTransitionTimer: NodeJS.Timeout = null!;
 
   const colorPalette = createMemo(() => {
     return props.colorPalettes[index()];
   });
 
-  onMount(() => {
-    colorPaletteTransitionTimer = setInterval(() => {
-      setIndex((index() + 1) % props.colorPalettes.length);
-    }, props.transitionInterval || 10000);
+  const timer = useTimer({
+    handler: () => setIndex((index() + 1) % props.colorPalettes.length),
+    type: "interval",
+    delayMs: props.transitionInterval || 10000,
   });
 
-  onCleanup(() => clearInterval(colorPaletteTransitionTimer));
+  onMount(timer.start);
 
   return colorPalette;
 }

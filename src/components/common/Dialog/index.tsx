@@ -14,7 +14,7 @@ import Button from "~/components/common/Button";
 import Tick from "~/assets/icons/Tick";
 import Cross from "~/assets/icons/Cross";
 import { createStore } from "solid-js/store";
-import { createMutator } from "~/utils/utils";
+import { createMutator, waitUntil } from "~/utils/utils";
 
 type DialogProps = {
   open?: boolean;
@@ -39,11 +39,12 @@ export default function Dialog(props: DialogProps) {
   let dialogRef: HTMLDialogElement;
   let eventListeners: Unsubscribe[] = [];
 
-  function registerEventListeners() {
-    if (!dialogRef) {
-      setTimeout(registerEventListeners, 200);
-      return;
-    }
+  async function registerEventListeners() {
+    await waitUntil(
+      () => dialogRef !== undefined && dialogRef !== null,
+      50,
+      1000,
+    );
 
     if (local.onBeforeShow) {
       eventListeners.push(

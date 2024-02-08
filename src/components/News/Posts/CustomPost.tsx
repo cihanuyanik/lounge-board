@@ -5,6 +5,7 @@ import Img from "~/components/common/Img";
 import moment from "moment";
 import { createMemo, createSignal, onCleanup, onMount } from "solid-js";
 import { Timestamp } from "firebase/firestore";
+import DefaultAvatar from "~/assets/images/member-placeholder.png";
 
 type CustomPostProps = {
   width: number;
@@ -25,14 +26,8 @@ export default function (props: CustomPostProps) {
   });
 
   let timePassedUpdateTimer: NodeJS.Timeout;
-
-  onMount(() => {
-    setTimeout(runTimePassedUpdater, 3000);
-  });
-
-  onCleanup(() => {
-    clearInterval(timePassedUpdateTimer);
-  });
+  onMount(() => setTimeout(runTimePassedUpdater, 3000));
+  onCleanup(() => clearInterval(timePassedUpdateTimer));
 
   function runTimePassedUpdater() {
     const timePassed = moment(props.updatedAt.toDate()).fromNow();
@@ -57,12 +52,7 @@ export default function (props: CustomPostProps) {
   return (
     <Column class={"custom-post"} style={{ width: `${props.width}px` }}>
       <Row class={"custom-post-title"}>
-        <Img
-          src={
-            props.avatarUrl ||
-            "https://firebasestorage.googleapis.com/v0/b/digital-health-lounge-board.appspot.com/o/profile-cihan-uyanik-1706345574976?alt=media"
-          }
-        />
+        <Img src={props.avatarUrl || DefaultAvatar} />
         <Column class={"flex-1"}>
           <div class={"title-text"}>{props.title}</div>
           <div class={"title-duration"}>{timePassed()}</div>

@@ -1,5 +1,5 @@
 import "./researchGroups.css";
-import { createEffect, For, on, onCleanup, onMount, Show } from "solid-js";
+import { createEffect, For, on, onMount, Show } from "solid-js";
 import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
 import Edit from "~/assets/icons/Edit";
@@ -9,6 +9,7 @@ import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
 import Left from "~/assets/icons/Left";
 import Right from "~/assets/icons/Right";
+import { useTimer } from "~/utils/utils";
 
 export default function ResearchGroups() {
   const { isAdmin, researchGroups } = useAppContext();
@@ -41,52 +42,21 @@ function Carousel() {
   const { isAdmin, researchGroups } = useAppContext();
 
   let resGroupImageRef: HTMLImageElement;
-  let interval: NodeJS.Timeout;
   let animRotateCenterToLeft: Animation;
   let animRotateLeftToCenter: Animation;
   let animRotateCenterToRight: Animation;
   let animRotateRightToCenter: Animation;
 
+  const timer = useTimer({
+    handler: () => researchGroups.next(),
+    type: "interval",
+    delayMs: 5000,
+  });
+
   onMount(() => {
     createAnimations();
-    if (!isAdmin()) {
-      resetInterval();
-    }
+    if (!isAdmin()) timer.start();
   });
-
-  onCleanup(() => {
-    console.log("start3DCarouselAnimation cleanup");
-    clearInterval(interval);
-  });
-
-  createEffect(
-    on(
-      () => researchGroups.active,
-      async () => {
-        if (!researchGroups.active) return;
-
-        if (researchGroups.activeChangeDirection === "next") {
-          animRotateCenterToLeft.play();
-          await animRotateCenterToLeft.finished;
-
-          resGroupImageRef.src = researchGroups.active.image;
-
-          animRotateRightToCenter.play();
-          await animRotateRightToCenter.finished;
-        }
-
-        if (researchGroups.activeChangeDirection === "prev") {
-          animRotateCenterToRight.play();
-          await animRotateCenterToRight.finished;
-
-          resGroupImageRef.src = researchGroups.active.image;
-
-          animRotateLeftToCenter.play();
-          await animRotateLeftToCenter.finished;
-        }
-      },
-    ),
-  );
 
   function createAnimations() {
     const TransPos = {
@@ -168,10 +138,34 @@ function Carousel() {
     animRotateCenterToRight.cancel();
   }
 
-  function resetInterval() {
-    clearInterval(interval);
-    interval = setInterval(() => researchGroups.next(), 5000);
-  }
+  createEffect(
+    on(
+      () => researchGroups.active,
+      async () => {
+        if (!researchGroups.active) return;
+
+        if (researchGroups.activeChangeDirection === "next") {
+          animRotateCenterToLeft.play();
+          await animRotateCenterToLeft.finished;
+
+          resGroupImageRef.src = researchGroups.active.image;
+
+          animRotateRightToCenter.play();
+          await animRotateRightToCenter.finished;
+        }
+
+        if (researchGroups.activeChangeDirection === "prev") {
+          animRotateCenterToRight.play();
+          await animRotateCenterToRight.finished;
+
+          resGroupImageRef.src = researchGroups.active.image;
+
+          animRotateLeftToCenter.play();
+          await animRotateLeftToCenter.finished;
+        }
+      },
+    ),
+  );
 
   return (
     <Row class={"res-group-image-container"}>
@@ -179,7 +173,7 @@ function Carousel() {
       <Show when={isAdmin()}>
         <ImageShiftControls />
       </Show>
-      <CarouselBullets resetInterval={resetInterval} />
+      <CarouselBullets resetInterval={timer.reset} />
     </Row>
   );
 }
