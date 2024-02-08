@@ -4,9 +4,7 @@ import NewsHeader from "~/assets/images/news-header.png";
 import Scrollable from "~/components/common/Scrollable";
 import { For, onCleanup, onMount, Show } from "solid-js";
 import { useAppContext } from "~/AppContext";
-import CreateEditNews, {
-  CreateNewsDialogResult,
-} from "~/components/News/CreateEditNews";
+import CreateEditNews from "~/components/News/CreateEditNews";
 import NewsItem from "~/components/News/NewsItem";
 import { DialogResult } from "~/components/MessageBox/store";
 import ContinuesScrollAnimator from "~/utils/ContinuesScrollAnimator";
@@ -21,9 +19,7 @@ export default function News() {
   let scrollAnimator: ContinuesScrollAnimator = null!;
 
   onMount(async () => {
-    if (isAdmin()) {
-      // If landed on admin page, don't run scroll animation
-    } else {
+    if (!isAdmin()) {
       onMountClient().then();
     }
   });
@@ -52,25 +48,12 @@ export default function News() {
       titleIcon={NewsHeader}
       class={"news-block-container"}
       popupDirection={"bottom-left"}
-      onAddNewItem={
-        !isAdmin()
-          ? undefined
-          : async () => {
-              const dResult =
-                await newsDialog.ShowModal<CreateNewsDialogResult>();
-              if (dResult.result === "Cancel") return;
-
-              await Executor.run(() => API.News.add({ ...dResult.news }), {
-                busyDialogMessage: "Creating news...",
-              });
-            }
-      }
+      onAddNewItem={!isAdmin() ? undefined : () => newsDialog.ShowModal()}
       onDeleteSelectedItems={
         !isAdmin()
           ? undefined
           : async () => {
               if (news.selectedIds.length === 0) return;
-
               const dResult = await messageBox.question(
                 "Are you sure you want to delete news?",
               );

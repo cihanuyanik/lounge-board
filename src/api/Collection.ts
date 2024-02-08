@@ -83,8 +83,8 @@ export default class Collection<
       // Generate a new document id
       const dataWithId = data as T;
 
-      // If the data does not have an id, generate a new one
-      if (!dataWithId.id) dataWithId.id = uuid();
+      // If the data does not have an id or empty string, generate a new one
+      if (!dataWithId.id || dataWithId.id === "") dataWithId.id = uuid();
 
       // if the data does not have a createdAt field, generate a new one
       if (!dataWithId.createdAt) dataWithId.createdAt = Timestamp.now();

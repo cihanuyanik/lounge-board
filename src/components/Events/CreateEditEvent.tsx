@@ -1,5 +1,5 @@
 import "./events.css";
-import { createEffect, on } from "solid-js";
+import { createEffect, on, onMount, Show } from "solid-js";
 import { Event } from "~/api/types";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
@@ -21,11 +21,13 @@ import Start from "~/assets/icons/Start";
 import Stop from "~/assets/icons/Stop";
 import DateTimePicker from "~/components/common/DateTimePicker";
 import { buildDurationString, toDate } from "~/utils/DateExtensions";
+import { useAppContext } from "~/AppContext";
+import { detectChanges } from "~/utils/utils";
 
 export type CreateEventDialogResult = {
   result: "Accept" | "Cancel";
+  mode: "create" | "edit";
   event: Event;
-
   startDateTime: string;
   endDateTime: string;
 };
@@ -33,6 +35,7 @@ export type CreateEventDialogResult = {
 const { ContextProvider, useDialogContext } =
   createDialogContext<CreateEventDialogResult>({
     result: "Cancel",
+    mode: "create",
     event: {
       id: "",
       text: "",
@@ -45,7 +48,6 @@ const { ContextProvider, useDialogContext } =
       // @ts-ignore
       endsAt: new Date(),
     },
-
     startDateTime: "",
     endDateTime: "",
   });
@@ -60,38 +62,21 @@ export default function CreateEditEvent(props: { ref: DialogRef }) {
 
 function _CreateEditEvent(props: { ref: DialogRef }) {
   const { state, mutate } = useDialogContext();
+  const { Executor, API, events } = useAppContext();
 
-  createEffect(
-    on(
-      () => state.event.startsAt,
-      (startsAt) => {
-        mutate((state) => {
-          state.startDateTime = toDate(startsAt)?.toLocaleISOString() || "";
-        });
-      },
-    ),
-  );
+  onMount(() => {
+    useStartDateTimeUpdater();
+    useEndDateTimeUpdater();
+  });
 
-  createEffect(
-    on(
-      () => state.event.endsAt,
-      (endsAt) => {
-        mutate((state) => {
-          state.endDateTime = toDate(endsAt)?.toLocaleISOString() || "";
-        });
-      },
-    ),
-  );
-
-  function onBeforeShow(
-    ev: CustomEvent<{ event?: Event; type?: "upcoming" | "past" }>,
-  ) {
+  function onBeforeShow(ev: CustomEvent<{ event?: Event }>) {
     const event = ev.detail as Event | undefined;
 
     mutate((state) => {
       state.result = "Cancel";
       if (event) {
         // Open in edit mode
+        state.mode = "edit";
         state.event.id = event.id;
         state.event.text = event.text;
         state.event.name = event.name;
@@ -104,7 +89,8 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
         state.event.endsAt = event.endsAt.toDate();
       } else {
         // Open in create mode
-
+        state.mode = "create";
+        state.event.id = "";
         state.event.text = "";
         state.event.name = "";
         state.event.details = "";
@@ -126,7 +112,7 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
     });
   }
 
-  function onClose(ev: CustomEvent) {
+  async function onClose(ev: CustomEvent) {
     // Prepare dialogStore for return
     mutate((state) => {
       let startsAt = new Date(state.startDateTime);
@@ -143,6 +129,29 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
 
     // Resolve dialogStore as return value
     (ev.target as HTMLDialogElement).Resolve(state);
+    if (state.result === "Cancel") return;
+
+    switch (state.mode) {
+      case "create":
+        await Executor.run(
+          async () => {
+            if (!state.event.startsAt)
+              throw new Error("Start date is required");
+            await API.Events.add({ ...state.event });
+          },
+          {
+            busyDialogMessage: "Adding event...",
+          },
+        );
+        break;
+      case "edit":
+        await Executor.run(async () => {
+          const original = events.entities[state.event.id];
+          const changes: Partial<Event> = detectChanges(original, state.event);
+          await API.Events.update({ original, changes });
+        });
+        break;
+    }
   }
 
   return (
@@ -253,50 +262,83 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
   );
 }
 
+function useStartDateTimeUpdater() {
+  const { state, mutate } = useDialogContext();
+
+  createEffect(
+    on(
+      () => state.event.startsAt,
+      (startsAt) => {
+        mutate((state) => {
+          state.startDateTime = toDate(startsAt)?.toLocaleISOString() || "";
+        });
+      },
+    ),
+  );
+}
+
+function useEndDateTimeUpdater() {
+  const { state, mutate } = useDialogContext();
+
+  createEffect(
+    on(
+      () => state.event.endsAt,
+      (endsAt) => {
+        mutate((state) => {
+          state.endDateTime = toDate(endsAt)?.toLocaleISOString() || "";
+        });
+      },
+    ),
+  );
+}
+
 function Preview() {
   const { state } = useDialogContext();
-  if (state === undefined) return null;
 
   return (
-    <Row class={"preview"}>
-      <Column
-        class={"event-card"}
-        classList={{
-          "past-event-item-background": state.event.isPast,
-        }}
-      >
-        <Column class={"event-card-header"}>
-          <Row class={"icon"}>
-            <Img src={EventsHeaderImage} />
-          </Row>
-          <Row class={"name"}>{state.event.name || "Event Name"}</Row>
-          <Row class={"horizontal-line"}></Row>
-          <Row class={"details"}>{state.event.details || "Event Details"}</Row>
-        </Column>
+    <Show when={state !== undefined}>
+      <Row class={"preview"}>
+        <Column
+          class={"event-card"}
+          classList={{
+            "past-event-item-background": state.event.isPast,
+          }}
+        >
+          <Column class={"event-card-header"}>
+            <Row class={"icon"}>
+              <Img src={EventsHeaderImage} />
+            </Row>
+            <Row class={"name"}>{state.event.name || "Event Name"}</Row>
+            <Row class={"horizontal-line"}></Row>
+            <Row class={"details"}>
+              {state.event.details || "Event Details"}
+            </Row>
+          </Column>
 
-        <Row class={"event-card-datetime-info"}>
-          <Row class={"date"}>
-            <CalendarDate />
-            <Column class={"flex-1"}>
-              <Row>{moment(state.event.startsAt).format("DD")}</Row>
-              <Row>{moment(state.event.startsAt).format("MMM")}</Row>
-            </Column>
+          <Row class={"event-card-datetime-info"}>
+            <Row class={"date"}>
+              <CalendarDate />
+              <Column class={"flex-1"}>
+                <Row>{moment(state.event.startsAt).format("DD")}</Row>
+                <Row>{moment(state.event.startsAt).format("MMM")}</Row>
+              </Column>
+            </Row>
+            <Row class={"time"}>
+              <Clock />
+              <Column class={"flex-1"}>
+                <Row>{moment(state.event.startsAt).format("HH")}</Row>
+                <Row>{moment(state.event.startsAt).format("mm")}</Row>
+              </Column>
+            </Row>
+            <Row class={"duration"}>
+              <Duration />
+              <Column class={"flex-1"}>
+                {buildDurationString(state.event.startsAt, state.event.endsAt)}
+              </Column>
+            </Row>
           </Row>
-          <Row class={"time"}>
-            <Clock />
-            <Column class={"flex-1"}>
-              <Row>{moment(state.event.startsAt).format("HH")}</Row>
-              <Row>{moment(state.event.startsAt).format("mm")}</Row>
-            </Column>
-          </Row>
-          <Row class={"duration"}>
-            <Duration />
-            <Column class={"flex-1"}>
-              {buildDurationString(state.event.startsAt, state.event.endsAt)}
-            </Column>
-          </Row>
-        </Row>
-      </Column>
-    </Row>
+        </Column>
+      </Row>
+    </Show>
   );
 }

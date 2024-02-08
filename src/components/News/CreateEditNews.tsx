@@ -28,9 +28,11 @@ import LinkedInIcon from "~/assets/images/linkedin.png";
 import FacebookIcon from "~/assets/images/facebook.png";
 import TwitterIcon from "~/assets/images/twitter.png";
 import InstagramIcon from "~/assets/images/instagram.png";
+import { detectChanges } from "~/utils/utils";
 
 export type CreateNewsDialogResult = {
   result: "Accept" | "Cancel";
+  mode: "create" | "edit";
   news: New;
   sizeUpdateTimer: any;
   previewContainer: HTMLDivElement;
@@ -41,6 +43,7 @@ export type CreateNewsDialogResult = {
 const { ContextProvider, useDialogContext } =
   createDialogContext<CreateNewsDialogResult>({
     result: "Cancel",
+    mode: "create",
     news: {
       id: "",
       isSelected: false,
@@ -91,7 +94,7 @@ export default function (props: { ref: DialogRef }) {
 }
 
 function _CreateEditNews(props: { ref: DialogRef }) {
-  const { user } = useAppContext();
+  const { user, Executor, API, news } = useAppContext();
   const { state, mutate } = useDialogContext();
 
   return (
@@ -105,6 +108,8 @@ function _CreateEditNews(props: { ref: DialogRef }) {
           mutate((state) => {
             if (!news) {
               // open for creating new item
+              state.mode = "create";
+              state.news.id = "";
               state.news.type = "linkedin";
               state.news.isSelected = false;
               state.news.postTitle = "";
@@ -116,12 +121,35 @@ function _CreateEditNews(props: { ref: DialogRef }) {
               state.result = "Cancel";
             } else {
               // open for updating existing item
+              state.mode = "edit";
               state.news = { ...news };
+              state.result = "Cancel";
             }
           });
         }}
-        onClose={(ev) => {
+        onClose={async (ev) => {
           (ev.target as HTMLDialogElement).Resolve(state);
+          if (state.result === "Cancel") return;
+
+          switch (state.mode) {
+            case "create":
+              await Executor.run(() => API.News.add({ ...state.news }), {
+                busyDialogMessage: "Creating news...",
+              });
+              break;
+            case "edit":
+              await Executor.run(
+                async () => {
+                  const original = news.entities[state.news.id];
+                  const changes = detectChanges(original, state.news);
+                  await API.News.update({ original, changes });
+                },
+                {
+                  busyDialogMessage: "Updating news...",
+                },
+              );
+              break;
+          }
         }}
       >
         <Row class={"title"}>
@@ -181,7 +209,7 @@ function NewsTypeSelection() {
   return (
     <Dropdown
       rootStyle={{ width: "100%", "z-index": 3 }}
-      value={state.news.type}
+      value={state?.news.type || ""}
       onValueChanged={(e) => {
         mutate((state) => {
           // @ts-ignore
@@ -189,7 +217,7 @@ function NewsTypeSelection() {
         });
       }}
     >
-      <For each={state.newsTypes}>
+      <For each={state?.newsTypes || []}>
         {(newsType) => (
           <DropdownItem value={newsType}>
             <Row class={"dropdown-item-inner"}>

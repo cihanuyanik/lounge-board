@@ -1,21 +1,19 @@
 import Img from "~/components/common/Img";
 import MemberImagePlaceholder from "~/assets/images/member-placeholder.png";
-import { CreateEditMemberDialogResult } from "~/components/Members/CreateEditMember";
 import DragHandle from "~/components/DragToReorder/DragHandle";
 import { Show } from "solid-js";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
 import Tick from "~/assets/icons/Tick";
-import { detectChanges } from "~/utils/utils";
 
 type MemberItemProps = {
   id: string;
-  editDialog?: HTMLDialogElement;
+  editDialog: HTMLDialogElement;
 };
 
 export default function MemberItem(props: MemberItemProps) {
-  const { isAdmin, members, Executor, API } = useAppContext();
+  const { isAdmin, members } = useAppContext();
 
   return (
     <Row
@@ -38,26 +36,7 @@ export default function MemberItem(props: MemberItemProps) {
       ondblclick={
         !isAdmin()
           ? undefined
-          : async () => {
-              if (!props.editDialog) return;
-              const dResult =
-                await props.editDialog.ShowModal<CreateEditMemberDialogResult>(
-                  members.entities[props.id],
-                );
-              if (dResult.result === "Cancel") return;
-
-              await Executor.run(
-                () =>
-                  API.Members.update({
-                    original: members.entities[props.id],
-                    changes: detectChanges(
-                      members.entities[props.id],
-                      dResult.member,
-                    ),
-                  }),
-                { busyDialogMessage: "Updating member..." },
-              );
-            }
+          : () => props.editDialog.ShowModal(members.entities[props.id])
       }
     >
       <Row class={"avatar"}>

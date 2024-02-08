@@ -2,8 +2,6 @@ import { Accessor, Show } from "solid-js";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
-import { Event } from "~/api/types";
-import { CreateEventDialogResult } from "~/components/Events/CreateEditEvent";
 import Img from "~/components/common/Img";
 import EventsHeaderImage from "~/assets/images/events-header.png";
 import CalendarDate from "~/assets/icons/CalendarDate";
@@ -12,7 +10,6 @@ import Clock from "~/assets/icons/Clock";
 import Duration from "~/assets/icons/Duration";
 import Tick from "~/assets/icons/Tick";
 import { buildDurationString } from "~/utils/DateExtensions";
-import { detectChanges } from "~/utils/utils";
 
 type Props = {
   id: string;
@@ -21,7 +18,7 @@ type Props = {
 };
 
 export default function EventItem(props: Props) {
-  const { isAdmin, events, Executor, API } = useAppContext();
+  const { isAdmin, events } = useAppContext();
 
   return (
     <Column
@@ -44,26 +41,7 @@ export default function EventItem(props: Props) {
       ondblclick={
         !isAdmin()
           ? undefined
-          : async () => {
-              const dResult =
-                await props.editDialog.ShowModal<CreateEventDialogResult>(
-                  events.entities[props.id],
-                );
-              if (dResult.result === "Cancel") return;
-
-              await Executor.run(async () => {
-                const original = events.entities[props.id];
-                const changes: Partial<Event> = detectChanges(
-                  original,
-                  dResult.event,
-                );
-
-                await API.Events.update({
-                  original: events.entities[props.id],
-                  changes: changes,
-                });
-              });
-            }
+          : () => props.editDialog.ShowModal(events.entities[props.id])
       }
     >
       <Column class={"event-card-header"}>

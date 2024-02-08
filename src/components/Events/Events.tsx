@@ -7,189 +7,30 @@ import EventsHeader from "~/assets/images/events-header.png";
 import { DialogResult } from "~/components/MessageBox/store";
 import EventItem from "~/components/Events/EventItem";
 import { Timestamp } from "firebase/firestore";
-import CreateEditEvent, {
-  CreateEventDialogResult,
-} from "~/components/Events/CreateEditEvent";
+import CreateEditEvent from "~/components/Events/CreateEditEvent";
 
 export default function Events() {
-  const { isAdmin, messageBox, events, Executor, API, popup } = useAppContext();
+  const { isAdmin, messageBox, events, Executor, API } = useAppContext();
 
-  let eventsBlockContainer: HTMLDivElement = null!;
   let eventsScrollableContainer: HTMLDivElement = null!;
-  let scrollTimer: NodeJS.Timeout;
-  let activeChildIndex = -1;
 
-  let createEventDialog: HTMLDialogElement = null!;
-
-  let dueTimeCheckerTimer: NodeJS.Timeout;
+  let editDialog: HTMLDialogElement = null!;
 
   onMount(() => {
     if (isAdmin()) return;
 
     // Index page hit
     // Start scroll animation
-    startScrollAnimation();
-
-    startEventDueTimeChecker();
+    startScrollAnimation({ scrollContainer: () => eventsScrollableContainer });
+    startDueTimeChecker(10 * 60 * 1000); // 10 minutes
   });
-
-  onCleanup(() => {
-    if (isAdmin()) return;
-    clearInterval(scrollTimer);
-  });
-
-  function startScrollAnimation() {
-    scrollTimer = setInterval(async () => {
-      // Next item
-      const childElement = getActiveElement();
-      if (!childElement) return;
-
-      eventsScrollableContainer.scrollTo({
-        behavior: "smooth",
-        left:
-          childElement.activeElem.offsetLeft +
-          childElement.activeElem.offsetWidth / 2 -
-          eventsScrollableContainer.offsetWidth / 2,
-      });
-
-      clearClasses(childElement.prevElem);
-      clearClasses(childElement.activeElem);
-      clearClasses(childElement.nextElem);
-
-      childElement.prevElem?.classList.add("left");
-      childElement.activeElem.classList.add("active");
-      childElement.nextElem?.classList.add("right");
-    }, 3000);
-  }
-
-  function getPrevSibling(activeElement: HTMLElement) {
-    let prevSibling = activeElement.previousElementSibling;
-    while (prevSibling && prevSibling.classList.contains("placeholder")) {
-      prevSibling = prevSibling.previousElementSibling;
-    }
-    if (!prevSibling) {
-      prevSibling = eventsScrollableContainer.lastElementChild;
-      while (prevSibling && prevSibling.classList.contains("placeholder")) {
-        prevSibling = prevSibling.previousElementSibling;
-      }
-    }
-    return prevSibling;
-  }
-
-  function getNextSibling(activeElement: HTMLElement) {
-    let nextSibling = activeElement.nextElementSibling;
-    while (nextSibling && nextSibling.classList.contains("placeholder")) {
-      nextSibling = nextSibling.nextElementSibling;
-    }
-    if (!nextSibling) {
-      nextSibling = eventsScrollableContainer.firstElementChild;
-      while (nextSibling && nextSibling.classList.contains("placeholder")) {
-        nextSibling = nextSibling.nextElementSibling;
-      }
-    }
-    return nextSibling;
-  }
-
-  function getActiveElement() {
-    const childCount = eventsScrollableContainer.childElementCount;
-    if (childCount === 2) {
-      // No events exists
-      return null;
-    }
-
-    let searchIterationCount = 0;
-    while (searchIterationCount < childCount) {
-      searchIterationCount++;
-
-      activeChildIndex = (activeChildIndex + 1) % childCount;
-      const activeElement = eventsScrollableContainer.children[
-        activeChildIndex
-      ] as HTMLElement;
-      if (!activeElement.classList.contains("placeholder")) {
-        // Find previous valid sibling
-        return {
-          prevElem: getPrevSibling(activeElement),
-          activeElem: activeElement,
-          nextElem: getNextSibling(activeElement),
-        };
-      }
-    }
-  }
-
-  function clearClasses(element: Element | null) {
-    if (!element) return;
-    element.classList.remove("active");
-    element.classList.remove("left");
-    element.classList.remove("right");
-  }
-
-  function startEventDueTimeChecker() {
-    // Call time out handler after 10 minutes
-    dueTimeCheckerTimer = setTimeout(timeOutHandler, 10 * 60 * 1000);
-
-    async function timeOutHandler() {
-      // Start transaction
-      API.Events.beginTransaction();
-
-      // Iterate over events and compare with current time
-      // If event is due, update its isPast property
-      const now = Timestamp.now();
-      for (const eventId of events.ids) {
-        const event = events.entities[eventId];
-
-        // Check if event is due
-        if (event.startsAt < now && event.isPast === false) {
-          // Update event
-          await API.Events.update({
-            original: event,
-            changes: { isPast: true },
-          });
-        }
-
-        // Check if event is upcoming and marked as past by mistake
-        if (event.startsAt > now && event.isPast === true) {
-          // Update event
-          await API.Events.update({
-            original: event,
-            changes: { isPast: false },
-          });
-        }
-      }
-
-      // Commit transaction
-      await API.Events.commitTransaction();
-
-      dueTimeCheckerTimer = setTimeout(timeOutHandler, 10 * 60 * 1000);
-    }
-  }
 
   return (
     <BlockContainer
-      ref={eventsBlockContainer}
       title={"Events"}
       titleIcon={EventsHeader}
-      popupStore={popup}
-      onAddNewItem={
-        !isAdmin()
-          ? undefined
-          : async () => {
-              const dResult =
-                await createEventDialog.ShowModal<CreateEventDialogResult>();
-              if (dResult.result === "Cancel") return;
-
-              await Executor.run(
-                async () => {
-                  if (!dResult.event.startsAt)
-                    throw new Error("Start date is required");
-
-                  await API.Events.add({ ...dResult.event });
-                },
-                {
-                  busyDialogMessage: "Adding event...",
-                },
-              );
-            }
-      }
+      class={"events-block-container"}
+      onAddNewItem={!isAdmin() ? undefined : () => editDialog.ShowModal()}
       onDeleteSelectedItems={
         !isAdmin()
           ? undefined
@@ -208,7 +49,6 @@ export default function Events() {
               );
             }
       }
-      class={"events-block-container"}
     >
       <div class={"scroll-wrapper"}>
         <Scrollable
@@ -223,7 +63,7 @@ export default function Events() {
 
           <For each={events.ids}>
             {(id, index) => (
-              <EventItem id={id} index={index} editDialog={createEventDialog} />
+              <EventItem id={id} index={index} editDialog={editDialog} />
             )}
           </For>
           <Show when={!isAdmin()}>
@@ -232,8 +72,151 @@ export default function Events() {
         </Scrollable>
       </div>
       <Show when={isAdmin()}>
-        <CreateEditEvent ref={createEventDialog} />
+        <CreateEditEvent ref={editDialog} />
       </Show>
     </BlockContainer>
   );
+}
+
+function startScrollAnimation(props: {
+  scrollContainer: () => HTMLDivElement;
+  switchInterval?: number;
+}) {
+  let scrollTimer: NodeJS.Timeout;
+  let activeChildIndex = -1;
+
+  onMount(() => {
+    scrollTimer = setInterval(async () => {
+      // Next item
+      const childElement = getActiveElement();
+      if (!childElement) return;
+
+      props.scrollContainer().scrollTo({
+        behavior: "smooth",
+        left:
+          childElement.activeElem.offsetLeft +
+          childElement.activeElem.offsetWidth / 2 -
+          props.scrollContainer().offsetWidth / 2,
+      });
+
+      clearClasses(childElement.prevElem);
+      clearClasses(childElement.activeElem);
+      clearClasses(childElement.nextElem);
+
+      childElement.prevElem?.classList.add("left");
+      childElement.activeElem.classList.add("active");
+      childElement.nextElem?.classList.add("right");
+    }, props.switchInterval || 3000);
+  });
+
+  onCleanup(() => clearInterval(scrollTimer));
+
+  function getPrevSibling(activeElement: HTMLElement) {
+    let prevSibling = activeElement.previousElementSibling;
+    while (prevSibling && prevSibling.classList.contains("placeholder")) {
+      prevSibling = prevSibling.previousElementSibling;
+    }
+    if (!prevSibling) {
+      prevSibling = props.scrollContainer().lastElementChild;
+      while (prevSibling && prevSibling.classList.contains("placeholder")) {
+        prevSibling = prevSibling.previousElementSibling;
+      }
+    }
+    return prevSibling;
+  }
+
+  function getNextSibling(activeElement: HTMLElement) {
+    let nextSibling = activeElement.nextElementSibling;
+    while (nextSibling && nextSibling.classList.contains("placeholder")) {
+      nextSibling = nextSibling.nextElementSibling;
+    }
+    if (!nextSibling) {
+      nextSibling = props.scrollContainer().firstElementChild;
+      while (nextSibling && nextSibling.classList.contains("placeholder")) {
+        nextSibling = nextSibling.nextElementSibling;
+      }
+    }
+    return nextSibling;
+  }
+
+  function getActiveElement() {
+    const childCount = props.scrollContainer().childElementCount;
+    if (childCount === 2) {
+      // No events exists
+      return null;
+    }
+
+    let searchIterationCount = 0;
+    while (searchIterationCount < childCount) {
+      searchIterationCount++;
+
+      activeChildIndex = (activeChildIndex + 1) % childCount;
+      const activeElement = props.scrollContainer().children[
+        activeChildIndex
+      ] as HTMLElement;
+      if (!activeElement.classList.contains("placeholder")) {
+        // Find previous valid sibling
+        return {
+          prevElem: getPrevSibling(activeElement),
+          activeElem: activeElement,
+          nextElem: getNextSibling(activeElement),
+        };
+      }
+    }
+
+    return null;
+  }
+
+  function clearClasses(element: Element | null) {
+    if (!element) return;
+    element.classList.remove("active");
+    element.classList.remove("left");
+    element.classList.remove("right");
+  }
+}
+
+// Call time out handler after 10 minutes
+function startDueTimeChecker(checkInterval: number = 10 * 60 * 1000) {
+  const { events, API } = useAppContext();
+
+  let timer: NodeJS.Timeout;
+
+  onMount(() => (timer = setTimeout(timeOutHandler, checkInterval)));
+
+  onCleanup(() => clearTimeout(timer));
+
+  async function timeOutHandler() {
+    // Start transaction
+    API.Events.beginTransaction();
+
+    // Iterate over events and compare with current time
+    // If event is due, update its isPast property
+    const now = Timestamp.now();
+    for (const eventId of events.ids) {
+      const event = events.entities[eventId];
+
+      // Check if event is due
+      if (event.startsAt < now && event.isPast === false) {
+        // Update event
+        await API.Events.update({
+          original: event,
+          changes: { isPast: true },
+        });
+      }
+
+      // Check if event is upcoming and marked as past by mistake
+      if (event.startsAt > now && event.isPast === true) {
+        // Update event
+        await API.Events.update({
+          original: event,
+          changes: { isPast: false },
+        });
+      }
+    }
+
+    // Commit transaction
+    await API.Events.commitTransaction();
+
+    timer = setTimeout(timeOutHandler, checkInterval);
+  }
 }

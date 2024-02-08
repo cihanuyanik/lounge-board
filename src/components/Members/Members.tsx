@@ -1,9 +1,7 @@
 import "./members.css";
 import { For, onCleanup, onMount, Show } from "solid-js";
 import MemberItem from "~/components/Members/MemberItem";
-import CreateEditMember, {
-  CreateEditMemberDialogResult,
-} from "~/components/Members/CreateEditMember";
+import CreateEditMember from "~/components/Members/CreateEditMember";
 import { DialogResult } from "~/components/MessageBox/store";
 import Scrollable from "~/components/common/Scrollable";
 import DragToReorder from "~/components/DragToReorder";
@@ -16,58 +14,14 @@ import { sleep } from "~/utils/utils";
 export default function Members() {
   const { isAdmin, messageBox, members, meta, Executor, API } = useAppContext();
 
-  let createEditMemberDialog: HTMLDialogElement = null!;
+  let updateDialog: HTMLDialogElement = null!;
 
   return (
     <BlockContainer
       title={"Members"}
       titleIcon={MembersHeader}
       class={"members-block-container"}
-      onAddNewItem={
-        !isAdmin()
-          ? undefined
-          : async () => {
-              const dResult =
-                await createEditMemberDialog.ShowModal<CreateEditMemberDialogResult>();
-              if (dResult.result === "Cancel") return;
-
-              await Executor.run(
-                async () => {
-                  API.Members.beginTransaction();
-                  const newMemberId = await API.Members.add({
-                    ...dResult.member,
-                  });
-                  API.Meta.batch = API.Members.batch;
-                  await API.Meta.update({
-                    original: meta,
-                    changes: {
-                      membersDisplayOrder: [
-                        ...meta.membersDisplayOrder,
-                        newMemberId,
-                      ],
-                    },
-                  });
-                  await API.Members.commitTransaction();
-                  API.Meta.batch = undefined;
-                },
-                {
-                  busyDialogMessage: "Creating a new member...",
-                  postAction: () => {
-                    // Scroll to the bottom
-                    const membersScrollableContainer = document.querySelector(
-                      ".members-scrollable-container",
-                    );
-                    if (membersScrollableContainer) {
-                      membersScrollableContainer.scrollTo({
-                        behavior: "smooth",
-                        top: membersScrollableContainer.scrollHeight,
-                      });
-                    }
-                  },
-                },
-              );
-            }
-      }
+      onAddNewItem={!isAdmin() ? undefined : () => updateDialog.ShowModal()}
       onDeleteSelectedItems={
         !isAdmin()
           ? undefined
@@ -121,7 +75,7 @@ export default function Members() {
     >
       <Show
         when={isAdmin()}
-        fallback={<MemberContainer editDialog={() => createEditMemberDialog} />}
+        fallback={<MemberContainer editDialog={() => updateDialog} />}
       >
         <DragToReorder
           ids={members.ids}
@@ -145,13 +99,11 @@ export default function Members() {
             );
           }}
         >
-          <MemberContainer editDialog={() => createEditMemberDialog} />
+          <MemberContainer editDialog={() => updateDialog} />
         </DragToReorder>
       </Show>
 
-      <Show when={isAdmin()}>
-        {<CreateEditMember ref={createEditMemberDialog} />}
-      </Show>
+      <Show when={isAdmin()}>{<CreateEditMember ref={updateDialog} />}</Show>
     </BlockContainer>
   );
 }

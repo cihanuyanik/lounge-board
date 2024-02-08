@@ -5,10 +5,8 @@ import LinkedInPost from "~/components/News/Posts/LinkedInPost";
 import FacebookPost from "~/components/News/Posts/FacebookPost";
 import TwitterPost from "~/components/News/Posts/TwitterPost";
 import InstagramPost from "~/components/News/Posts/InstagramPost";
-import { CreateNewsDialogResult } from "~/components/News/CreateEditNews";
 import CustomPost from "~/components/News/Posts/CustomPost";
 import Tick from "~/assets/icons/Tick";
-import { detectChanges } from "~/utils/utils";
 
 type NewsItemProps = {
   id: string;
@@ -17,7 +15,7 @@ type NewsItemProps = {
 };
 
 export default function NewsItem(props: NewsItemProps) {
-  const { isAdmin, news, Executor, API } = useAppContext();
+  const { isAdmin, news } = useAppContext();
 
   return (
     <Row
@@ -38,28 +36,7 @@ export default function NewsItem(props: NewsItemProps) {
       onDblClick={
         !isAdmin()
           ? undefined
-          : async () => {
-              const dResult =
-                await props.editDialog.ShowModal<CreateNewsDialogResult>(
-                  news.entities[props.id],
-                );
-              if (dResult.result === "Cancel") return;
-
-              await Executor.run(
-                async () => {
-                  const original = news.entities[props.id];
-                  const changes = detectChanges(original, dResult.news);
-
-                  await API.News.update({
-                    original,
-                    changes,
-                  });
-                },
-                {
-                  busyDialogMessage: "Updating news...",
-                },
-              );
-            }
+          : () => props.editDialog.ShowModal(news.entities[props.id])
       }
     >
       <Switch fallback={<></>}>
