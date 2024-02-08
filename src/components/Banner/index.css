@@ -23,9 +23,15 @@
   padding-left: var(--space-4);
   padding-right: var(--space-4);
 }
-.banner .user img {
-  padding: 5px;
+.banner .user .avatar {
+  height: 100%;
+  padding: var(--space-1);
+  position: relative;
+}
+.banner .user .avatar img {
+  flex: 1;
   border-radius: 50% 50%;
+  box-shadow: 0 0 10px 4px var(--color-primary-darker);
 }
 .banner .user p {
   padding-left: var(--space-4);

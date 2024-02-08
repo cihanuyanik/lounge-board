@@ -34,7 +34,9 @@ export default function (props: BannerProps) {
 
       <Show when={props.user}>
         <Row class={"user"}>
-          <Img src={props.user?.photoURL || AvatarPlaceholder}></Img>
+          <Row class={"avatar"}>
+            <Img src={props.user?.photoURL || AvatarPlaceholder}></Img>
+          </Row>
           <Column>
             <p>{"Welcome"}</p>
             <p>{props.user?.displayName}</p>
