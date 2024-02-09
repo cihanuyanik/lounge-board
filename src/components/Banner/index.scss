@@ -15,7 +15,7 @@
     transition: all 0.3s ease-in-out;
     border-radius: var(--radii-xl);
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
       box-shadow: 0 0 10px 3px var(--color-primary-lighter);
     }
   }
@@ -78,6 +78,13 @@
       box-shadow: 0 0 var(--space-6) var(--color-primary-lighter);
       height: 75px;
       width: 75px;
+      transition: all 2s ease-in-out;
+      opacity: 0.5;
+
+      &.active {
+        opacity: 1;
+        transform: scale(1.15);
+      }
     }
   }
 }
