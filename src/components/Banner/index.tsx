@@ -1,7 +1,7 @@
 import "./index.css";
 import Img from "~/components/common/Img";
 import DTULogo from "~/assets/images/dtu-logo.png";
-import { For, Show } from "solid-js";
+import { createMemo, For, onMount, Show } from "solid-js";
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
 import Column from "~/components/common/Column";
@@ -11,6 +11,7 @@ import { useNavigate } from "@solidjs/router";
 import { User } from "~/api/types";
 import AvatarPlaceholder from "~/assets/images/member-placeholder.png";
 import Settings from "~/assets/icons/Settings";
+import { useTimer } from "~/utils/utils";
 
 type BannerProps = {
   title: string;
@@ -19,14 +20,11 @@ type BannerProps = {
 };
 
 export default function (props: BannerProps) {
-  const { researchGroups, Executor, API, isAdmin } = useAppContext();
-  const navigate = useNavigate();
-
   return (
     <Row class={"banner w-full gap-2"}>
       <Logo />
       <AdminUser user={props.user} />
-      <Row class={"name"}>{props.title}</Row>
+      <BannerText title={props.title} />
       <Row class={"flex-1"} />
       <ResearchGroups show={props.showResearchGroups} />
     </Row>
@@ -86,6 +84,52 @@ function AdminUser(props: { user?: User }) {
         </Column>
       </Row>
     </Show>
+  );
+}
+
+function BannerText(props: { title: string }) {
+  const { isAdmin } = useAppContext();
+
+  // convert string into character array
+  const titleAsArray = createMemo(() => {
+    // Get character array as each character is a separate string
+    let charArray = props.title.split("");
+    // Handle space characters
+    return charArray.map((char) => (char === " " ? "\u00A0" : char));
+  });
+
+  const timer = useTimer({
+    handler: () => {
+      bannerTextContainer.classList.contains("animate-letter-jump")
+        ? bannerTextContainer.classList.remove("animate-letter-jump")
+        : bannerTextContainer.classList.add("animate-letter-jump");
+    },
+    type: "interval",
+    delayMs: 5000, // Half of the color transition time
+  });
+
+  onMount(() => {
+    if (!isAdmin()) {
+      timer.start();
+    }
+  });
+
+  let bannerTextContainer: HTMLDivElement = null!;
+
+  return (
+    <Row ref={bannerTextContainer} class={"banner-text animate-letter-jump"}>
+      <For each={titleAsArray()}>
+        {(char, index) => (
+          <span
+            style={{
+              "animation-delay": `${index() * 0.25}s`,
+            }}
+          >
+            {char}
+          </span>
+        )}
+      </For>
+    </Row>
   );
 }
 
