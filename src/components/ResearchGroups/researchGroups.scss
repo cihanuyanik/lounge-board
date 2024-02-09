@@ -3,6 +3,14 @@
   width: 100%;
   position: relative;
 
+  .title-container {
+    img {
+      border-radius: var(--radii-2xl);
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+
   .btn-edit-res-groups {
     height: 40px;
     width: 40px;

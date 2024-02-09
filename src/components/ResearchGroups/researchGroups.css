@@ -3,6 +3,11 @@
   width: 100%;
   position: relative;
 }
+.research-groups-container .title-container img {
+  border-radius: var(--radii-2xl);
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
 .research-groups-container .btn-edit-res-groups {
   height: 40px;
   width: 40px;

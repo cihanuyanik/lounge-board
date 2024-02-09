@@ -20,6 +20,7 @@ export default function ResearchGroups() {
     <BlockContainer
       title={researchGroups.active ? researchGroups.active.name : ""}
       class={"research-groups-container"}
+      titleIcon={researchGroups.active ? researchGroups.active.bannerImage : ""}
     >
       <Show when={isAdmin()}>
         <Button
