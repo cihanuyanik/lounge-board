@@ -10,9 +10,9 @@ import Dialog, {
   DialogControls,
   DialogRef,
 } from "~/components/common/Dialog";
-import ImageSelectInput from "~/components/ImageSelectInput";
 import { useAppContext } from "~/AppContext";
 import { detectChanges } from "~/utils/utils";
+import Avatar from "~/components/common/Avatar";
 
 export type CreateEditMemberDialogResult = {
   result: "Accept" | "Cancel";
@@ -128,7 +128,14 @@ function _CreateEditMember(props: { ref: DialogRef }) {
       }}
     >
       <Row class={"member-item"}>
-        <Avatar />
+        <Avatar
+          imgSrc={state.member.image}
+          enableImageSelect={true}
+          enableImageCrop={true}
+          onImageSelected={(image) =>
+            mutate((state) => (state.member.image = image))
+          }
+        />
         <TextInfo />
       </Row>
 
@@ -156,37 +163,6 @@ function _CreateEditMember(props: { ref: DialogRef }) {
         }}
       />
     </Dialog>
-  );
-}
-
-function Avatar() {
-  const { state, mutate } = useDialogContext();
-
-  let imageCropDialog: HTMLDialogElement = null!;
-
-  return (
-    <Show when={state !== undefined}>
-      <Row class={"avatar"}>
-        <Img src={state.member.image || MemberImagePlaceholder} />
-        <ImageSelectInput
-          onImageSelected={async (image) => {
-            const reader = new FileReader();
-            const result = await reader.readAsyncAsDataURL(image);
-            if (!result || typeof result !== "string" || result === "") return;
-            const dResult =
-              await imageCropDialog.ShowModal<ImageCropResult>(result);
-            if (dResult.result === "Cancel") return;
-            mutate((state) => (state.member.image = dResult.croppedImage));
-          }}
-        />
-
-        <ImageCropDialog
-          ref={imageCropDialog}
-          aspectRatio={250 / 300}
-          rounded={"full"}
-        />
-      </Row>
-    </Show>
   );
 }
 

@@ -26,16 +26,9 @@
     padding-left: var(--space-4);
     padding-right: var(--space-4);
 
-    .avatar {
-      height: 100%;
-      padding: var(--space-1);
-      position: relative;
-
-      img {
-        flex: 1;
-        border-radius: 50% 50%;
-        box-shadow: 0 0 10px 4px var(--color-primary-darker);
-      }
+    > .avatar {
+      height: 80px;
+      width: 68px;
     }
 
     p {

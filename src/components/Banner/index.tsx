@@ -9,9 +9,9 @@ import Button from "~/components/common/Button";
 import Logout from "~/assets/icons/Logout";
 import { useNavigate } from "@solidjs/router";
 import { User } from "~/api/types";
-import AvatarPlaceholder from "~/assets/images/member-placeholder.png";
 import Settings from "~/assets/icons/Settings";
 import { useTimer } from "~/utils/utils";
+import Avatar from "~/components/common/Avatar";
 
 type BannerProps = {
   title: string;
@@ -53,9 +53,7 @@ function AdminUser(props: { user?: User }) {
   return (
     <Show when={props.user}>
       <Row class={"user"}>
-        <Row class={"avatar"}>
-          <Img src={props.user?.photoURL || AvatarPlaceholder}></Img>
-        </Row>
+        <Avatar imgSrc={props.user?.photoURL!} />
         <Column>
           <p>{"Welcome"}</p>
           <p>{props.user?.displayName}</p>

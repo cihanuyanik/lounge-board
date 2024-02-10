@@ -1,11 +1,10 @@
-import Img from "~/components/common/Img";
-import MemberImagePlaceholder from "~/assets/images/member-placeholder.png";
 import DragHandle from "~/components/DragToReorder/DragHandle";
 import { Show } from "solid-js";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
 import Tick from "~/assets/icons/Tick";
+import Avatar from "~/components/common/Avatar";
 
 type MemberItemProps = {
   id: string;
@@ -39,11 +38,7 @@ export default function MemberItem(props: MemberItemProps) {
           : () => props.editDialog.ShowModal(members.entities[props.id])
       }
     >
-      <Row class={"avatar"}>
-        <Img
-          src={members.entities[props.id]?.image || MemberImagePlaceholder}
-        />
-      </Row>
+      <Avatar imgSrc={members.entities[props.id]?.image} />
 
       <Column class={"name-role"}>
         <Row class={"name"}>{members.entities[props.id]?.name}</Row>

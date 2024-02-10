@@ -39,16 +39,6 @@
 .member-item.cursor-pointer {
   cursor: pointer;
 }
-.member-item .avatar {
-  height: 100px;
-  width: 85px;
-  position: relative;
-}
-.member-item .avatar img {
-  flex: 1;
-  border-radius: 50% 50%;
-  box-shadow: 0 0 10px 4px var(--color-primary-darker);
-}
 .member-item .name-role {
   flex: 1;
   gap: var(--space-2);
@@ -95,19 +85,6 @@
 }
 .create-edit-member-dialog .name-role > textarea::placeholder {
   color: var(--color-darkgray);
-}
-.create-edit-member-dialog .avatar button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 40px;
-  width: 40px;
-  padding: var(--space-1);
-  background-color: transparent;
-  opacity: 0;
-}
-.create-edit-member-dialog .avatar:hover button {
-  opacity: 1;
 }
 
 /*# sourceMappingURL=members.css.map */

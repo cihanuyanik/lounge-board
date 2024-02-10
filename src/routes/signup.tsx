@@ -8,16 +8,14 @@ import Email from "~/assets/icons/Email";
 import Password from "~/assets/icons/Password";
 import Button from "~/components/common/Button";
 import Tick from "~/assets/icons/Tick";
-import Img from "~/components/common/Img";
 import BusyDialog from "~/components/BusyDialog";
 import MessageBox from "~/components/MessageBox";
 import DefaultAvatar from "~/assets/images/member-placeholder.png";
-import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
 import { createMemo, createSignal } from "solid-js";
 import Footer from "~/components/Footer";
 import { useNavigate } from "@solidjs/router";
 import Banner from "~/components/Banner";
-import ImageSelectInput from "~/components/ImageSelectInput";
+import Avatar from "~/components/common/Avatar";
 
 export default function Home() {
   return (
@@ -56,8 +54,6 @@ function _Signup() {
     );
   });
 
-  let imageCropDialog: HTMLDialogElement = null!;
-
   return (
     <main>
       <Title>Lounge Board - Sign up</Title>
@@ -65,28 +61,12 @@ function _Signup() {
         <Banner title={"Sign-up"} />
 
         <Column class={"input-form"}>
-          <Row class={"profile-image"}>
-            <Img src={avatar()} />
-            <ImageSelectInput
-              onImageSelected={async (image) => {
-                const reader = new FileReader();
-                const result = await reader.readAsyncAsDataURL(image);
-                if (!result || typeof result !== "string" || result === "")
-                  return;
-
-                const dResult =
-                  await imageCropDialog.ShowModal<ImageCropResult>(result);
-                if (dResult.result === "Cancel") return;
-                setAvatar(dResult.croppedImage);
-              }}
-            />
-
-            <ImageCropDialog
-              ref={imageCropDialog}
-              aspectRatio={250 / 300}
-              rounded={"full"}
-            />
-          </Row>
+          <Avatar
+            imgSrc={avatar()}
+            enableImageSelect={true}
+            enableImageCrop={true}
+            onImageSelected={(image) => setAvatar(image)}
+          />
           <Input
             label={"Full Name"}
             type={"text"}

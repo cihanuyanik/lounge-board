@@ -18,14 +18,13 @@ import {
   createSignal,
   onCleanup,
   onMount,
-  Show,
 } from "solid-js";
 import DefaultAvatar from "~/assets/images/member-placeholder.png";
 import { waitUntil } from "~/utils/utils";
 import { useNavigate } from "@solidjs/router";
 import Banner from "~/components/Banner";
 import { isServer } from "solid-js/web";
-import ImageSelectInput from "~/components/ImageSelectInput";
+import Avatar from "~/components/common/Avatar";
 
 export default function Home() {
   return (
@@ -115,8 +114,6 @@ function _Profile() {
     () => !isProviderUpdatable() || name() === "" || avatar() === DefaultAvatar,
   );
 
-  let imageCropDialog: HTMLDialogElement = null!;
-
   return (
     <main>
       <Title>Lounge Board - Profile</Title>
@@ -124,30 +121,13 @@ function _Profile() {
         <Banner title={"Update Profile"} user={user()} />
 
         <Column class={"input-form"}>
-          <Row class={"profile-image"}>
-            <Img src={avatar()} />
-            <Show when={isProviderUpdatable()}>
-              <ImageSelectInput
-                onImageSelected={async (image) => {
-                  const reader = new FileReader();
-                  const result = await reader.readAsyncAsDataURL(image);
-                  if (!result || typeof result !== "string" || result === "")
-                    return;
+          <Avatar
+            imgSrc={avatar()}
+            enableImageSelect={isProviderUpdatable()}
+            enableImageCrop={isProviderUpdatable()}
+            onImageSelected={(image) => setAvatar(image)}
+          />
 
-                  const dResult =
-                    await imageCropDialog.ShowModal<ImageCropResult>(result);
-                  if (dResult.result === "Cancel") return;
-                  setAvatar(dResult.croppedImage);
-                }}
-              />
-
-              <ImageCropDialog
-                ref={imageCropDialog}
-                aspectRatio={250 / 300}
-                rounded={"full"}
-              />
-            </Show>
-          </Row>
           <Input
             label={"Full Name"}
             type={"text"}

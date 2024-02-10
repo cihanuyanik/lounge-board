@@ -1,0 +1,25 @@
+.avatar {
+  height: 100px;
+  width: 85px;
+  position: relative;
+}
+.avatar img {
+  flex: 1;
+  border-radius: 50% 50%;
+  box-shadow: 0 0 10px 4px var(--color-primary-darker);
+}
+.avatar button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 40px;
+  width: 40px;
+  padding: var(--space-1);
+  background-color: transparent;
+  opacity: 0;
+}
+.avatar:hover button {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=index.css.map */
