@@ -30,11 +30,9 @@ export default function ResearchGroups() {
         >
           <Edit />
         </Button>
-      </Show>
-      <Carousel />
-      <Show when={isAdmin()}>
         <EditResearchGroups ref={editDialog} />
       </Show>
+      <Carousel />
     </BlockContainer>
   );
 }

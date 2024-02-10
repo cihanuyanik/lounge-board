@@ -101,9 +101,8 @@ export default function Members() {
         >
           <MemberContainer editDialog={() => updateDialog} />
         </DragToReorder>
+        <CreateEditMember ref={updateDialog} />
       </Show>
-
-      <Show when={isAdmin()}>{<CreateEditMember ref={updateDialog} />}</Show>
     </BlockContainer>
   );
 }

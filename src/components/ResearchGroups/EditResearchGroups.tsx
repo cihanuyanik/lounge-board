@@ -287,45 +287,6 @@ function ResearchGroupSelector() {
   const { state, mutate } = useDialogContext();
   if (state === undefined) return;
 
-  function onNewResearchGroup() {
-    mutate((state) => {
-      const id = uuid();
-      state.ids.push(id);
-      state.entities[id] = {
-        id: id,
-        name: "New Research Group",
-        bannerImage: "",
-        image: "",
-        // @ts-ignore
-        createdAt: new Date(),
-      };
-      state.selectedId = id;
-    });
-  }
-
-  function onDeleteResearchGroup() {
-    mutate((state) => {
-      state.ids = state.ids.filter((id) => id !== state.selectedId);
-      delete state.entities[state.selectedId];
-
-      if (state.ids.length === 0) {
-        const id = uuid();
-        state.ids.push(id);
-        state.entities[id] = {
-          id: id,
-          name: "New Research Group",
-          bannerImage: "",
-          image: "",
-          // @ts-ignore
-          createdAt: new Date(),
-        };
-        state.selectedId = id;
-      } else {
-        state.selectedId = state.ids[0];
-      }
-    });
-  }
-
   return (
     <Row class={"research-group-selector"}>
       <Dropdown
@@ -347,7 +308,28 @@ function ResearchGroupSelector() {
       </Dropdown>
 
       <Button
-        onClick={onDeleteResearchGroup}
+        onClick={() =>
+          mutate((state) => {
+            state.ids = state.ids.filter((id) => id !== state.selectedId);
+            delete state.entities[state.selectedId];
+
+            if (state.ids.length === 0) {
+              const id = uuid();
+              state.ids.push(id);
+              state.entities[id] = {
+                id: id,
+                name: "New Research Group",
+                bannerImage: "",
+                image: "",
+                // @ts-ignore
+                createdAt: new Date(),
+              };
+              state.selectedId = id;
+            } else {
+              state.selectedId = state.ids[0];
+            }
+          })
+        }
         popupContent={"Delete active research group."}
         popupDirection={"bottom-left"}
       >
@@ -355,7 +337,21 @@ function ResearchGroupSelector() {
       </Button>
 
       <Button
-        onClick={onNewResearchGroup}
+        onClick={() =>
+          mutate((state) => {
+            const id = uuid();
+            state.ids.push(id);
+            state.entities[id] = {
+              id: id,
+              name: "New Research Group",
+              bannerImage: "",
+              image: "",
+              // @ts-ignore
+              createdAt: new Date(),
+            };
+            state.selectedId = id;
+          })
+        }
         popupContent={"Add new research group."}
         popupDirection={"bottom-left"}
       >

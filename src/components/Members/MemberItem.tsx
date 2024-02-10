@@ -52,12 +52,12 @@ export default function MemberItem(props: MemberItemProps) {
 
       <Show when={isAdmin()}>
         <DragHandle />
-      </Show>
 
-      <Show when={isAdmin() && members.entities[props.id]?.isSelected}>
-        <Row class={"item-selected-marker"}>
-          <Tick />
-        </Row>
+        <Show when={members.entities[props.id]?.isSelected}>
+          <Row class={"item-selected-marker"}>
+            <Tick />
+          </Row>
+        </Show>
       </Show>
     </Row>
   );
