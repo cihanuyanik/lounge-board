@@ -63,10 +63,8 @@
   }
 }
 .banner .banner-text span {
-  background: url("../../assets/images/flame.gif");
-  background-size: cover;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-text);
+  text-shadow: 0 0 10px black;
 }
 .banner .banner-text.animate-letter-jump span {
   animation: letterJump 1s ease-in-out;
