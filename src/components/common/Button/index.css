@@ -64,38 +64,4 @@
   color: crimson;
 }
 
-.hover-popup {
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: var(--color-text);
-  background-color: var(--color-tertiary-darker);
-  padding: var(--space-2);
-  border-radius: var(--radii-xl);
-  box-shadow: 0 0 10px 4px var(--color-tertiary-lighter);
-  font-size: var(--font-sizes-xs);
-  font-style: italic;
-  opacity: 0;
-  white-space: nowrap;
-  z-index: 10;
-  pointer-events: none;
-  user-select: none;
-  transition: opacity 200ms ease-in-out;
-}
-.hover-popup.top-left {
-  transform: translate(-100%, -100%);
-}
-.hover-popup.top-right {
-  transform: translate(0, -100%);
-}
-.hover-popup.bottom-left {
-  transform: translate(-100%, 0);
-}
-.hover-popup.bottom-right {
-  transform: translate(0, 0);
-}
-.hover-popup.open {
-  opacity: 1;
-}
-
 /*# sourceMappingURL=index.css.map */
