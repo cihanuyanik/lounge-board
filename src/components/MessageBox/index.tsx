@@ -1,4 +1,5 @@
-import "./index.css";
+// import "./index.css";
+import styles from "./index.module.scss";
 import { DialogResult } from "~/components/MessageBox/store";
 import Button from "~/components/common/Button";
 import ErrorImage from "~/assets/images/error.png";
@@ -29,9 +30,9 @@ export default function () {
       id={"message-box"}
       ref={(el) => mutateMessageBox((state) => (state.dialogRef = el))}
     >
-      <Column class={"message-box"}>
-        <Row class={"title w-full"}>{messageBox.title}</Row>
-        <Row class={"gap-2 w-full content"}>
+      <Column class={styles.MessageBox}>
+        <Row class={styles.title}>{messageBox.title}</Row>
+        <Row class={styles.content}>
           <img
             src={iconMap[messageBox.type]}
             alt={messageBox.type}
@@ -41,17 +42,19 @@ export default function () {
           <p>{messageBox.message}</p>
         </Row>
 
-        <Row class={"controls"}>
+        <Row class={styles.controls}>
           {messageBox.type === "question" ? (
             <>
               <Button
-                class={"button-rect green"}
+                class={styles.green}
+                rectangle
                 onClick={async () => messageBox.close(DialogResult.Yes)}
               >
                 Yes <Tick />
               </Button>
               <Button
-                class={"button-rect red"}
+                class={styles.red}
+                rectangle
                 onClick={async () => messageBox.close(DialogResult.No)}
               >
                 No <Cross />
@@ -59,7 +62,8 @@ export default function () {
             </>
           ) : (
             <Button
-              class={"button-rect green"}
+              class={styles.green}
+              rectangle
               onClick={async () => messageBox.close(DialogResult.OK)}
             >
               OK <Tick />

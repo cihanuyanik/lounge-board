@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import Dialog, { DialogRef } from "~/components/common/Dialog";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
@@ -20,16 +20,14 @@ export default function (props: { ref: DialogRef }) {
     <Dialog
       id={"email-verification-dialog"}
       ref={props.ref}
-      class={"email-verification-dialog"}
-      onBeforeShow={() => {
-        dialogResult = "Cancel";
-      }}
+      class={styles.EmailVerificationDialog}
+      onBeforeShow={() => (dialogResult = "Cancel")}
       onClose={(ev) => (ev.target as HTMLDialogElement)?.Resolve(dialogResult)}
     >
       <Column>
-        <Row class={"title"}>Email Verification Required!</Row>
+        <Row class={styles.title}>Email Verification Required!</Row>
 
-        <Column class={"message"}>
+        <Column class={styles.message}>
           <img
             src={EmailVerificationImage}
             alt={"verify-email"}
@@ -51,7 +49,8 @@ export default function (props: { ref: DialogRef }) {
             email.
           </p>
           <Button
-            class={"button-rect resend"}
+            class={styles.resend}
+            rectangle
             onClick={async () => {
               await Executor.run(() => API.AuthService.verifyEmail(), {
                 busyDialogMessage: "Resending verification email...",
@@ -65,9 +64,10 @@ export default function (props: { ref: DialogRef }) {
           </Button>
         </Column>
       </Column>
-      <Row class={"control-buttons"}>
+      <Row class={styles.controlButtons}>
         <Button
-          class={"button-rect green"}
+          class={styles.green}
+          rectangle
           onClick={async () => {
             await Executor.run(
               async () => {
@@ -92,7 +92,8 @@ export default function (props: { ref: DialogRef }) {
           Verified!
         </Button>
         <Button
-          class={"button-rect red"}
+          class={styles.red}
+          rectangle
           onClick={() => {
             const dialog = document.getElementById(
               "email-verification-dialog",

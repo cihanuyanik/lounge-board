@@ -1,7 +1,6 @@
+import styles from "./members.module.scss";
 import { createEffect, on, Show } from "solid-js";
-import Img from "~/components/common/Img";
 import MemberImagePlaceholder from "~/assets/images/member-placeholder.png";
-import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import { Member } from "~/api/types";
@@ -44,7 +43,7 @@ function _CreateEditMember(props: { ref: DialogRef }) {
   return (
     <Dialog
       id={"create-edit-member-dialog"}
-      class={"create-edit-member-dialog"}
+      class={styles.editDialog}
       ref={props.ref}
       onAfterShow={(ev: CustomEvent) => {
         const member = ev.detail as Member;
@@ -127,7 +126,7 @@ function _CreateEditMember(props: { ref: DialogRef }) {
         }
       }}
     >
-      <Row class={"member-item"}>
+      <Row class={styles.memberItem}>
         <Avatar
           imgSrc={state.member.image}
           enableImageSelect={true}
@@ -186,14 +185,14 @@ function TextInfo() {
 
   return (
     <Show when={state !== undefined}>
-      <Column class={"name-role"}>
+      <Column class={styles.nrContainer}>
         <input
           value={state.member.name}
           onInput={(e) =>
             mutate((state) => (state.member.name = e.target.value || ""))
           }
           placeholder={"Member Name"}
-          class={"name"}
+          class={styles.name}
         />
 
         <textarea
@@ -205,7 +204,7 @@ function TextInfo() {
             );
           }}
           placeholder={"Member Role"}
-          class={"role"}
+          class={styles.role}
         />
       </Column>
     </Show>

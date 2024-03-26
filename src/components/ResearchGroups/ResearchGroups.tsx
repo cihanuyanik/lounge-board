@@ -1,4 +1,5 @@
-import "./researchGroups.css";
+// import "./researchGroups.css";
+import styles from "./researchGroups.module.scss";
 import { createEffect, For, on, onMount, Show } from "solid-js";
 import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
@@ -19,12 +20,12 @@ export default function ResearchGroups() {
   return (
     <BlockContainer
       title={researchGroups.active ? researchGroups.active.name : ""}
-      class={"research-groups-container"}
+      class={styles.researchGroupsContainer}
       titleIcon={researchGroups.active ? researchGroups.active.bannerImage : ""}
     >
       <Show when={isAdmin()}>
         <Button
-          class={"btn-edit-res-groups"}
+          class={styles.btnEdit}
           onClick={() => editDialog.ShowModal(researchGroups)}
           popupContent={"Edit research groups"}
         >
@@ -167,7 +168,7 @@ function Carousel() {
   );
 
   return (
-    <Row class={"res-group-image-container"}>
+    <Row class={styles.imageContainer}>
       <Img ref={(el) => (resGroupImageRef = el)} />
       <Show when={isAdmin()}>
         <ImageShiftControls />
@@ -181,7 +182,7 @@ function ImageShiftControls() {
   const { researchGroups } = useAppContext();
 
   return (
-    <Row class={"image-shift-controls"}>
+    <Row class={styles.carouselControls}>
       <Button onClick={() => researchGroups.prev()}>
         <Left />
       </Button>
@@ -196,12 +197,12 @@ function CarouselBullets(props: { resetInterval: () => void }) {
   const { researchGroups, isAdmin } = useAppContext();
 
   return (
-    <Row class={"carousel-bullets"}>
+    <Row class={styles.carouselBullets}>
       <For each={researchGroups.ids}>
         {(id) => (
           <div
-            class={"bullet"}
-            classList={{ active: researchGroups.active?.id === id }}
+            class={styles.bullet}
+            classList={{ [styles.active]: researchGroups.active?.id === id }}
             onClick={() => {
               researchGroups.setActive(id);
               if (!isAdmin()) {

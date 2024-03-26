@@ -1,0 +1,42 @@
+.Footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  width: 100%;
+  font-size: var(--font-sizes-xl);
+  gap: var(--space-2);
+  border-radius: var(--radii-xl);
+  animation: pulse 1s ease-in-out infinite alternate;
+  margin-bottom: calc(-1 * var(--space-2));
+  box-shadow: 0 0 10px 5px var(--color-primary-darker);
+
+  span {
+    text-decoration: underline;
+  }
+
+  a {
+    text-decoration: underline;
+    color: var(--color-tertiary);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.5;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import "./posts.css";
+import styles from "./posts.module.scss";
 import IFramePost, {
   IFramePostProps,
 } from "~/components/News/Posts/IFramePost";
@@ -10,13 +10,13 @@ type TwitterPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 
 export default function TwitterPost(props: TwitterPostProps) {
   return (
-    <div class={"post-container twitter"}>
+    <div class={`${styles.postContainer} ${styles.twitter}`}>
       <IFramePost
         baseUrl={"twitter.com"}
         expInternalType={"blockquote"}
         {...props}
       />
-      <Row class={"logo"}>
+      <Row class={styles.logo}>
         <Img src={TwitterPostImage}></Img>
       </Row>
     </div>

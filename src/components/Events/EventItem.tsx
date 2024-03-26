@@ -1,4 +1,5 @@
-import { Accessor, Show } from "solid-js";
+import styles from "./events.module.scss";
+import { Accessor } from "solid-js";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
@@ -8,8 +9,8 @@ import CalendarDate from "~/assets/icons/CalendarDate";
 import moment from "moment/moment";
 import Clock from "~/assets/icons/Clock";
 import Duration from "~/assets/icons/Duration";
-import Tick from "~/assets/icons/Tick";
 import { buildDurationString } from "~/utils/DateExtensions";
+import SelectedMarker from "~/components/SelectedMarker";
 
 type Props = {
   id: string;
@@ -22,12 +23,12 @@ export default function EventItem(props: Props) {
 
   return (
     <Column
-      class={"event-card"}
+      class={styles.eventItem}
       classList={{
-        "past-event-item-background": events.entities[props.id]?.isPast,
-        "item-selected": events.entities[props.id]?.isSelected,
-        "cursor-pointer": isAdmin(),
-        "scroll-item": !isAdmin(),
+        [styles.isPast]: events.entities[props.id]?.isPast,
+        [styles.selected]: events.entities[props.id]?.isSelected,
+        [styles.pointer]: isAdmin(),
+        [styles.scrollItem]: !isAdmin(),
       }}
       onclick={
         !isAdmin()
@@ -44,21 +45,20 @@ export default function EventItem(props: Props) {
           : () => props.editDialog.ShowModal(events.entities[props.id])
       }
     >
-      <Column class={"event-card-header"}>
-        <Row class={"icon"}>
+      <Column class={styles.header}>
+        <Row class={styles.icon}>
           <Img src={EventsHeaderImage} />
         </Row>
-        <Row class={"name"}>
+        <Row class={styles.name}>
           {events.entities[props.id].name || "Event Name"}
         </Row>
-        <Row class={"horizontal-line"}></Row>
-        <Row class={"details"}>
+        <Row class={styles.details}>
           {events.entities[props.id].details || "Event Details"}
         </Row>
       </Column>
 
-      <Row class={"event-card-datetime-info"}>
-        <Row class={"date"}>
+      <Row class={styles.datetimeInfo}>
+        <Row class={styles.date}>
           <CalendarDate />
           <Column class={"flex-1"}>
             <Row>
@@ -71,7 +71,7 @@ export default function EventItem(props: Props) {
             </Row>
           </Column>
         </Row>
-        <Row class={"time"}>
+        <Row class={styles.time}>
           <Clock />
           <Column class={"flex-1"}>
             <Row>
@@ -82,7 +82,7 @@ export default function EventItem(props: Props) {
             </Row>
           </Column>
         </Row>
-        <Row class={"duration"}>
+        <Row class={styles.duration}>
           <Duration />
           <Column class={"flex-1"}>
             {buildDurationString(
@@ -92,11 +92,9 @@ export default function EventItem(props: Props) {
           </Column>
         </Row>
       </Row>
-      <Show when={isAdmin() && events.entities[props.id]?.isSelected}>
-        <Row class={"item-selected-marker"}>
-          <Tick />
-        </Row>
-      </Show>
+      <SelectedMarker
+        visible={isAdmin() && events.entities[props.id]?.isSelected}
+      />
     </Column>
   );
 }

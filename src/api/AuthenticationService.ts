@@ -74,7 +74,7 @@ export class AuthenticationService {
       throw new Error("Microsoft sign in failed.");
     }
 
-    // Microsoft authentication does not return the photoURL
+    // Microsoft's authentication does not return the photoURL,
     // so we need to retrieve it manually by extra effort.
     const photoURL = userCred.user.photoURL;
     if (photoURL === null) {

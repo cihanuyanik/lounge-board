@@ -1,4 +1,4 @@
-import "./members.css";
+import styles from "./members.module.scss";
 import { For, onCleanup, onMount, Show } from "solid-js";
 import MemberItem from "~/components/Members/MemberItem";
 import CreateEditMember from "~/components/Members/CreateEditMember";
@@ -20,7 +20,7 @@ export default function Members() {
     <BlockContainer
       title={"Members"}
       titleIcon={MembersHeader}
-      class={"members-block-container"}
+      class={styles.blockContainer}
       onAddNewItem={!isAdmin() ? undefined : () => updateDialog.ShowModal()}
       onDeleteSelectedItems={
         !isAdmin()
@@ -146,12 +146,9 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
       ref={membersScrollableContainer}
       direction={"vertical"}
       hideScrollbar={true}
-      class={"members-scrollable-container"}
+      class={styles.scrollable}
     >
-      <div
-        ref={membersAnimationContainer}
-        class={"members-scroll-animation-wrapper"}
-      >
+      <div ref={membersAnimationContainer} class={styles.wrapper}>
         <For each={meta.membersDisplayOrder}>
           {(id) => <MemberItem id={id} editDialog={props.editDialog()} />}
         </For>

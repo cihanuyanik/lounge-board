@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import { JSX, Show, splitProps } from "solid-js";
 import HoverPopup, {
   Direction,
@@ -9,6 +9,7 @@ type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
   popupContent?: JSX.Element;
   popupDelay?: number;
   popupDirection?: Direction;
+  rectangle?: boolean;
 };
 
 export default function (props: ButtonProps) {
@@ -18,6 +19,7 @@ export default function (props: ButtonProps) {
     "popupContent",
     "popupDelay",
     "popupDirection",
+    "rectangle",
   ]);
 
   function popupPointerEnter(e: PointerEvent & { currentTarget: HTMLElement }) {
@@ -50,9 +52,12 @@ export default function (props: ButtonProps) {
 
   return (
     <button
-      // onPointerEnter={local.popupStore ? popupPointerEnter : undefined}
       onPointerEnter={local.popupContent ? popupPointerEnter : undefined}
-      class={`button-base${local.class ? " " + local.class : ""}`}
+      class={styles.Button}
+      classList={{
+        [styles.rectangle]: local.rectangle || false,
+        [local.class!]: local.class !== undefined,
+      }}
       {...rest}
     >
       {props.children}

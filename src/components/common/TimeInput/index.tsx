@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import Row from "~/components/common/Row";
 import Clock from "~/assets/icons/Clock";
 import { createEffect, createMemo, createSignal, onMount } from "solid-js";
@@ -72,12 +72,12 @@ export default function (props: Props) {
   });
 
   return (
-    <Row class={"time-input"}>
-      <Row class={"icon"}>
+    <Row class={styles.TimeInput}>
+      <Row class={styles.icon}>
         <Clock />
       </Row>
       <input
-        id={"hour"}
+        class={styles.hour}
         type={"number"}
         min={0}
         max={23}
@@ -103,7 +103,7 @@ export default function (props: Props) {
       />
       <p>:</p>
       <input
-        id={"minute"}
+        class={styles.minute}
         type={"number"}
         min={0}
         max={55}

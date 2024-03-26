@@ -1,0 +1,19 @@
+.Scrollable {
+  overflow: auto;
+  scrollbar-gutter: stable both-edges;
+  -webkit-overflow-scrolling: touch;
+}
+.Scrollable.horizontal {
+  height: 100%;
+}
+.Scrollable.vertical {
+  width: 100%;
+}
+.Scrollable.hideScrollbar {
+  scrollbar-width: none;
+}
+.Scrollable.hideScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/*# sourceMappingURL=index.module.css.map */

@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import { JSX, Show, splitProps } from "solid-js";
 
 type Props = {
@@ -12,7 +12,7 @@ export default function (props: Props) {
 
   return (
     <div
-      class={`input-container${local.class ? " " + local.class : ""}`}
+      class={`${styles.Input}${local.class ? " " + local.class : ""}`}
       style={{
         "--label-height": local.label ? "26px" : "0px",
         "--container-height": local.height ? `${local.height}px` : "70px",

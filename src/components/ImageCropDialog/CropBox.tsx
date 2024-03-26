@@ -1,3 +1,4 @@
+import styles from "./index.module.scss";
 import CenterIcon from "~/assets/icons/CenterIcon";
 import ResizeIcon from "~/assets/icons/ResizeIcon";
 import { createEffect, Show } from "solid-js";
@@ -30,7 +31,7 @@ export function CropBox(props: { ref: (el: HTMLDivElement) => void }) {
           props.ref(el);
           cropBoxRef = el;
         }}
-        class={"crop-box"}
+        class={styles.cropbox}
         style={{
           top: `${state.cropRegion?.y}px`,
           left: `${state.cropRegion?.x}px`,
@@ -75,7 +76,7 @@ function Center() {
 
   return (
     <Row
-      class={"tool center"}
+      class={`${styles.tool} ${styles.center}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;
@@ -128,7 +129,7 @@ function TopLeft() {
 
   return (
     <Row
-      class={"tool top-left"}
+      class={`${styles.tool} ${styles.topLeft}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;
@@ -202,7 +203,7 @@ function TopCenter() {
 
   return (
     <Row
-      class={"tool top-center"}
+      class={`${styles.tool} ${styles.topCenter}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;
@@ -252,7 +253,7 @@ function TopRight() {
 
   return (
     <Row
-      class={"tool top-right"}
+      class={`${styles.tool} ${styles.topRight}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;
@@ -321,7 +322,7 @@ function RightCenter() {
 
   return (
     <Row
-      class={"tool right-center"}
+      class={`${styles.tool} ${styles.rightCenter}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;
@@ -367,7 +368,7 @@ function BottomRight() {
 
   return (
     <Row
-      class={"tool bottom-right"}
+      class={`${styles.tool} ${styles.bottomRight}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;
@@ -439,7 +440,7 @@ function BottomCenter() {
 
   return (
     <Row
-      class={"tool bottom-center"}
+      class={`${styles.tool} ${styles.bottomCenter}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;
@@ -489,7 +490,7 @@ function BottomLeft() {
 
   return (
     <Row
-      class={"tool bottom-left"}
+      class={`${styles.tool} ${styles.bottomLeft}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;
@@ -566,7 +567,7 @@ function LeftCenter() {
 
   return (
     <Row
-      class={"tool left-center"}
+      class={`${styles.tool} ${styles.leftCenter}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         e.currentTarget.onpointermove = onPointerMove;

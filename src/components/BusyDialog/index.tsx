@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import BusyDialogGif from "~/assets/images/busydialog.gif";
 import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
@@ -12,7 +12,7 @@ export default function () {
       id={"busy-dialog"}
       ref={(el) => mutateBusyDialog((state) => (state.dialogRef = el))}
     >
-      <Column class={"busy-dialog-content"}>
+      <Column class={styles.BusyDialogContent}>
         <img src={BusyDialogGif} alt={"Busy Dialog gif"} />
         <p>{busyDialog.message}</p>
       </Column>

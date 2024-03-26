@@ -1,4 +1,5 @@
-import "./index.css";
+// import "./index.css";
+import styles from "./index.module.scss";
 import Img from "~/components/common/Img";
 import AvatarPlaceholder from "~/assets/images/member-placeholder.png";
 import Row from "~/components/common/Row";
@@ -13,13 +14,15 @@ type AvatarProps = {
   enableImageCrop?: boolean;
   cropAspectRatio?: number; // width / height default 250 / 300
   cropRounded?: "none" | "full" | number; // default "full"
+  class?: string;
 };
 
 export default function (props: AvatarProps) {
   let imageCropDialog: HTMLDialogElement = null!;
 
   return (
-    <Row class={"avatar"}>
+    // <Row class={"avatar"}>
+    <Row class={`${styles.Avatar}${props.class ? " " + props.class : ""}`}>
       <Img src={props.imgSrc || AvatarPlaceholder} />
 
       <Show when={props.enableImageSelect}>

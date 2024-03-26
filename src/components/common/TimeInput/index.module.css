@@ -1,0 +1,41 @@
+.TimeInput {
+  --container-height: 40px;
+  height: var(--container-height);
+}
+.TimeInput > .icon {
+  height: 100%;
+}
+.TimeInput > .icon > svg {
+  padding-right: 0;
+  height: 20px;
+  width: 20px;
+}
+.TimeInput > .hour,
+.TimeInput > .minute {
+  min-width: 0;
+  max-width: 26px;
+  border: none;
+  outline: none;
+  user-select: none;
+  background-color: transparent;
+  font-weight: bolder;
+}
+.TimeInput > .hour::-webkit-inner-spin-button, .TimeInput > .hour::-webkit-outer-spin-button,
+.TimeInput > .minute::-webkit-inner-spin-button,
+.TimeInput > .minute::-webkit-outer-spin-button {
+  appearance: none;
+  display: none;
+}
+.TimeInput > .hour {
+  text-align: right;
+}
+.TimeInput > .minute {
+  text-align: left;
+}
+.TimeInput p {
+  font-weight: bolder;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+/*# sourceMappingURL=index.module.css.map */

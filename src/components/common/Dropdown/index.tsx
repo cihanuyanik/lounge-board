@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import {
   Accessor,
   createEffect,
@@ -43,7 +43,7 @@ export default function (props: Props) {
 
         // There is a chance that the items are not yet rendered, waiting for the next tick
         waitUntil(() => dropdownMenu.children.length > 0, 50, 500).then(() => {
-          const items = dropdownMenu.querySelectorAll(".item");
+          const items = dropdownMenu.querySelectorAll(`.${styles.item}`);
 
           if (!items || items.length === 0) {
             setValueVisual(null!);
@@ -74,14 +74,14 @@ export default function (props: Props) {
   // noinspection HtmlUnknownAttribute
   return (
     <div
-      class={`dropdown${props.class ? " " + props.class : ""}`}
+      class={`${styles.Dropdown}${props.class ? " " + props.class : ""}`}
       onClick={() => setOpen((prev) => !prev)}
       style={props.rootStyle}
       // @ts-ignore
       use:clickOutside={() => setOpen(false)}
     >
-      <div class={"toggle"}>{valueVisual()}</div>
-      <div class={"arrow"} classList={{ rotate: open() }}>
+      <div class={styles.toggle}>{valueVisual()}</div>
+      <div class={styles.arrow} classList={{ [styles.rotate]: open() }}>
         <p>▼</p>
       </div>
       <div
@@ -101,7 +101,8 @@ export default function (props: Props) {
             );
           }
         }}
-        class={`menu${open() ? " open" : ""}`}
+        class={styles.menu}
+        classList={{ [styles.open]: open() }}
       >
         {props.children}
       </div>
@@ -113,11 +114,11 @@ export function DropdownItem(props: DropDownItemProps) {
   return (
     <div
       id={props.value}
-      class={"item"}
+      class={styles.item}
       onClick={(e) => {
         // Access parent menu div
         const menuNode = e.target.parentNode as HTMLDivElement;
-        if (menuNode.classList.contains("menu")) {
+        if (menuNode.classList.contains(styles.menu)) {
           menuNode.dispatchEvent(
             new CustomEvent("item-click", {
               detail: { value: props.value, source: e.target },

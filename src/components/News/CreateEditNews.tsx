@@ -1,3 +1,4 @@
+import styles from "./news.module.scss";
 import { For, Match, Show, Switch } from "solid-js";
 import { useAppContext } from "~/AppContext";
 import Dialog, {
@@ -101,7 +102,7 @@ function _CreateEditNews(props: { ref: DialogRef }) {
     <Show when={state !== undefined}>
       <Dialog
         id={"create-news-dialog"}
-        class={"create-news-dialog"}
+        class={styles.editDialog}
         ref={props.ref}
         onBeforeShow={(ev) => {
           const news = ev.detail as New;
@@ -152,12 +153,12 @@ function _CreateEditNews(props: { ref: DialogRef }) {
           }
         }}
       >
-        <Row class={"title"}>
+        <Row class={styles.title}>
           Create/Edit News
           <Img src={NewsHeader}></Img>
         </Row>
 
-        <Column class={"content"}>
+        <Column class={styles.content}>
           <NewsTypeSelection />
           <Switch>
             <Match when={state.news.type === "custom"}>
@@ -220,7 +221,7 @@ function NewsTypeSelection() {
       <For each={state?.newsTypes || []}>
         {(newsType) => (
           <DropdownItem value={newsType}>
-            <Row class={"dropdown-item-inner"}>
+            <Row class={styles.dropdownInnerItem}>
               <Img src={state.newsTypeDisplay[newsType].image} />
               {state.newsTypeDisplay[newsType].text}
             </Row>
@@ -249,7 +250,7 @@ function CustomPostInfo() {
         }}
       />
       <textarea
-        class={"html-code"}
+        class={styles.htmlCode}
         spellcheck={false}
         placeholder={"Post Html Code"}
         value={state.news.postHtml}
@@ -270,7 +271,7 @@ function SocialMediaPostEmbedCode() {
   return (
     <Column class={"w-full gap-3"}>
       <textarea
-        class={"html-code"}
+        class={styles.htmlCode}
         spellcheck={false}
         placeholder={"Post Html Embed Code"}
         value={state.news.postHtml}
@@ -296,7 +297,7 @@ function Preview() {
         });
       }}
       direction={"vertical"}
-      class={"preview"}
+      class={styles.preview}
     >
       <Switch fallback={null}>
         <Match when={state.news.type === "custom"}>
@@ -350,7 +351,7 @@ function SizeAdjuster() {
   if (state === undefined) return null;
 
   return (
-    <Column class={"size-adjustor"}>
+    <Column class={styles.sizeAdjustor}>
       <Button
         popupContent={"Decrease frame height"}
         onPointerDown={(e) => {

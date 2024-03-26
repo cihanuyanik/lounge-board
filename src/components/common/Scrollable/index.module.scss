@@ -1,0 +1,20 @@
+.Scrollable {
+  overflow: auto;
+  scrollbar-gutter: stable both-edges;
+  -webkit-overflow-scrolling: touch;
+
+  &.horizontal {
+    height: 100%;
+  }
+
+  &.vertical {
+    width: 100%;
+  }
+
+  &.hideScrollbar {
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

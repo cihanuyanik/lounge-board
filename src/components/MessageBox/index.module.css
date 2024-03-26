@@ -1,0 +1,32 @@
+.MessageBox {
+  background-color: var(--color-primary);
+}
+.MessageBox .title {
+  height: 40px;
+  background-color: var(--color-primary-darker);
+  border-bottom: 5px solid var(--color-primary-darker);
+  width: 100%;
+}
+.MessageBox .content {
+  justify-content: stretch;
+  padding: var(--space-5) var(--space-2);
+  background-color: var(--color-tertiary);
+  font-size: var(--font-sizes-md);
+  border: 3px solid var(--color-primary);
+  width: 100%;
+  gap: var(--space-2);
+}
+.MessageBox .controls {
+  width: 100%;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-top: 5px solid var(--color-primary-darker);
+}
+.MessageBox .green {
+  color: lawngreen !important;
+}
+.MessageBox .red {
+  color: crimson !important;
+}
+
+/*# sourceMappingURL=index.module.css.map */

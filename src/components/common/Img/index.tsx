@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import { JSX, splitProps } from "solid-js";
 
 export default function (props: JSX.ImgHTMLAttributes<HTMLImageElement>) {
@@ -6,7 +6,7 @@ export default function (props: JSX.ImgHTMLAttributes<HTMLImageElement>) {
 
   return (
     <img
-      class={`image-base${local.class ? " " + local.class : ""}`}
+      class={`${styles.Img}${local.class ? " " + local.class : ""}`}
       alt={local.alt}
       {...rest}
     />

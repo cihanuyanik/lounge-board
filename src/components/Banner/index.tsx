@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import Img from "~/components/common/Img";
 import DTULogo from "~/assets/images/dtu-logo.png";
 import { createMemo, For, onMount, Show } from "solid-js";
@@ -21,7 +21,7 @@ type BannerProps = {
 
 export default function (props: BannerProps) {
   return (
-    <Row class={"banner w-full gap-2"}>
+    <Row class={styles.Banner}>
       <Logo />
       <AdminUser user={props.user} />
       <BannerText title={props.title} />
@@ -38,7 +38,7 @@ function Logo() {
   return (
     <Img
       src={DTULogo}
-      class={"dtu-logo"}
+      class={styles.logo}
       onClick={() => {
         !isAdmin() ? navigate("/admin") : navigate("/");
       }}
@@ -52,8 +52,8 @@ function AdminUser(props: { user?: User }) {
 
   return (
     <Show when={props.user}>
-      <Row class={"user"}>
-        <Avatar imgSrc={props.user?.photoURL!} />
+      <Row class={styles.user}>
+        <Avatar imgSrc={props.user?.photoURL!} class={styles.avatar} />
         <Column>
           <p>{"Welcome"}</p>
           <p>{props.user?.displayName}</p>
@@ -98,9 +98,9 @@ function BannerText(props: { title: string }) {
 
   const timer = useTimer({
     handler: () => {
-      bannerTextContainer.classList.contains("animate-letter-jump")
-        ? bannerTextContainer.classList.remove("animate-letter-jump")
-        : bannerTextContainer.classList.add("animate-letter-jump");
+      bannerTextContainer.classList.contains(styles.animateLetterJump)
+        ? bannerTextContainer.classList.remove(styles.animateLetterJump)
+        : bannerTextContainer.classList.add(styles.animateLetterJump);
     },
     type: "interval",
     delayMs: 5000, // Half of the color transition time
@@ -115,7 +115,10 @@ function BannerText(props: { title: string }) {
   let bannerTextContainer: HTMLDivElement = null!;
 
   return (
-    <Row ref={bannerTextContainer} class={"banner-text animate-letter-jump"}>
+    <Row
+      ref={bannerTextContainer}
+      class={`${styles.bannerText} ${styles.animateLetterJump}`}
+    >
       <For each={titleAsArray()}>
         {(char, index) => (
           <span
@@ -136,13 +139,13 @@ function ResearchGroups(props: { show?: boolean }) {
 
   return (
     <Show when={props.show}>
-      <Row class={"group-images gap-4"}>
+      <Row class={styles.researchGroupImages}>
         <For each={researchGroups.ids}>
           {(id) => (
             <Img
               src={researchGroups.entities[id].bannerImage}
               classList={{
-                active: researchGroups.active.id === id,
+                [styles.active]: researchGroups.active.id === id,
               }}
             />
           )}

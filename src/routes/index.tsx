@@ -2,7 +2,7 @@ import { Title } from "@solidjs/meta";
 import Events from "~/components/Events/Events";
 import ResearchGroups from "~/components/ResearchGroups/ResearchGroups";
 import News from "~/components/News/News";
-import { createMemo, createSignal, onCleanup, onMount } from "solid-js";
+import { onCleanup, onMount } from "solid-js";
 import { AppContextProvider, useAppContext, useDataLoader } from "~/AppContext";
 import Members from "~/components/Members/Members";
 import Row from "~/components/common/Row";
@@ -12,7 +12,8 @@ import BusyDialog from "~/components/BusyDialog";
 import MessageBox from "~/components/MessageBox";
 import Footer from "~/components/Footer";
 import { isServer } from "solid-js/web";
-import { useTimer, waitUntil } from "~/utils/utils";
+import { waitUntil } from "~/utils/utils";
+import { useColorPalette } from "~/components/ColorPalette";
 
 export default function Home() {
   return (
@@ -25,16 +26,7 @@ export default function Home() {
 function _Home() {
   const { busyDialog } = useAppContext();
   const { loadData, unSubList } = useDataLoader();
-  const colorPalette = useColorPaletteTransition({
-    colorPalettes: [
-      "dtu-red",
-      "dtu-blue",
-      "dtu-green",
-      "dtu-navy-blue",
-      "dtu-orange",
-      "dtu-purple",
-    ],
-  });
+  const colorPalette = useColorPalette();
 
   onMount(async () => {
     if (isServer) return;
@@ -50,9 +42,9 @@ function _Home() {
   return (
     <main>
       <Title>Lounge Board</Title>
-      <div class={`app-container color-palette-transition ${colorPalette()}`}>
+      <div class={`App ${colorPalette()}`}>
         <Banner title={"Digital Health"} showResearchGroups={true} />
-        <Row class={"flex-1 w-full gap-2"}>
+        <Row class={`flex-1 w-full gap-2`}>
           <Members />
           <Column class={"flex-1 h-full gap-2"}>
             <ResearchGroups />
@@ -66,27 +58,4 @@ function _Home() {
       </div>
     </main>
   );
-}
-
-function useColorPaletteTransition(props: {
-  transitionInterval?: number;
-  colorPalettes: string[];
-}) {
-  const [index, setIndex] = createSignal(0);
-
-  const colorPalette = createMemo(() => {
-    return props.colorPalettes[index()];
-  });
-
-  const timer = useTimer({
-    handler: () => setIndex((index() + 1) % props.colorPalettes.length),
-    type: "interval",
-    delayMs: props.transitionInterval || 10000,
-  });
-
-  onMount(() => {
-    timer.start();
-  });
-
-  return colorPalette;
 }

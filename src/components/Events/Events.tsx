@@ -1,4 +1,4 @@
-import "./events.css";
+import styles from "./events.module.scss";
 import BlockContainer from "~/components/common/BlockContainer";
 import { For, onMount, Show } from "solid-js";
 import Scrollable from "~/components/common/Scrollable";
@@ -30,7 +30,7 @@ export default function Events() {
     <BlockContainer
       title={"Events"}
       titleIcon={EventsHeader}
-      class={"events-block-container"}
+      class={styles.blockContainer}
       onAddNewItem={!isAdmin() ? undefined : () => editDialog.ShowModal()}
       onDeleteSelectedItems={
         !isAdmin()
@@ -51,15 +51,15 @@ export default function Events() {
             }
       }
     >
-      <div class={"scroll-wrapper"}>
+      <div class={styles.wrapper}>
         <Scrollable
           ref={eventsScrollableContainer}
           direction={"horizontal"}
           hideScrollbar={!isAdmin()}
-          class={"events-scrollable-container"}
+          class={styles.scrollable}
         >
           <Show when={!isAdmin()}>
-            <div class={"event-card placeholder"} />
+            <div class={`${styles.eventItem} ${styles.placeholder}`} />
           </Show>
 
           <For each={events.ids}>
@@ -68,7 +68,7 @@ export default function Events() {
             )}
           </For>
           <Show when={!isAdmin()}>
-            <div class={"event-card placeholder"} />
+            <div class={`${styles.eventItem} ${styles.placeholder}`} />
           </Show>
         </Scrollable>
       </div>
@@ -103,9 +103,9 @@ function startScrollAnimation(props: {
       clearClasses(childElement.activeElem);
       clearClasses(childElement.nextElem);
 
-      childElement.prevElem?.classList.add("left");
-      childElement.activeElem.classList.add("active");
-      childElement.nextElem?.classList.add("right");
+      childElement.prevElem?.classList.add(styles.left);
+      childElement.activeElem.classList.add(styles.active);
+      childElement.nextElem?.classList.add(styles.right);
     },
     type: "interval",
     delayMs: props.switchInterval || 3000,
@@ -117,12 +117,15 @@ function startScrollAnimation(props: {
 
   function getPrevSibling(activeElement: HTMLElement) {
     let prevSibling = activeElement.previousElementSibling;
-    while (prevSibling && prevSibling.classList.contains("placeholder")) {
+    while (prevSibling && prevSibling.classList.contains(styles.placeholder)) {
       prevSibling = prevSibling.previousElementSibling;
     }
     if (!prevSibling) {
       prevSibling = props.scrollContainer().lastElementChild;
-      while (prevSibling && prevSibling.classList.contains("placeholder")) {
+      while (
+        prevSibling &&
+        prevSibling.classList.contains(styles.placeholder)
+      ) {
         prevSibling = prevSibling.previousElementSibling;
       }
     }
@@ -131,12 +134,15 @@ function startScrollAnimation(props: {
 
   function getNextSibling(activeElement: HTMLElement) {
     let nextSibling = activeElement.nextElementSibling;
-    while (nextSibling && nextSibling.classList.contains("placeholder")) {
+    while (nextSibling && nextSibling.classList.contains(styles.placeholder)) {
       nextSibling = nextSibling.nextElementSibling;
     }
     if (!nextSibling) {
       nextSibling = props.scrollContainer().firstElementChild;
-      while (nextSibling && nextSibling.classList.contains("placeholder")) {
+      while (
+        nextSibling &&
+        nextSibling.classList.contains(styles.placeholder)
+      ) {
         nextSibling = nextSibling.nextElementSibling;
       }
     }
@@ -158,7 +164,7 @@ function startScrollAnimation(props: {
       const activeElement = props.scrollContainer().children[
         activeChildIndex
       ] as HTMLElement;
-      if (!activeElement.classList.contains("placeholder")) {
+      if (!activeElement.classList.contains(styles.placeholder)) {
         // Find previous valid sibling
         return {
           prevElem: getPrevSibling(activeElement),
@@ -173,9 +179,9 @@ function startScrollAnimation(props: {
 
   function clearClasses(element: Element | null) {
     if (!element) return;
-    element.classList.remove("active");
-    element.classList.remove("left");
-    element.classList.remove("right");
+    element.classList.remove(styles.active);
+    element.classList.remove(styles.left);
+    element.classList.remove(styles.right);
   }
 }
 

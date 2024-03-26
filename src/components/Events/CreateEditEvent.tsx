@@ -1,4 +1,4 @@
-import "./events.css";
+import styles from "./events.module.scss";
 import { createEffect, on, onMount, Show } from "solid-js";
 import { Event } from "~/api/types";
 import Column from "~/components/common/Column";
@@ -157,16 +157,16 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
   return (
     <Dialog
       id={"create-edit-event-dialog"}
-      class={"create-edit-event-dialog"}
+      class={styles.editDialog}
       ref={props.ref}
       onBeforeShow={onBeforeShow}
       onClose={onClose}
     >
-      <Row class={"header"}>
+      <Row class={styles.dheader}>
         Create/Edit Event
         <Img src={EventsHeaderImage} />
       </Row>
-      <Column class={"content-editors"}>
+      <Column class={styles.container}>
         <Input
           label={"Name"}
           placeholder={"... Event Name ..."}
@@ -232,7 +232,7 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
           }}
         />
       </Column>
-      <Row class={"separator"} />
+      <Row class={styles.separator} />
       <Preview />
       <DialogControls
         // Disabled when: name, details, startDateTime, endDateTime any one of them is empty and endDateTime is before startDateTime
@@ -297,40 +297,39 @@ function Preview() {
 
   return (
     <Show when={state !== undefined}>
-      <Row class={"preview"}>
+      <Row class={styles.preview}>
         <Column
-          class={"event-card"}
+          class={styles.eventItem}
           classList={{
-            "past-event-item-background": state.event.isPast,
+            [styles.isPast]: state.event.isPast,
           }}
         >
-          <Column class={"event-card-header"}>
-            <Row class={"icon"}>
+          <Column class={styles.header}>
+            <Row class={styles.icon}>
               <Img src={EventsHeaderImage} />
             </Row>
-            <Row class={"name"}>{state.event.name || "Event Name"}</Row>
-            <Row class={"horizontal-line"}></Row>
-            <Row class={"details"}>
+            <Row class={styles.name}>{state.event.name || "Event Name"}</Row>
+            <Row class={styles.details}>
               {state.event.details || "Event Details"}
             </Row>
           </Column>
 
-          <Row class={"event-card-datetime-info"}>
-            <Row class={"date"}>
+          <Row class={styles.datetimeInfo}>
+            <Row class={styles.date}>
               <CalendarDate />
               <Column class={"flex-1"}>
                 <Row>{moment(state.event.startsAt).format("DD")}</Row>
                 <Row>{moment(state.event.startsAt).format("MMM")}</Row>
               </Column>
             </Row>
-            <Row class={"time"}>
+            <Row class={styles.time}>
               <Clock />
               <Column class={"flex-1"}>
                 <Row>{moment(state.event.startsAt).format("HH")}</Row>
                 <Row>{moment(state.event.startsAt).format("mm")}</Row>
               </Column>
             </Row>
-            <Row class={"duration"}>
+            <Row class={styles.duration}>
               <Duration />
               <Column class={"flex-1"}>
                 {buildDurationString(state.event.startsAt, state.event.endsAt)}

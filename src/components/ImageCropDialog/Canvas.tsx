@@ -1,9 +1,12 @@
+import styles from "./index.module.scss";
 import CanvasBackground from "~/assets/images/empty-canvas-background.jpg";
 import { useDialogContext } from "~/components/ImageCropDialog/index";
 
-export default function Canvas(props: {
+type CanvasProps = {
   ref: (el: HTMLCanvasElement) => void;
-}) {
+};
+
+export default function Canvas(props: CanvasProps) {
   const { state, mutate } = useDialogContext();
 
   let canvas: HTMLCanvasElement;
@@ -54,7 +57,7 @@ export default function Canvas(props: {
         canvas = el;
         props.ref(el);
       }}
-      class={"canvas"}
+      class={styles.canvas}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
     />

@@ -1,0 +1,47 @@
+.TimeInput {
+  --container-height: 40px;
+  height: var(--container-height);
+
+  > .icon {
+    height: 100%;
+
+    > svg {
+      padding-right: 0;
+      height: 20px;
+      width: 20px;
+    }
+  }
+
+  > .hour,
+  > .minute {
+    min-width: 0;
+    max-width: 26px;
+    border: none;
+    outline: none;
+    user-select: none;
+    background-color: transparent;
+    font-weight: bolder;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      appearance: none;
+      display: none;
+    }
+  }
+
+
+
+  > .hour {
+    text-align: right;
+  }
+
+  > .minute {
+    text-align: left;
+  }
+
+  p {
+    font-weight: bolder;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}

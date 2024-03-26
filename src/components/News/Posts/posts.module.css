@@ -1,0 +1,61 @@
+.postContainer {
+  position: relative;
+  height: min-content;
+  border-radius: var(--radii-xl);
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+}
+.postContainer > frame {
+  pointer-events: none;
+  user-select: none;
+}
+.postContainer .logo {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  top: var(--space-2);
+  right: var(--space-2);
+}
+.postContainer.linkedin, .postContainer.facebook, .postContainer.twitter, .postContainer.instagram {
+  background-color: #fdfdfd;
+}
+
+.customPost {
+  background-color: #fdfdfd;
+  color: black;
+  padding: var(--space-5);
+  height: min-content;
+  border-radius: var(--radii-xl);
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+}
+.customPost .title {
+  font-size: var(--font-sizes-md);
+  font-weight: bold;
+  margin-bottom: var(--space-2);
+  gap: var(--space-2);
+  width: 100%;
+  border-bottom: solid 1px var(--color-darkgray);
+}
+.customPost .title img {
+  height: 60px;
+  border-radius: 50% 50%;
+}
+.customPost .title .text {
+  align-self: start;
+}
+.customPost .title .duration {
+  align-self: end;
+  font-weight: normal;
+  color: var(--color-darkgray);
+}
+.customPost .content {
+  font-size: var(--font-sizes-sm);
+  font-weight: normal;
+  justify-content: stretch;
+  width: 100%;
+}
+
+/*# sourceMappingURL=posts.module.css.map */

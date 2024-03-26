@@ -1,4 +1,4 @@
-import "./posts.css";
+import styles from "./posts.module.scss";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
 import Img from "~/components/common/Img";
@@ -50,15 +50,15 @@ export default function (props: CustomPostProps) {
   }
 
   return (
-    <Column class={"custom-post"} style={{ width: `${props.width}px` }}>
-      <Row class={"custom-post-title"}>
+    <Column class={styles.customPost} style={{ width: `${props.width}px` }}>
+      <Row class={styles.title}>
         <Img src={props.avatarUrl || DefaultAvatar} />
         <Column class={"flex-1"}>
-          <div class={"title-text"}>{props.title}</div>
-          <div class={"title-duration"}>{timePassed()}</div>
+          <div class={styles.text}>{props.title}</div>
+          <div class={styles.duration}>{timePassed()}</div>
         </Column>
       </Row>
-      <Row class={"custom-post-content"}>{contentBody()}</Row>
+      <Row class={styles.content}>{contentBody()}</Row>
     </Column>
   );
 }

@@ -1,4 +1,6 @@
-import { Accessor, Match, Show, Switch } from "solid-js";
+import styles from "./news.module.scss";
+
+import { Accessor, Match, Switch } from "solid-js";
 import { useAppContext } from "~/AppContext";
 import Row from "~/components/common/Row";
 import LinkedInPost from "~/components/News/Posts/LinkedInPost";
@@ -6,7 +8,7 @@ import FacebookPost from "~/components/News/Posts/FacebookPost";
 import TwitterPost from "~/components/News/Posts/TwitterPost";
 import InstagramPost from "~/components/News/Posts/InstagramPost";
 import CustomPost from "~/components/News/Posts/CustomPost";
-import Tick from "~/assets/icons/Tick";
+import SelectedMarker from "~/components/SelectedMarker";
 
 type NewsItemProps = {
   id: string;
@@ -19,10 +21,10 @@ export default function NewsItem(props: NewsItemProps) {
 
   return (
     <Row
-      class={"news-item"}
+      class={styles.newsItem}
       classList={{
-        "item-selected": news.entities[props.id].isSelected,
-        "cursor-pointer": isAdmin(),
+        [styles.selected]: news.entities[props.id].isSelected,
+        [styles.pointer]: isAdmin(),
       }}
       onClick={
         !isAdmin()
@@ -86,11 +88,9 @@ export default function NewsItem(props: NewsItemProps) {
           />
         </Match>
       </Switch>
-      <Show when={isAdmin() && news.entities[props.id]?.isSelected}>
-        <Row class={"item-selected-marker"}>
-          <Tick />
-        </Row>
-      </Show>
+      <SelectedMarker
+        visible={isAdmin() && news.entities[props.id]?.isSelected}
+      />
     </Row>
   );
 }

@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import moment from "moment";
 import CalendarDate from "~/assets/icons/CalendarDate";
 import Row from "~/components/common/Row";
@@ -23,7 +23,7 @@ export default function (props: Props) {
 
   return (
     <Row
-      class={"date-input"}
+      class={styles.DateInput}
       style={{
         background: props.background,
         color: props.color,

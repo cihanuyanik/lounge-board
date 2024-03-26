@@ -1,0 +1,120 @@
+.ImageCropDialog {
+  width: 75%;
+  height: 75%;
+  overflow: hidden;
+
+  &::backdrop {
+    background: none !important;
+  }
+
+  .content {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-primary-darker);
+
+    .row {
+      width: 100%;
+      flex: 1 1 auto;
+    }
+  }
+
+  .canvas {
+    position: absolute;
+    cursor: crosshair;
+  }
+
+  .cropbox {
+    background-color: transparent;
+    box-shadow: 0 0 10px 99999px rgba(0, 0, 0, 0.75);
+    border: 2px dashed var(--color-primary-lighter);
+    position: absolute;
+    pointer-events: none;
+
+    .tool {
+      width: var(--space-8);
+      height: var(--space-8);
+      position: absolute;
+      transform: translate(-50%, -50%);
+      color: var(--color-primary-lighter);
+      pointer-events: visible;
+
+      svg {
+        pointer-events: none;
+        margin: var(--space-2);
+      }
+    }
+
+    .center {
+      cursor: move;
+      svg {
+        margin: 0;
+      }
+    }
+
+    .topLeft {
+      cursor: nwse-resize;
+    }
+
+    .topCenter {
+      cursor: ns-resize;
+    }
+
+    .topRight {
+      cursor: nesw-resize;
+    }
+
+    .rightCenter {
+      cursor: ew-resize;
+    }
+
+    .bottomRight {
+      cursor: nwse-resize;
+    }
+
+    .bottomCenter {
+      cursor: ns-resize;
+    }
+
+    .bottomLeft {
+      cursor: nesw-resize;
+    }
+
+    .leftCenter {
+      cursor: ew-resize;
+    }
+  }
+
+  .controlButton {
+    position: absolute;
+    right: var(--space-6);
+    padding: var(--space-2);
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: var(--color-darkgray);
+
+      &:hover {
+        background-color: var(--color-darkgray);
+      }
+    }
+
+    &.accept {
+      bottom: var(--space-6);
+      background-color: lawngreen;
+      transform: translate(50%, 50%);
+
+      &:hover {
+        background-color: green;
+      }
+    }
+
+    &.cancel {
+      top: var(--space-6);
+      background-color: crimson;
+      transform: translate(50%, -50%);
+      &:hover {
+        background-color: red;
+      }
+    }
+  }
+}

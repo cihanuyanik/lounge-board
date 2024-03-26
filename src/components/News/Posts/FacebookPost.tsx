@@ -1,4 +1,4 @@
-import "./posts.css";
+import styles from "./posts.module.scss";
 import IFramePost, {
   IFramePostProps,
 } from "~/components/News/Posts/IFramePost";
@@ -10,13 +10,13 @@ type FacebookPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 
 export default function FacebookPost(props: FacebookPostProps) {
   return (
-    <div class={"post-container facebook"}>
+    <div class={`${styles.postContainer} ${styles.facebook}`}>
       <IFramePost
         baseUrl={"facebook.com"}
         expInternalType={"iframe"}
         {...props}
       />
-      <Row class={"logo"}>
+      <Row class={styles.logo}>
         <Img src={FacebookPostImage}></Img>
       </Row>
     </div>

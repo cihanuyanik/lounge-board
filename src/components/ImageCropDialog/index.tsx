@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import Img from "~/components/common/Img";
 import { CropBox } from "~/components/ImageCropDialog/CropBox";
 import Column from "~/components/common/Column";
@@ -6,9 +6,11 @@ import Row from "~/components/common/Row";
 import Canvas, { CropperCanvas } from "~/components/ImageCropDialog/Canvas";
 import Dialog, {
   createDialogContext,
-  DialogControls,
   DialogRef,
 } from "~/components/common/Dialog";
+import Button from "~/components/common/Button";
+import Tick from "~/assets/icons/Tick";
+import Cross from "~/assets/icons/Cross";
 
 export type ImageCropResult = {
   result: "Accept" | "Cancel";
@@ -156,13 +158,13 @@ function _ImageCropDialog(props: ImageCropDialogProps) {
   return (
     <Dialog
       id={"image-crop-dialog"}
-      class={"image-crop-dialog"}
+      class={styles.ImageCropDialog}
       ref={props.ref}
       onBeforeShow={onBeforeShow}
       onClose={onClose}
     >
-      <Column class={"content"}>
-        <Row class={"w-full flex-1-1-auto"}>
+      <Column class={styles.content}>
+        <Row class={styles.row}>
           <Img ref={(el) => (imageToCrop = el)} src={state.imgSrc} />
           <Canvas ref={(el) => mutate((state) => (state.canvas = el))} />
           <CropBox ref={(el) => (cropBox = el)} />
@@ -181,9 +183,36 @@ function _ImageCropDialog(props: ImageCropDialogProps) {
               ) as HTMLDialogElement | null;
               dialog?.Close();
             }}
-          ></DialogControls>
+          />
         </Row>
       </Column>
     </Dialog>
+  );
+}
+
+type DialogControlsProps = {
+  disabled?: boolean;
+  onAccept: () => void;
+  onCancel: () => void;
+};
+
+function DialogControls(props: DialogControlsProps) {
+  return (
+    <>
+      <Button
+        class={`${styles.controlButton} ${styles.accept}`}
+        onClick={props.onAccept}
+        disabled={props.disabled}
+      >
+        <Tick />
+      </Button>
+
+      <Button
+        class={`${styles.controlButton} ${styles.cancel}`}
+        onClick={props.onCancel}
+      >
+        <Cross />
+      </Button>
+    </>
   );
 }

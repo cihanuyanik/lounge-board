@@ -18,7 +18,6 @@ import { User } from "~/api/types";
 import EmailVerificationDialog, {
   EmailVerificationDialogResult,
 } from "~/components/EmailVerificationDialog";
-// import HoverPopup from "~/components/HoverPopup";
 
 export default function Home() {
   return (
@@ -108,7 +107,7 @@ function _Admin() {
   return (
     <main>
       <Title>Lounge Board - Admin</Title>
-      <div class="app-container">
+      <div class="App">
         <Banner
           title={"Digital Health - Admin"}
           user={user()}

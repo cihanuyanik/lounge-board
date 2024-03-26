@@ -8,7 +8,7 @@ export default function NotFound() {
     <main>
       <Title>Not Found</Title>
       <HttpStatusCode code={404} />
-      <div class={"app-container"} style={{ background: "#09001f" }}>
+      <div class={"App"} style={{ background: "#09001f" }}>
         <Img src={NotFoundImage} />
         <h1
           style={{

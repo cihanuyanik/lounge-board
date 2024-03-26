@@ -1,0 +1,34 @@
+.SelectedMarker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 50%;
+  width: 50%;
+  max-height: 85px;
+  max-width: 85px;
+  border-radius: var(--radii-xl);
+  animation: pulse 1s infinite;
+  color: white;
+  pointer-events: none;
+  user-select: none;
+
+  svg {
+    height: 100%;
+    background-color: rgba(0, 250, 0, 0.5);
+    border-radius: var(--radii-full);
+    padding: var(--space-2);
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.5;
+    }
+  }
+}

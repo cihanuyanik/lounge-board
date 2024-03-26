@@ -1,0 +1,90 @@
+.Banner {
+  height: 100px;
+  width: 100%;
+  gap: var(--space-2);
+  background-color: var(--color-primary);
+  border-bottom: var(--space-3) solid var(--color-primary-darker);
+  box-shadow: 0 0 10px 5px var(--color-primary-darker);
+  border-radius: var(--radii-2xl);
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+  position: relative;
+}
+.Banner .logo {
+  width: 50px;
+  transition: all 0.3s ease-in-out;
+  border-radius: var(--radii-xl);
+}
+.Banner .logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px 3px var(--color-primary-lighter);
+}
+.Banner .user {
+  height: 100%;
+  color: var(--color-text);
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+.Banner .user .avatar {
+  height: 80px;
+  width: 68px;
+}
+.Banner .user p {
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+.Banner .user button {
+  width: auto;
+  height: 28px;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+}
+.Banner .bannerText {
+  font-family: "Rockwell", serif;
+  font-weight: 900;
+  font-size: 4rem;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80px;
+}
+@keyframes letterJump {
+  0% {
+    transform: translate(0) scale(1) rotate(0deg);
+  }
+  30% {
+    transform: translate(0, -40px) rotate(180deg) scale(1);
+  }
+  60% {
+    transform: translate(0, 20px) scale(0.8) rotate(0deg);
+  }
+  100% {
+    transform: translate(0) scale(1) rotate(0deg);
+  }
+}
+.Banner .bannerText span {
+  color: var(--color-text);
+  text-shadow: 0 0 10px black;
+}
+.Banner .bannerText.animateLetterJump span {
+  animation: letterJump 1s ease-in-out;
+}
+.Banner .researchGroupImages {
+  gap: var(--space-4);
+}
+.Banner .researchGroupImages img {
+  border-radius: var(--radii-2xl);
+  box-shadow: 0 0 var(--space-6) var(--color-primary-lighter);
+  height: 75px;
+  width: 75px;
+  transition: all 2s ease-in-out;
+  opacity: 0.5;
+}
+.Banner .researchGroupImages img.active {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/*# sourceMappingURL=index.module.css.map */

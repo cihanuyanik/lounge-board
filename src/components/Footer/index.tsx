@@ -1,9 +1,9 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import Email from "~/assets/icons/Email";
 
 export default function () {
   return (
-    <div class={"footer"}>
+    <div class={styles.Footer}>
       <span>Under Development...</span>
       Please contact Cihan Uyanik, <a> ciuya@dtu.dk </a>
       <Email />, when you observe any bugs and/or if you have suggestions. Thank

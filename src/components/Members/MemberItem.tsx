@@ -1,10 +1,11 @@
+import styles from "./members.module.scss";
 import DragHandle from "~/components/DragToReorder/DragHandle";
 import { Show } from "solid-js";
 import Row from "~/components/common/Row";
 import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
-import Tick from "~/assets/icons/Tick";
 import Avatar from "~/components/common/Avatar";
+import SelectedMarker from "~/components/SelectedMarker";
 
 type MemberItemProps = {
   id: string;
@@ -17,11 +18,12 @@ export default function MemberItem(props: MemberItemProps) {
   return (
     <Row
       id={props.id}
-      class={"member-item"}
+      class={styles.memberItem}
       classList={{
+        // TODO: Add "drag-item" class to the member item if the user is an admin
         "drag-item": isAdmin(),
-        "cursor-pointer": isAdmin(),
-        "item-selected": members.entities[props.id]?.isSelected,
+        [styles.pointer]: isAdmin(),
+        [styles.selected]: members.entities[props.id]?.isSelected,
       }}
       onclick={
         !isAdmin()
@@ -40,19 +42,14 @@ export default function MemberItem(props: MemberItemProps) {
     >
       <Avatar imgSrc={members.entities[props.id]?.image} />
 
-      <Column class={"name-role"}>
-        <Row class={"name"}>{members.entities[props.id]?.name}</Row>
-        <Row class={"role"}>{members.entities[props.id]?.role}</Row>
+      <Column class={styles.nrContainer}>
+        <Row class={styles.name}>{members.entities[props.id]?.name}</Row>
+        <Row class={styles.role}>{members.entities[props.id]?.role}</Row>
       </Column>
 
       <Show when={isAdmin()}>
         <DragHandle />
-
-        <Show when={members.entities[props.id]?.isSelected}>
-          <Row class={"item-selected-marker"}>
-            <Tick />
-          </Row>
-        </Show>
+        <SelectedMarker visible={members.entities[props.id]?.isSelected} />
       </Show>
     </Row>
   );

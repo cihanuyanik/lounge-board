@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import { JSX, splitProps } from "solid-js";
 
 type ScrollableProps = {
@@ -17,8 +17,11 @@ export default function (props: ScrollableProps) {
 
   return (
     <div
-      class={`scrollable ${local.direction}${local.class ? " " + local.class : ""}`}
-      classList={{ "hide-scrollbar": local.hideScrollbar === true }}
+      class={`${styles.Scrollable} ${styles[local.direction]}`}
+      classList={{
+        [styles.hideScrollbar]: local.hideScrollbar || false,
+        [local.class!]: local.class !== undefined,
+      }}
       {...rest}
     >
       {local.children}

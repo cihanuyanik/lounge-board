@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import Dialog, { DialogRef } from "~/components/common/Dialog";
 import Input from "~/components/common/Input";
 import Email from "~/assets/icons/Email";
@@ -42,6 +42,7 @@ export default function (props: { ref?: DialogRef }) {
     <Dialog
       id={"login-dialog"}
       ref={props.ref}
+      class={styles.LoginDialog}
       onBeforeShow={() => {
         // Clear input fields and output user
         batch(() => {
@@ -53,9 +54,8 @@ export default function (props: { ref?: DialogRef }) {
       }}
       onClose={(ev) => (ev.target as HTMLDialogElement)?.Resolve(loggedInUser)}
     >
-      <Row class={"title"}>{"Login"}</Row>
-
-      <Column class={"login-dialog"}>
+      <Row class={styles.title}>{"Login"}</Row>
+      <Column class={styles.content}>
         <Input
           label={"E-mail"}
           type={"email"}
@@ -81,7 +81,8 @@ export default function (props: { ref?: DialogRef }) {
 
         <Row class={"w-full"}>
           <Button
-            class={"button-rect green"}
+            class={styles.green}
+            rectangle
             onClick={async () => {
               const dialog = document.getElementById(
                 "login-dialog",
@@ -123,10 +124,10 @@ export default function (props: { ref?: DialogRef }) {
           </p>
         </Row>
 
-        <Column class={"external-provider-login"}>
+        <Column class={styles.externalProviderLogin}>
           <p>Or you can login with:</p>
           <Button
-            class={"button-rect"}
+            rectangle
             onClick={async () => {
               const dialog = document.getElementById(
                 "login-dialog",
@@ -135,7 +136,6 @@ export default function (props: { ref?: DialogRef }) {
               if (!dialog) return;
 
               await Executor.run(() => API.AuthService.signInWithGoogle(), {
-                // busyDialogMessage: "Logging in...",
                 postAction: (userCredential) => {
                   loggedInUser = userCredential.user;
                   dialog?.Close();
@@ -147,7 +147,7 @@ export default function (props: { ref?: DialogRef }) {
             Google
           </Button>
           <Button
-            class={"button-rect"}
+            rectangle
             onClick={async () => {
               const dialog = document.getElementById(
                 "login-dialog",
@@ -156,7 +156,6 @@ export default function (props: { ref?: DialogRef }) {
               if (!dialog) return;
 
               await Executor.run(() => API.AuthService.signInWithMicrosoft(), {
-                // busyDialogMessage: "Logging in...",
                 postAction: (userCredential) => {
                   loggedInUser = userCredential.user;
                   dialog?.Close();
@@ -168,7 +167,7 @@ export default function (props: { ref?: DialogRef }) {
             Microsoft
           </Button>
           <Button
-            class={"button-rect"}
+            rectangle
             onClick={async () => {
               const dialog = document.getElementById(
                 "login-dialog",
@@ -177,7 +176,6 @@ export default function (props: { ref?: DialogRef }) {
               if (!dialog) return;
 
               await Executor.run(() => API.AuthService.signInWithGitHub(), {
-                // busyDialogMessage: "Logging in...",
                 postAction: (userCredential) => {
                   loggedInUser = userCredential.user;
                   dialog?.Close();

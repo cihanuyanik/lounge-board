@@ -1,4 +1,5 @@
-import "./index.css";
+// import "./index.css";
+import styles from "./index.module.scss";
 import { createEffect, JSX, Match, on, Show, Switch } from "solid-js";
 import Button from "~/components/common/Button";
 import Delete from "~/assets/icons/Delete";
@@ -21,7 +22,7 @@ type BlockContainerProps = {
 };
 
 export default function (props: BlockContainerProps) {
-  let titleRef: HTMLDivElement;
+  let titleRef: HTMLDivElement = null!;
 
   createEffect(
     on(
@@ -37,11 +38,12 @@ export default function (props: BlockContainerProps) {
   return (
     <Column
       ref={props.ref}
-      class={`block-container${props.class ? " " + props.class : ""}`}
+      class={styles.BlockContainer + (props.class ? " " + props.class : "")}
       style={props.style}
     >
-      <Row class={"title-container"}>
-        <Row class={"title"} ref={(el) => (titleRef = el)}>
+      {/*<Row class={"title-container"}>*/}
+      <Row class={styles.titleContainer}>
+        <Row class={styles.title} ref={titleRef!}>
           {""}
         </Row>
         <Show when={props.titleIcon}>

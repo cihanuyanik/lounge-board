@@ -1,4 +1,4 @@
-import "./posts.css";
+import styles from "./posts.module.scss";
 import IFramePost, {
   IFramePostProps,
 } from "~/components/News/Posts/IFramePost";
@@ -10,13 +10,13 @@ type LinkedInPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 
 export default function LinkedInPost(props: LinkedInPostProps) {
   return (
-    <div class={"post-container linkedin"}>
+    <div class={`${styles.postContainer} ${styles.linkedin}`}>
       <IFramePost
         baseUrl={"linkedin.com"}
         expInternalType={"iframe"}
         {...props}
       />
-      <Row class={"logo"}>
+      <Row class={styles.logo}>
         <Img src={LinkedInPostImage}></Img>
       </Row>
     </div>

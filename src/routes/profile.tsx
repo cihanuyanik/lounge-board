@@ -1,11 +1,9 @@
-import "./signup.scss";
+import styles from "./signup.module.scss";
 import { AppContextProvider, useAppContext } from "~/AppContext";
 import { Title } from "@solidjs/meta";
 import Column from "~/components/common/Column";
 import Row from "~/components/common/Row";
-import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
-import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
 import Input from "~/components/common/Input";
 import Tick from "~/assets/icons/Tick";
 import Footer from "~/components/Footer";
@@ -117,15 +115,16 @@ function _Profile() {
   return (
     <main>
       <Title>Lounge Board - Profile</Title>
-      <Column class={"app-container sign-up-container"}>
+      <Column class={`App ${styles.container}`}>
         <Banner title={"Update Profile"} user={user()} />
 
-        <Column class={"input-form"}>
+        <Column class={styles.form}>
           <Avatar
             imgSrc={avatar()}
             enableImageSelect={isProviderUpdatable()}
             enableImageCrop={isProviderUpdatable()}
             onImageSelected={(image) => setAvatar(image)}
+            class={styles.avatar}
           />
 
           <Input
@@ -140,7 +139,8 @@ function _Profile() {
 
           <Row class={"w-full"}>
             <Button
-              class={"button-rect green"}
+              class={styles.green}
+              rectangle
               onClick={async () => {
                 await Executor.run(
                   async () => {

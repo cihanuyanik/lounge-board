@@ -1,4 +1,4 @@
-import "./news.css";
+import styles from "./news.module.scss";
 import BlockContainer from "~/components/common/BlockContainer";
 import NewsHeader from "~/assets/images/news-header.png";
 import Scrollable from "~/components/common/Scrollable";
@@ -46,7 +46,7 @@ export default function News() {
     <BlockContainer
       title={"News"}
       titleIcon={NewsHeader}
-      class={"news-block-container"}
+      class={styles.blockContainer}
       popupDirection={"bottom-left"}
       onAddNewItem={!isAdmin() ? undefined : () => newsDialog.ShowModal()}
       onDeleteSelectedItems={
@@ -69,12 +69,9 @@ export default function News() {
         ref={newsScrollableContainer}
         direction={"vertical"}
         hideScrollbar={true}
-        class={"news-scrollable-container"}
+        class={styles.scrollable}
       >
-        <div
-          ref={newsAnimationContainer}
-          class={"news-scroll-animation-wrapper"}
-        >
+        <div ref={newsAnimationContainer} class={styles.wrapper}>
           <For each={news.ids}>
             {(id, index) => (
               <NewsItem id={id} index={index} editDialog={newsDialog} />

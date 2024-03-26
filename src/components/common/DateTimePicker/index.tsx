@@ -1,4 +1,4 @@
-import "./index.scss";
+import styles from "./index.module.scss";
 import Row from "~/components/common/Row";
 import DateInput from "~/components/common/DateInput";
 import TimeInput, { TimeInputRef } from "~/components/common/TimeInput";
@@ -85,7 +85,7 @@ export default function (props: Props) {
   return (
     <Column
       id={props.id}
-      class={"date-time-picker" + (props.class ? " " + props.class : "")}
+      class={styles.DateTimePicker + (props.class ? " " + props.class : "")}
       style={{
         "--label-height": props.label ? "26px" : "0px",
         "--container-height": props.height ? `${props.height}px` : "70px",
@@ -95,7 +95,7 @@ export default function (props: Props) {
       <Show when={props.label}>
         <label>{props.label}</label>
       </Show>
-      <Row class={"date-time-container"}>
+      <Row class={styles.container}>
         <DateInput
           ref={dateRef}
           format={props.dateFormat || "DD MMM YYYY"}

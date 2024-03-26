@@ -1,0 +1,26 @@
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: var(--radii-full);
+}
+
+::-webkit-scrollbar-track:horizontal {
+  margin-left: var(--space-3);
+  margin-right: var(--space-3);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-secondary-darker);
+  border-radius: var(--radii-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary-lighter);
+}
+
+/*# sourceMappingURL=scrollBar.css.map */

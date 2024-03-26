@@ -1,4 +1,4 @@
-import "./signup.scss";
+import styles from "./signup.module.scss";
 import { AppContextProvider, useAppContext } from "~/AppContext";
 import { Title } from "@solidjs/meta";
 import Row from "~/components/common/Row";
@@ -57,15 +57,16 @@ function _Signup() {
   return (
     <main>
       <Title>Lounge Board - Sign up</Title>
-      <Column class={"app-container sign-up-container"}>
+      <Column class={`App ${styles.container}`}>
         <Banner title={"Sign-up"} />
 
-        <Column class={"input-form"}>
+        <Column class={styles.form}>
           <Avatar
             imgSrc={avatar()}
             enableImageSelect={true}
             enableImageCrop={true}
             onImageSelected={(image) => setAvatar(image)}
+            class={styles.avatar}
           />
           <Input
             label={"Full Name"}
@@ -97,7 +98,8 @@ function _Signup() {
 
           <Row class={"w-full"}>
             <Button
-              class={"button-rect green"}
+              class={styles.green}
+              rectangle
               onClick={async () => {
                 await Executor.run(
                   async () => {

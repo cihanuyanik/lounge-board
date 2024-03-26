@@ -1,0 +1,23 @@
+.container {
+  background-color: var(--color-secondary-lighter);
+  min-height: 100vh;
+  gap: var(--space-3);
+}
+.container .form {
+  background-color: var(--color-primary);
+  border-radius: var(--radii-3xl);
+  padding: var(--space-4);
+  flex: 1;
+  width: 100%;
+  max-width: 500px;
+  gap: var(--space-3);
+}
+.container .avatar {
+  height: 200px;
+  width: 170px;
+}
+.container .green {
+  color: lawngreen !important;
+}
+
+/*# sourceMappingURL=signup.module.css.map */

@@ -1,0 +1,100 @@
+.ImageCropDialog {
+  width: 75%;
+  height: 75%;
+  overflow: hidden;
+}
+.ImageCropDialog::backdrop {
+  background: none !important;
+}
+.ImageCropDialog .content {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-primary-darker);
+}
+.ImageCropDialog .content .row {
+  width: 100%;
+  flex: 1 1 auto;
+}
+.ImageCropDialog .canvas {
+  position: absolute;
+  cursor: crosshair;
+}
+.ImageCropDialog .cropbox {
+  background-color: transparent;
+  box-shadow: 0 0 10px 99999px rgba(0, 0, 0, 0.75);
+  border: 2px dashed var(--color-primary-lighter);
+  position: absolute;
+  pointer-events: none;
+}
+.ImageCropDialog .cropbox .tool {
+  width: var(--space-8);
+  height: var(--space-8);
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: var(--color-primary-lighter);
+  pointer-events: visible;
+}
+.ImageCropDialog .cropbox .tool svg {
+  pointer-events: none;
+  margin: var(--space-2);
+}
+.ImageCropDialog .cropbox .center {
+  cursor: move;
+}
+.ImageCropDialog .cropbox .center svg {
+  margin: 0;
+}
+.ImageCropDialog .cropbox .topLeft {
+  cursor: nwse-resize;
+}
+.ImageCropDialog .cropbox .topCenter {
+  cursor: ns-resize;
+}
+.ImageCropDialog .cropbox .topRight {
+  cursor: nesw-resize;
+}
+.ImageCropDialog .cropbox .rightCenter {
+  cursor: ew-resize;
+}
+.ImageCropDialog .cropbox .bottomRight {
+  cursor: nwse-resize;
+}
+.ImageCropDialog .cropbox .bottomCenter {
+  cursor: ns-resize;
+}
+.ImageCropDialog .cropbox .bottomLeft {
+  cursor: nesw-resize;
+}
+.ImageCropDialog .cropbox .leftCenter {
+  cursor: ew-resize;
+}
+.ImageCropDialog .controlButton {
+  position: absolute;
+  right: var(--space-6);
+  padding: var(--space-2);
+}
+.ImageCropDialog .controlButton:disabled {
+  cursor: not-allowed;
+  background-color: var(--color-darkgray);
+}
+.ImageCropDialog .controlButton:disabled:hover {
+  background-color: var(--color-darkgray);
+}
+.ImageCropDialog .controlButton.accept {
+  bottom: var(--space-6);
+  background-color: lawngreen;
+  transform: translate(50%, 50%);
+}
+.ImageCropDialog .controlButton.accept:hover {
+  background-color: green;
+}
+.ImageCropDialog .controlButton.cancel {
+  top: var(--space-6);
+  background-color: crimson;
+  transform: translate(50%, -50%);
+}
+.ImageCropDialog .controlButton.cancel:hover {
+  background-color: red;
+}
+
+/*# sourceMappingURL=index.module.css.map */

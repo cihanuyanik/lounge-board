@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import { batch, createSignal, JSX, onMount } from "solid-js";
 import Row from "~/components/common/Row";
 
@@ -44,8 +44,8 @@ export default function HoverPopup(props: HoverPopupProps) {
 
   return (
     <Row
-      class={`hover-popup ${props.direction}`}
-      classList={{ open: popupOpen() }}
+      class={`${styles.HoverPopup} ${styles[props.direction]}`}
+      classList={{ [styles.open]: popupOpen() }}
       style={{
         top: `${y()}px`,
         left: `${x()}px`,

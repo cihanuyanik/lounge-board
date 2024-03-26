@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.scss";
 import "~/utils/DialogExtensions";
 
 import {
@@ -82,7 +82,11 @@ export default function Dialog(props: DialogProps) {
             local.ref = el;
           }
         }}
-        class={`dialog${local.class ? " " + local.class : ""}`}
+        // class={`dialog${local.class ? " " + local.class : ""}`}
+        class={styles.Dialog}
+        classList={{
+          [local.class!]: local.class !== undefined,
+        }}
         {...rest}
       >
         {local.children}
@@ -101,14 +105,17 @@ export function DialogControls(props: DialogControlsProps) {
   return (
     <>
       <Button
-        class={"control-btn accept"}
+        class={`${styles.controlButton} ${styles.accept}`}
         onClick={props.onAccept}
         disabled={props.disabled}
       >
         <Tick />
       </Button>
 
-      <Button class={"control-btn cancel"} onClick={props.onCancel}>
+      <Button
+        class={`${styles.controlButton} ${styles.cancel}`}
+        onClick={props.onCancel}
+      >
         <Cross />
       </Button>
     </>

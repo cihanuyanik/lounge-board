@@ -1,4 +1,4 @@
-import "./researchGroups.css";
+import styles from "./researchGroups.module.scss";
 import { For } from "solid-js";
 import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
@@ -85,7 +85,7 @@ function _EditResearchGroups(props: { ref: DialogRef }) {
   return (
     <Dialog
       id={"edit-research-groups-dialog"}
-      class={"edit-research-groups-dialog"}
+      class={styles.editDialog}
       ref={props.ref}
       onBeforeShow={onBeforeShow}
       onClose={async (ev) => {
@@ -160,10 +160,10 @@ function _EditResearchGroups(props: { ref: DialogRef }) {
         );
       }}
     >
-      <Column class={"content"}>
-        <Row class={"title"}>{"Edit Research Groups"}</Row>
+      <Column class={styles.content}>
+        <Row class={styles.title}>{"Edit Research Groups"}</Row>
         <ResearchGroupSelector />
-        <Row class={"selected-group"}>
+        <Row class={styles.selectedGroup}>
           <ResearchGroupName />
           <BannerImage />
         </Row>
@@ -222,7 +222,7 @@ function ResearchGroupName() {
           (state) => (state.entities[state.selectedId].name = e.target.value),
         );
       }}
-      class={"research-group-name"}
+      class={styles.rgname}
     />
   );
 }
@@ -232,7 +232,7 @@ function BannerImage() {
   if (state === undefined) return;
 
   return (
-    <Row class={"banner-image"}>
+    <Row class={styles.banner}>
       <Img
         src={
           !state.entities[state.selectedId]?.bannerImage
@@ -261,7 +261,7 @@ function ResearchGroupTeamImage() {
   if (state === undefined) return;
 
   return (
-    <Row class={"research-group-team-image"}>
+    <Row class={styles.rgTeamImage}>
       <Img
         src={
           !state.entities[state.selectedId]?.image
@@ -288,7 +288,7 @@ function ResearchGroupSelector() {
   if (state === undefined) return;
 
   return (
-    <Row class={"research-group-selector"}>
+    <Row class={styles.rgselector}>
       <Dropdown
         rootStyle={{ flex: "1", height: "40px" }}
         value={state.selectedId}

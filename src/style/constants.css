@@ -1,0 +1,54 @@
+:root {
+  /* Colors*/
+  --color-primary: #6f0000;
+  --color-primary-lighter: #d30000;
+  --color-primary-darker: #370000;
+  --color-secondary: #f7d4cd;
+  --color-secondary-lighter: #fbe9e6;
+  --color-secondary-darker: #e7806c;
+  --color-tertiary: #4e8fcd;
+  --color-tertiary-lighter: #a6c7e6;
+  --color-tertiary-darker: #1f486e;
+  --color-text: #ffffffff;
+  --color-darkgray: #484646;
+  /* Spaces*/
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  /*Screen sizes*/
+  --screen-height: 100vh;
+  --screen-width: 100vw;
+  /* Border radius*/
+  --radii-xs: 0.125rem;
+  --radii-sm: 0.25rem;
+  --radii-md: 0.375rem;
+  --radii-lg: 0.5rem;
+  --radii-xl: 0.75rem;
+  --radii-2xl: 1rem;
+  --radii-3xl: 1.5rem;
+  --radii-full: 9999px;
+  /* Font sizes*/
+  --font-sizes-2xs: 0.5rem;
+  --font-sizes-xs: 0.75rem;
+  --font-sizes-sm: 0.875rem;
+  --font-sizes-md: 1rem;
+  --font-sizes-lg: 1.125rem;
+  --font-sizes-xl: 1.25rem;
+  --font-sizes-2xl: 1.5rem;
+  --font-sizes-3xl: 1.875rem;
+  --font-sizes-4xl: 2.25rem;
+  --font-sizes-5xl: 3rem;
+  --font-sizes-6xl: 3.75rem;
+  --font-sizes-7xl: 4.5rem;
+  --font-sizes-8xl: 6rem;
+  --font-sizes-9xl: 8rem;
+}
+
+/*# sourceMappingURL=constants.css.map */
