@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
 import { batch, createSignal, JSX, onMount } from "solid-js";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 
 export type Direction =
   | "top-left"

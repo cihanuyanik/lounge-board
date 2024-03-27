@@ -1,8 +1,8 @@
 import styles from "./index.module.scss";
 import Img from "~/components/common/Img";
 import { CropBox } from "~/components/ImageCropDialog/CropBox";
-import Column from "~/components/common/Column";
-import Row from "~/components/common/Row";
+import Column from "~/components/common/Flex/Column";
+import Row from "~/components/common/Flex/Row";
 import Canvas, { CropperCanvas } from "~/components/ImageCropDialog/Canvas";
 import Dialog, {
   createDialogContext,

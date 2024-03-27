@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 import Clock from "~/assets/icons/Clock";
 import { createEffect, createMemo, createSignal, onMount } from "solid-js";
 

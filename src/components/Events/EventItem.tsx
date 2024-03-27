@@ -1,7 +1,7 @@
 import styles from "./events.module.scss";
 import { Accessor } from "solid-js";
-import Column from "~/components/common/Column";
-import Row from "~/components/common/Row";
+import Column from "~/components/common/Flex/Column";
+import Row from "~/components/common/Flex/Row";
 import { useAppContext } from "~/AppContext";
 import Img from "~/components/common/Img";
 import EventsHeaderImage from "~/assets/images/events-header.png";

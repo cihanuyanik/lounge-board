@@ -1,8 +1,8 @@
 import styles from "./events.module.scss";
 import { createEffect, on, onMount, Show } from "solid-js";
 import { Event } from "~/api/types";
-import Column from "~/components/common/Column";
-import Row from "~/components/common/Row";
+import Column from "~/components/common/Flex/Column";
+import Row from "~/components/common/Flex/Row";
 import Dialog, {
   createDialogContext,
   DialogControls,

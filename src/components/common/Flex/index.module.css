@@ -1,0 +1,299 @@
+.Flex {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+.Flex.row {
+  flex-direction: row;
+}
+.Flex.row-reverse {
+  flex-direction: row-reverse;
+}
+.Flex.column {
+  flex-direction: column;
+}
+.Flex.column-reverse {
+  flex-direction: column-reverse;
+}
+.Flex[alignItems=normal] {
+  align-items: normal;
+}
+.Flex[alignItems=stretch] {
+  align-items: stretch;
+}
+.Flex[alignItems=center] {
+  align-items: center;
+}
+.Flex[alignItems=start] {
+  align-items: start;
+}
+.Flex[alignItems=end] {
+  align-items: end;
+}
+.Flex[alignItems=flex-start] {
+  align-items: flex-start;
+}
+.Flex[alignItems=flex-end] {
+  align-items: flex-end;
+}
+.Flex[alignItems=self-start] {
+  align-items: self-start;
+}
+.Flex[alignItems=self-end] {
+  align-items: self-end;
+}
+.Flex[alignItems=baseline] {
+  align-items: baseline;
+}
+.Flex[alignItems=inherit] {
+  align-items: inherit;
+}
+.Flex[alignItems=initial] {
+  align-items: initial;
+}
+.Flex[alignItems=revert] {
+  align-items: revert;
+}
+.Flex[alignItems=unset] {
+  align-items: unset;
+}
+.Flex[alignContent=center] {
+  align-content: center;
+}
+.Flex[alignContent=start] {
+  align-content: start;
+}
+.Flex[alignContent=end] {
+  align-content: end;
+}
+.Flex[alignContent=flex-start] {
+  align-content: flex-start;
+}
+.Flex[alignContent=flex-end] {
+  align-content: flex-end;
+}
+.Flex[alignContent=normal] {
+  align-content: normal;
+}
+.Flex[alignContent=baseline] {
+  align-content: baseline;
+}
+.Flex[alignContent=space-between] {
+  align-content: space-between;
+}
+.Flex[alignContent=space-around] {
+  align-content: space-around;
+}
+.Flex[alignContent=space-evenly] {
+  align-content: space-evenly;
+}
+.Flex[alignContent=stretch] {
+  align-content: stretch;
+}
+.Flex[alignContent=inherit] {
+  align-content: inherit;
+}
+.Flex[alignContent=initial] {
+  align-content: initial;
+}
+.Flex[alignContent=revert] {
+  align-content: revert;
+}
+.Flex[alignContent=unset] {
+  align-content: unset;
+}
+.Flex[alignSelf=auto] {
+  align-self: auto;
+}
+.Flex[alignSelf=normal] {
+  align-self: normal;
+}
+.Flex[alignSelf=center] {
+  align-self: center;
+}
+.Flex[alignSelf=start] {
+  align-self: start;
+}
+.Flex[alignSelf=end] {
+  align-self: end;
+}
+.Flex[alignSelf=flex-start] {
+  align-self: flex-start;
+}
+.Flex[alignSelf=flex-end] {
+  align-self: flex-end;
+}
+.Flex[alignSelf=self-start] {
+  align-self: self-start;
+}
+.Flex[alignSelf=self-end] {
+  align-self: self-end;
+}
+.Flex[alignSelf=baseline] {
+  align-self: baseline;
+}
+.Flex[alignSelf=stretch] {
+  align-self: stretch;
+}
+.Flex[alignSelf=inherit] {
+  align-self: inherit;
+}
+.Flex[alignSelf=initial] {
+  align-self: initial;
+}
+.Flex[alignSelf=revert] {
+  align-self: revert;
+}
+.Flex[alignSelf=unset] {
+  align-self: unset;
+}
+.Flex[justifyItems=normal] {
+  justify-items: normal;
+}
+.Flex[justifyItems=stretch] {
+  justify-items: stretch;
+}
+.Flex[justifyItems=center] {
+  justify-items: center;
+}
+.Flex[justifyItems=start] {
+  justify-items: start;
+}
+.Flex[justifyItems=end] {
+  justify-items: end;
+}
+.Flex[justifyItems=flex-start] {
+  justify-items: flex-start;
+}
+.Flex[justifyItems=flex-end] {
+  justify-items: flex-end;
+}
+.Flex[justifyItems=self-start] {
+  justify-items: self-start;
+}
+.Flex[justifyItems=self-end] {
+  justify-items: self-end;
+}
+.Flex[justifyItems=left] {
+  justify-items: left;
+}
+.Flex[justifyItems=right] {
+  justify-items: right;
+}
+.Flex[justifyItems=baseline] {
+  justify-items: baseline;
+}
+.Flex[justifyItems=inherit] {
+  justify-items: inherit;
+}
+.Flex[justifyItems=initial] {
+  justify-items: initial;
+}
+.Flex[justifyItems=revert] {
+  justify-items: revert;
+}
+.Flex[justifyItems=unset] {
+  justify-items: unset;
+}
+.Flex[justifyContent=center] {
+  justify-content: center;
+}
+.Flex[justifyContent=start] {
+  justify-content: start;
+}
+.Flex[justifyContent=end] {
+  justify-content: end;
+}
+.Flex[justifyContent=flex-start] {
+  justify-content: flex-start;
+}
+.Flex[justifyContent=flex-end] {
+  justify-content: flex-end;
+}
+.Flex[justifyContent=left] {
+  justify-content: left;
+}
+.Flex[justifyContent=right] {
+  justify-content: right;
+}
+.Flex[justifyContent=normal] {
+  justify-content: normal;
+}
+.Flex[justifyContent=space-between] {
+  justify-content: space-between;
+}
+.Flex[justifyContent=space-around] {
+  justify-content: space-around;
+}
+.Flex[justifyContent=space-evenly] {
+  justify-content: space-evenly;
+}
+.Flex[justifyContent=stretch] {
+  justify-content: stretch;
+}
+.Flex[justifyContent=inherit] {
+  justify-content: inherit;
+}
+.Flex[justifyContent=initial] {
+  justify-content: initial;
+}
+.Flex[justifyContent=revert] {
+  justify-content: revert;
+}
+.Flex[justifyContent=unset] {
+  justify-content: unset;
+}
+.Flex[justifySelf=auto] {
+  justify-self: auto;
+}
+.Flex[justifySelf=normal] {
+  justify-self: normal;
+}
+.Flex[justifySelf=stretch] {
+  justify-self: stretch;
+}
+.Flex[justifySelf=center] {
+  justify-self: center;
+}
+.Flex[justifySelf=start] {
+  justify-self: start;
+}
+.Flex[justifySelf=end] {
+  justify-self: end;
+}
+.Flex[justifySelf=flex-start] {
+  justify-self: flex-start;
+}
+.Flex[justifySelf=flex-end] {
+  justify-self: flex-end;
+}
+.Flex[justifySelf=self-start] {
+  justify-self: self-start;
+}
+.Flex[justifySelf=self-end] {
+  justify-self: self-end;
+}
+.Flex[justifySelf=left] {
+  justify-self: left;
+}
+.Flex[justifySelf=right] {
+  justify-self: right;
+}
+.Flex[justifySelf=baseline] {
+  justify-self: baseline;
+}
+.Flex[justifySelf=inherit] {
+  justify-self: inherit;
+}
+.Flex[justifySelf=initial] {
+  justify-self: initial;
+}
+.Flex[justifySelf=revert] {
+  justify-self: revert;
+}
+.Flex[justifySelf=unset] {
+  justify-self: unset;
+}
+
+/*# sourceMappingURL=index.module.css.map */

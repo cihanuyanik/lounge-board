@@ -1,8 +1,8 @@
 import styles from "./signup.module.scss";
 import { AppContextProvider, useAppContext } from "~/AppContext";
 import { Title } from "@solidjs/meta";
-import Row from "~/components/common/Row";
-import Column from "~/components/common/Column";
+import Row from "~/components/common/Flex/Row";
+import Column from "~/components/common/Flex/Column";
 import Input from "~/components/common/Input";
 import Email from "~/assets/icons/Email";
 import Password from "~/assets/icons/Password";

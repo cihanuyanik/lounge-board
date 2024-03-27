@@ -1,8 +1,8 @@
 import styles from "./members.module.scss";
 import { createEffect, on, Show } from "solid-js";
 import MemberImagePlaceholder from "~/assets/images/member-placeholder.png";
-import Row from "~/components/common/Row";
-import Column from "~/components/common/Column";
+import Row from "~/components/common/Flex/Row";
+import Column from "~/components/common/Flex/Column";
 import { Member } from "~/api/types";
 import Dialog, {
   createDialogContext,

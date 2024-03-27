@@ -1,7 +1,7 @@
 import styles from "./index.module.scss";
 import Dialog, { DialogRef } from "~/components/common/Dialog";
-import Column from "~/components/common/Column";
-import Row from "~/components/common/Row";
+import Column from "~/components/common/Flex/Column";
+import Row from "~/components/common/Flex/Row";
 import EmailVerificationImage from "~/assets/images/email-verification.png";
 import Button from "~/components/common/Button";
 import Email from "~/assets/icons/Email";

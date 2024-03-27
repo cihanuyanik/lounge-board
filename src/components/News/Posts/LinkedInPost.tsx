@@ -4,7 +4,7 @@ import IFramePost, {
 } from "~/components/News/Posts/IFramePost";
 import Img from "~/components/common/Img";
 import LinkedInPostImage from "~/assets/images/linkedin.png";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 
 type LinkedInPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 

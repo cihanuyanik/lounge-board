@@ -1,8 +1,8 @@
 import styles from "./index.module.scss";
 import BusyDialogGif from "~/assets/images/busydialog.gif";
-import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
 import Dialog from "~/components/common/Dialog";
+import Column from "~/components/common/Flex/Column";
 
 export default function BusyDialog() {
   const { busyDialog, mutateBusyDialog } = useAppContext();

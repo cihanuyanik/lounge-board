@@ -2,9 +2,7 @@ import styles from "./index.module.scss";
 import Img from "~/components/common/Img";
 import DTULogo from "~/assets/images/dtu-logo.png";
 import { createMemo, For, onMount, Show } from "solid-js";
-import Row from "~/components/common/Row";
 import { useAppContext } from "~/AppContext";
-import Column from "~/components/common/Column";
 import Button from "~/components/common/Button";
 import Logout from "~/assets/icons/Logout";
 import { useNavigate } from "@solidjs/router";
@@ -12,6 +10,8 @@ import { User } from "~/api/types";
 import Settings from "~/assets/icons/Settings";
 import { useTimer } from "~/utils/utils";
 import Avatar from "~/components/common/Avatar";
+import Row from "~/components/common/Flex/Row";
+import Column from "~/components/common/Flex/Column";
 
 type BannerProps = {
   title: string;
@@ -52,7 +52,7 @@ function AdminUser(props: { user?: User }) {
 
   return (
     <Show when={props.user}>
-      <Row class={styles.user} id={"ASD"}>
+      <Row class={styles.user}>
         <Avatar imgSrc={props.user?.photoURL!} class={styles.avatar} />
         <Column>
           <p>{"Welcome"}</p>

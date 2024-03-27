@@ -8,8 +8,8 @@ import Dialog, {
 } from "~/components/common/Dialog";
 import { New } from "~/api/types";
 import { Timestamp } from "firebase/firestore";
-import Row from "~/components/common/Row";
-import Column from "~/components/common/Column";
+import Row from "~/components/common/Flex/Row";
+import Column from "~/components/common/Flex/Column";
 import Button from "~/components/common/Button";
 import Input from "~/components/common/Input";
 

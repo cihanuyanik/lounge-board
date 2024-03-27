@@ -6,8 +6,8 @@ import BannerPlaceholder from "~/assets/images/banner_placeholder.png";
 import ResearchGroupPlaceholder from "~/assets/images/research-group-placeholder.png";
 import { v4 as uuid } from "uuid";
 import Delete from "~/assets/icons/Delete";
-import Column from "~/components/common/Column";
-import Row from "~/components/common/Row";
+import Column from "~/components/common/Flex/Column";
+import Row from "~/components/common/Flex/Row";
 import Add from "~/assets/icons/Add";
 import { ResearchGroup } from "~/api/types";
 import Dialog, {

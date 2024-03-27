@@ -5,7 +5,7 @@ import Img from "~/components/common/Img";
 import Button from "~/components/common/Button";
 import Edit from "~/assets/icons/Edit";
 import EditResearchGroups from "~/components/ResearchGroups/EditResearchGroups";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 import { useAppContext } from "~/AppContext";
 import BlockContainer from "~/components/common/BlockContainer";
 import Left from "~/assets/icons/Left";

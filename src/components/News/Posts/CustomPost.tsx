@@ -1,6 +1,6 @@
 import styles from "./posts.module.scss";
-import Column from "~/components/common/Column";
-import Row from "~/components/common/Row";
+import Column from "~/components/common/Flex/Column";
+import Row from "~/components/common/Flex/Row";
 import Img from "~/components/common/Img";
 import moment from "moment";
 import { createMemo, createSignal, onCleanup, onMount } from "solid-js";

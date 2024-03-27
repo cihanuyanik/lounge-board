@@ -1,8 +1,9 @@
 import styles from "./index.module.scss";
 import { JSX, splitProps } from "solid-js";
 
-type RowProps = JSX.HTMLAttributes<HTMLDivElement> & {
+export type FlexProps = JSX.HTMLAttributes<HTMLDivElement> & {
   children?: JSX.Element | JSX.Element[];
+  direction: "row" | "row-reverse" | "column" | "column-reverse";
   alignItems?: AlignItemsOptions;
   alignContent?: AlignContentOptions;
   alignSelf?: AlignSelfOptions;
@@ -11,10 +12,12 @@ type RowProps = JSX.HTMLAttributes<HTMLDivElement> & {
   justifySelf?: JustifySelfOptions;
 };
 
-export default function Row(props: RowProps) {
+export default function Flex(props: FlexProps) {
   const [local, rest] = splitProps(props, [
     "children",
+    "direction",
     "class",
+    "classList",
     "alignItems",
     "alignContent",
     "alignSelf",
@@ -26,7 +29,12 @@ export default function Row(props: RowProps) {
   // noinspection HtmlUnknownAttribute
   return (
     <div
-      class={`${styles.Row}${local.class ? " " + local.class : ""}`}
+      classList={{
+        [styles.Flex]: true,
+        [styles[local.direction]]: true,
+        [local.class || ""]: true,
+        ...local.classList,
+      }}
       // @ts-ignore
       alignItems={local.alignItems}
       alignContent={local.alignContent}

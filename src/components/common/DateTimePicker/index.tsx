@@ -1,8 +1,8 @@
 import styles from "./index.module.scss";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 import DateInput from "~/components/common/DateInput";
 import TimeInput, { TimeInputRef } from "~/components/common/TimeInput";
-import Column from "~/components/common/Column";
+import Column from "~/components/common/Flex/Column";
 import {
   batch,
   createEffect,

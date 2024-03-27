@@ -2,7 +2,7 @@ import styles from "./posts.module.scss";
 import IFramePost, {
   IFramePostProps,
 } from "~/components/News/Posts/IFramePost";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 import Img from "~/components/common/Img";
 import TwitterPostImage from "~/assets/images/twitter.png";
 

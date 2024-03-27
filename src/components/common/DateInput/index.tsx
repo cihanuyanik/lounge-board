@@ -1,7 +1,7 @@
 import styles from "./index.module.scss";
 import moment from "moment";
 import CalendarDate from "~/assets/icons/CalendarDate";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 
 type Props = {
   id?: string;

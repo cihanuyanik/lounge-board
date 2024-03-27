@@ -2,7 +2,7 @@ import styles from "./news.module.scss";
 
 import { Accessor, Match, Switch } from "solid-js";
 import { useAppContext } from "~/AppContext";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 import LinkedInPost from "~/components/News/Posts/LinkedInPost";
 import FacebookPost from "~/components/News/Posts/FacebookPost";
 import TwitterPost from "~/components/News/Posts/TwitterPost";

@@ -2,7 +2,7 @@ import styles from "./index.module.scss";
 import CenterIcon from "~/assets/icons/CenterIcon";
 import ResizeIcon from "~/assets/icons/ResizeIcon";
 import { createEffect, Show } from "solid-js";
-import Row from "~/components/common/Row";
+import Row from "~/components/common/Flex/Row";
 import { useDialogContext } from "~/components/ImageCropDialog/index";
 
 export function CropBox(props: { ref: (el: HTMLDivElement) => void }) {

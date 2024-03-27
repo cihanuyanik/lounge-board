@@ -1,0 +1,85 @@
+@use "../../../style/mixins" as *;
+.Flex {
+  display: flex;
+
+  // Flex Direction
+  &.row {
+    flex-direction: row;
+  }
+  &.row-reverse {
+    flex-direction: row-reverse;
+  }
+  &.column {
+    flex-direction: column;
+  }
+  &.column-reverse {
+    flex-direction: column-reverse;
+  }
+
+  // Flex Wrap
+  flex-wrap: nowrap;
+
+  // Alignments and Justifications
+  align-items: center;
+  justify-content: center;
+
+  $alignItemsOptions: "normal", "stretch", "center", "start", "end",
+    "flex-start", "flex-end", "self-start", "self-end", "baseline", "inherit",
+    "initial", "revert", "unset";
+
+  @each $option in $alignItemsOptions {
+    &[alignItems="#{$option}"] {
+      align-items: #{$option};
+    }
+  }
+
+  $alignContentOptions: "center", "start", "end", "flex-start", "flex-end",
+    "normal", "baseline", "space-between", "space-around", "space-evenly",
+    "stretch", "inherit", "initial", "revert", "unset";
+
+  @each $option in $alignContentOptions {
+    &[alignContent="#{$option}"] {
+      align-content: #{$option};
+    }
+  }
+
+  $alignSelfOptions: "auto", "normal", "center", "start", "end", "flex-start",
+    "flex-end", "self-start", "self-end", "baseline", "stretch", "inherit",
+    "initial", "revert", "unset";
+
+  @each $option in $alignSelfOptions {
+    &[alignSelf="#{$option}"] {
+      align-self: #{$option};
+    }
+  }
+
+  $justifyItemsOptions: "normal", "stretch", "center", "start", "end",
+    "flex-start", "flex-end", "self-start", "self-end", "left", "right",
+    "baseline", "inherit", "initial", "revert", "unset";
+
+  @each $option in $justifyItemsOptions {
+    &[justifyItems="#{$option}"] {
+      justify-items: #{$option};
+    }
+  }
+
+  $justifyContentOptions: "center", "start", "end", "flex-start", "flex-end",
+    "left", "right", "normal", "space-between", "space-around", "space-evenly",
+    "stretch", "inherit", "initial", "revert", "unset";
+
+  @each $option in $justifyContentOptions {
+    &[justifyContent="#{$option}"] {
+      justify-content: #{$option};
+    }
+  }
+
+  $justifySelfOptions: "auto", "normal", "stretch", "center", "start", "end",
+    "flex-start", "flex-end", "self-start", "self-end", "left", "right",
+    "baseline", "inherit", "initial", "revert", "unset";
+
+  @each $option in $justifySelfOptions {
+    &[justifySelf="#{$option}"] {
+      justify-self: #{$option};
+    }
+  }
+}

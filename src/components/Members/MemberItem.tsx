@@ -1,8 +1,8 @@
 import styles from "./members.module.scss";
 import DragHandle from "~/components/DragToReorder/DragHandle";
 import { Show } from "solid-js";
-import Row from "~/components/common/Row";
-import Column from "~/components/common/Column";
+import Row from "~/components/common/Flex/Row";
+import Column from "~/components/common/Flex/Column";
 import { useAppContext } from "~/AppContext";
 import Avatar from "~/components/common/Avatar";
 import SelectedMarker from "~/components/SelectedMarker";

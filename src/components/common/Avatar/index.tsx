@@ -1,10 +1,10 @@
 import styles from "./index.module.scss";
 import Img from "~/components/common/Img";
 import AvatarPlaceholder from "~/assets/images/member-placeholder.png";
-import Row from "~/components/common/Row";
 import ImageSelectInput from "~/components/ImageSelectInput";
 import ImageCropDialog, { ImageCropResult } from "~/components/ImageCropDialog";
 import { Show } from "solid-js";
+import Row from "~/components/common/Flex/Row";
 
 type AvatarProps = {
   imgSrc: string;
