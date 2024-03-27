@@ -32,16 +32,16 @@ export default function Flex(props: FlexProps) {
       classList={{
         [styles.Flex]: true,
         [styles[local.direction]]: true,
+        [styles[`ai-${local.alignItems}`]]: local.alignItems !== undefined,
+        [styles[`ac-${local.alignContent}`]]: local.alignContent !== undefined,
+        [styles[`as-${local.alignSelf}`]]: local.alignSelf !== undefined,
+        [styles[`ji-${local.justifyItems}`]]: local.justifyItems !== undefined,
+        [styles[`jc-${local.justifyContent}`]]:
+          local.justifyContent !== undefined,
+        [styles[`js-${local.justifySelf}`]]: local.justifySelf !== undefined,
         [local.class || ""]: true,
         ...local.classList,
       }}
-      // @ts-ignore
-      alignItems={local.alignItems}
-      alignContent={local.alignContent}
-      alignSelf={local.alignSelf}
-      justifyItems={local.justifyItems}
-      justifyContent={local.justifyContent}
-      justifySelf={local.justifySelf}
       {...rest}
     >
       {local.children}

@@ -28,7 +28,7 @@
     "initial", "revert", "unset";
 
   @each $option in $alignItemsOptions {
-    &[alignItems="#{$option}"] {
+    &.ai-#{$option} {
       align-items: #{$option};
     }
   }
@@ -38,7 +38,7 @@
     "stretch", "inherit", "initial", "revert", "unset";
 
   @each $option in $alignContentOptions {
-    &[alignContent="#{$option}"] {
+    &.ac-#{$option} {
       align-content: #{$option};
     }
   }
@@ -48,7 +48,7 @@
     "initial", "revert", "unset";
 
   @each $option in $alignSelfOptions {
-    &[alignSelf="#{$option}"] {
+    &.as-#{$option} {
       align-self: #{$option};
     }
   }
@@ -58,7 +58,7 @@
     "baseline", "inherit", "initial", "revert", "unset";
 
   @each $option in $justifyItemsOptions {
-    &[justifyItems="#{$option}"] {
+    &.ji-#{$option} {
       justify-items: #{$option};
     }
   }
@@ -68,7 +68,7 @@
     "stretch", "inherit", "initial", "revert", "unset";
 
   @each $option in $justifyContentOptions {
-    &[justifyContent="#{$option}"] {
+    &.jc-#{$option} {
       justify-content: #{$option};
     }
   }
@@ -78,7 +78,7 @@
     "baseline", "inherit", "initial", "revert", "unset";
 
   @each $option in $justifySelfOptions {
-    &[justifySelf="#{$option}"] {
+    &.js-#{$option} {
       justify-self: #{$option};
     }
   }
