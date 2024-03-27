@@ -20,7 +20,6 @@ export default function MemberItem(props: MemberItemProps) {
       id={props.id}
       class={styles.memberItem}
       classList={{
-        // TODO: Add "drag-item" class to the member item if the user is an admin
         "drag-item": isAdmin(),
         [styles.pointer]: isAdmin(),
         [styles.selected]: members.entities[props.id]?.isSelected,

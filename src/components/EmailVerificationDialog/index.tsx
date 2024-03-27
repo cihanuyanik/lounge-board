@@ -11,7 +11,7 @@ import { useAppContext } from "~/AppContext";
 
 export type EmailVerificationDialogResult = "Cancel" | "Verified";
 
-export default function (props: { ref: DialogRef }) {
+export default function EmailVerificationDialog(props: { ref: DialogRef }) {
   const { API, Executor } = useAppContext();
 
   let dialogResult: EmailVerificationDialogResult = "Cancel";

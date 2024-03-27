@@ -5,7 +5,7 @@ type ResizeIconProps = {
   style?: JSX.CSSProperties;
 } & Omit<JSX.HTMLAttributes<SVGSVGElement>, "style">;
 
-export default function (props: ResizeIconProps) {
+export default function ResizeIcon(props: ResizeIconProps) {
   const [local, rest] = splitProps(props, ["rotate", "style"]);
   return (
     <svg

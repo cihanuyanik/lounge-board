@@ -5,7 +5,7 @@ type Props = {
   onImageSelected: (file: File) => void;
 };
 
-export default function (props: Props) {
+export default function ImageSelectInput(props: Props) {
   let imageSelectInput: HTMLInputElement = null!;
 
   return (

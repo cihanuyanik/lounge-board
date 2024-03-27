@@ -5,7 +5,7 @@ import { Show } from "solid-js";
 
 type SelectedMarkerProps = { visible: boolean };
 
-export default function (props: SelectedMarkerProps) {
+export default function SelectedMarker(props: SelectedMarkerProps) {
   return (
     <Show when={props.visible}>
       <Row class={styles.SelectedMarker}>

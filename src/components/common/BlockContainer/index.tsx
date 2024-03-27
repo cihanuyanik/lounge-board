@@ -21,7 +21,7 @@ type BlockContainerProps = {
   popupDirection?: Direction;
 };
 
-export default function (props: BlockContainerProps) {
+export default function BlockContainer(props: BlockContainerProps) {
   let titleRef: HTMLDivElement = null!;
 
   createEffect(

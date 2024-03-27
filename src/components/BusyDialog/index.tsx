@@ -4,7 +4,7 @@ import Column from "~/components/common/Column";
 import { useAppContext } from "~/AppContext";
 import Dialog from "~/components/common/Dialog";
 
-export default function () {
+export default function BusyDialog() {
   const { busyDialog, mutateBusyDialog } = useAppContext();
 
   return (

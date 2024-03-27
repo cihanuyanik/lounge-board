@@ -7,7 +7,7 @@ type Props = {
   height?: string | number;
 } & JSX.InputHTMLAttributes<HTMLInputElement>;
 
-export default function (props: Props) {
+export default function Input(props: Props) {
   const [local, rest] = splitProps(props, ["label", "class", "icon", "height"]);
 
   return (

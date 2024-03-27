@@ -23,7 +23,7 @@ type Props = {
   onValueChanged: (event: { value: string; target: HTMLDivElement }) => void;
 };
 
-export default function (props: Props) {
+export default function Dropdown(props: Props) {
   const [open, setOpen] = createSignal(false);
   const [dropdownMenu, setDropdownMenu] = createSignal<HTMLDivElement>(null!);
   const [valueVisual, setValueVisual] = createSignal<HTMLElement>(null!);

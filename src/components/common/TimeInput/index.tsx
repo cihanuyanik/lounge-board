@@ -15,7 +15,7 @@ type Props = {
   onChange?: (value: string) => void;
 };
 
-export default function (props: Props) {
+export default function TimeInput(props: Props) {
   const [hour, setHour] = createSignal("00");
   const [minute, setMinute] = createSignal("00");
 

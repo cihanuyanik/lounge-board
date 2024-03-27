@@ -86,7 +86,7 @@ const { ContextProvider, useDialogContext } =
     },
   });
 
-export default function (props: { ref: DialogRef }) {
+export default function CreateEditNews(props: { ref: DialogRef }) {
   return (
     <ContextProvider>
       <_CreateEditNews ref={props.ref} />

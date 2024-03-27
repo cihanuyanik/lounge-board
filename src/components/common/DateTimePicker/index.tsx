@@ -31,7 +31,7 @@ type Props = {
   max?: string;
 };
 
-export default function (props: Props) {
+export default function DateTimePicker(props: Props) {
   let dateRef: HTMLInputElement = null!;
   let timeRef: TimeInputRef = null!;
 

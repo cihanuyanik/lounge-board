@@ -18,7 +18,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export default function (props: Props) {
+export default function DateInput(props: Props) {
   let inputRef: HTMLInputElement;
 
   return (

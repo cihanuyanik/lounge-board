@@ -1,7 +1,7 @@
 import styles from "./index.module.scss";
 import Email from "~/assets/icons/Email";
 
-export default function () {
+export default function Footer() {
   return (
     <div class={styles.Footer}>
       <span>Under Development...</span>

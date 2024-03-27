@@ -15,7 +15,7 @@ type CustomPostProps = {
   updatedAt: Timestamp;
 };
 
-export default function (props: CustomPostProps) {
+export default function CustomPost(props: CustomPostProps) {
   const [timePassed, setTimePassed] = createSignal(
     moment(props.updatedAt.toDate()).fromNow(),
   );

@@ -15,7 +15,7 @@ import GoogleLogo from "~/assets/images/google.png";
 import MicrosoftLogo from "~/assets/images/microsoft.png";
 import GitHubLogo from "~/assets/images/github.png";
 
-export default function (props: { ref?: DialogRef }) {
+export default function LoginDialog(props: { ref?: DialogRef }) {
   const { API, Executor } = useAppContext();
   const navigate = useNavigate();
 

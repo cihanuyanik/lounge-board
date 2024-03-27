@@ -1,6 +1,6 @@
 import { JSX } from "solid-js";
 
-export default function (props: JSX.HTMLAttributes<SVGSVGElement>) {
+export default function Clock(props: JSX.HTMLAttributes<SVGSVGElement>) {
   return (
     <svg
       stroke="currentColor"

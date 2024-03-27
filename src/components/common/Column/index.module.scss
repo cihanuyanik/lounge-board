@@ -1,7 +1,16 @@
+@use "../../../style/mixins" as *;
+
 .Column {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
+
+  @include generateAlignItems();
+  @include generateAlignContent();
+  @include generateAlignSelf();
+  @include generateJustifyItems();
+  @include generateJustifyContent();
+  @include generateJustifySelf();
 }

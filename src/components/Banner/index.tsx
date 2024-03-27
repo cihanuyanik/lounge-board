@@ -19,7 +19,7 @@ type BannerProps = {
   showResearchGroups?: boolean;
 };
 
-export default function (props: BannerProps) {
+export default function Banner(props: BannerProps) {
   return (
     <Row class={styles.Banner}>
       <Logo />
@@ -52,7 +52,7 @@ function AdminUser(props: { user?: User }) {
 
   return (
     <Show when={props.user}>
-      <Row class={styles.user}>
+      <Row class={styles.user} id={"ASD"}>
         <Avatar imgSrc={props.user?.photoURL!} class={styles.avatar} />
         <Column>
           <p>{"Welcome"}</p>

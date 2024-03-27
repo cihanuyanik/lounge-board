@@ -12,7 +12,7 @@ type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
   rectangle?: boolean;
 };
 
-export default function (props: ButtonProps) {
+export default function Button(props: ButtonProps) {
   // Split props into local and rest
   const [local, rest] = splitProps(props, [
     "class",

@@ -7,7 +7,7 @@ type ScrollableProps = {
   hideScrollbar?: boolean;
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
-export default function (props: ScrollableProps) {
+export default function Scrollable(props: ScrollableProps) {
   const [local, rest] = splitProps(props, [
     "children",
     "direction",

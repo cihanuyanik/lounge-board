@@ -1,4 +1,3 @@
-// import "./index.css";
 import styles from "./index.module.scss";
 import Img from "~/components/common/Img";
 import AvatarPlaceholder from "~/assets/images/member-placeholder.png";
@@ -17,11 +16,10 @@ type AvatarProps = {
   class?: string;
 };
 
-export default function (props: AvatarProps) {
+export default function Avatar(props: AvatarProps) {
   let imageCropDialog: HTMLDialogElement = null!;
 
   return (
-    // <Row class={"avatar"}>
     <Row class={`${styles.Avatar}${props.class ? " " + props.class : ""}`}>
       <Img src={props.imgSrc || AvatarPlaceholder} />
 

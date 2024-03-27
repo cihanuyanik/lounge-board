@@ -44,7 +44,7 @@ type ImageCropDialogProps = {
   rounded?: "none" | "full" | number;
 };
 
-export default function (props: ImageCropDialogProps) {
+export default function ImageCropDialog(props: ImageCropDialogProps) {
   return (
     <ContextProvider>
       <_ImageCropDialog

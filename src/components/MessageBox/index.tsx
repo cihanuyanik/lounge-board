@@ -14,7 +14,7 @@ import Cross from "~/assets/icons/Cross";
 import Dialog from "~/components/common/Dialog";
 import { useAppContext } from "~/AppContext";
 
-export default function () {
+export default function MessageBox() {
   const { messageBox, mutateMessageBox } = useAppContext();
 
   const iconMap = {

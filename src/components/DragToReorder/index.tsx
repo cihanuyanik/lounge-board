@@ -32,7 +32,7 @@ type DragToReorderProps = {
   onDragFinish?: DragFinishCallback;
 };
 
-export default function (props: DragToReorderProps) {
+export default function DragToReorder(props: DragToReorderProps) {
   const childContainer = children(() => props.children);
 
   let dragManager: DragManager;
