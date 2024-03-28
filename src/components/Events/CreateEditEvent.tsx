@@ -168,9 +168,9 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
       </Row>
       <Column class={styles.container}>
         <Input
+          width={"full"}
           label={"Name"}
           placeholder={"... Event Name ..."}
-          class={"w-full"}
           icon={Title}
           height={60}
           value={state.event.name}
@@ -179,9 +179,9 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
           }}
         />
         <Input
+          width={"full"}
           label={"Details"}
           placeholder={"... Event details ..."}
-          class={"w-full"}
           icon={Details}
           height={60}
           value={state.event.details}
@@ -317,21 +317,21 @@ function Preview() {
           <Row class={styles.datetimeInfo}>
             <Row class={styles.date}>
               <CalendarDate />
-              <Column class={"flex-1"}>
+              <Column flex={"1"}>
                 <Row>{moment(state.event.startsAt).format("DD")}</Row>
                 <Row>{moment(state.event.startsAt).format("MMM")}</Row>
               </Column>
             </Row>
             <Row class={styles.time}>
               <Clock />
-              <Column class={"flex-1"}>
+              <Column flex={"1"}>
                 <Row>{moment(state.event.startsAt).format("HH")}</Row>
                 <Row>{moment(state.event.startsAt).format("mm")}</Row>
               </Column>
             </Row>
             <Row class={styles.duration}>
               <Duration />
-              <Column class={"flex-1"}>
+              <Column flex={"1"}>
                 {buildDurationString(state.event.startsAt, state.event.endsAt)}
               </Column>
             </Row>

@@ -53,7 +53,7 @@ export default function CustomPost(props: CustomPostProps) {
     <Column class={styles.customPost} style={{ width: `${props.width}px` }}>
       <Row class={styles.title}>
         <Img src={props.avatarUrl || DefaultAvatar} />
-        <Column class={"flex-1"}>
+        <Column flex={"1"}>
           <div class={styles.text}>{props.title}</div>
           <div class={styles.duration}>{timePassed()}</div>
         </Column>

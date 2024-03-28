@@ -113,9 +113,9 @@ function _Admin() {
           user={user()}
           showResearchGroups={true}
         />
-        <Row class={"flex-1 w-full gap-2"}>
+        <Row flex={"1"} width={"full"} gap={"2"}>
           <Members />
-          <Column class={"flex-1 h-full gap-2"}>
+          <Column flex={"1"} height={"full"} gap={"2"}>
             <ResearchGroups />
             <Events />
           </Column>

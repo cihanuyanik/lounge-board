@@ -237,9 +237,9 @@ function CustomPostInfo() {
   if (state === undefined) return null;
 
   return (
-    <Column class={"w-full gap-3"}>
+    <Column width={"full"} gap={"3"}>
       <Input
-        class={"w-full"}
+        width={"full"}
         placeholder={"Post title"}
         height={40}
         value={state.news.postTitle}
@@ -269,7 +269,7 @@ function SocialMediaPostEmbedCode() {
   if (state === undefined) return null;
 
   return (
-    <Column class={"w-full gap-3"}>
+    <Column width={"full"} gap={"3"}>
       <textarea
         class={styles.htmlCode}
         spellcheck={false}
@@ -296,7 +296,6 @@ function Preview() {
           state.previewContainer = el;
         });
       }}
-      direction={"vertical"}
       class={styles.preview}
     >
       <Switch fallback={null}>

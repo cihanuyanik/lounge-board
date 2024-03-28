@@ -3,7 +3,7 @@ import { JSX, splitProps } from "solid-js";
 
 type ScrollableProps = {
   children: JSX.Element | JSX.Element[];
-  direction: "vertical" | "horizontal";
+  direction?: "vertical" | "horizontal";
   hideScrollbar?: boolean;
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
@@ -17,10 +17,11 @@ export default function Scrollable(props: ScrollableProps) {
 
   return (
     <div
-      class={`${styles.Scrollable} ${styles[local.direction]}`}
       classList={{
+        [styles.Scrollable]: true,
+        [styles[local.direction || "vertical"]]: true,
         [styles.hideScrollbar]: local.hideScrollbar || false,
-        [local.class!]: local.class !== undefined,
+        [local.class || ""]: true,
       }}
       {...rest}
     >

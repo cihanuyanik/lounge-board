@@ -44,8 +44,11 @@ export default function HoverPopup(props: HoverPopupProps) {
 
   return (
     <Row
-      class={`${styles.HoverPopup} ${styles[props.direction]}`}
-      classList={{ [styles.open]: popupOpen() }}
+      classList={{
+        [styles.HoverPopup]: true,
+        [styles[props.direction]]: true,
+        [styles.open]: popupOpen(),
+      }}
       style={{
         top: `${y()}px`,
         left: `${x()}px`,

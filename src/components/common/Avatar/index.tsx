@@ -20,7 +20,12 @@ export default function Avatar(props: AvatarProps) {
   let imageCropDialog: HTMLDialogElement = null!;
 
   return (
-    <Row class={`${styles.Avatar}${props.class ? " " + props.class : ""}`}>
+    <Row
+      classList={{
+        [styles.Avatar]: true,
+        [props.class || ""]: true,
+      }}
+    >
       <Img src={props.imgSrc || AvatarPlaceholder} />
 
       <Show when={props.enableImageSelect}>

@@ -57,10 +57,10 @@ export default function LoginDialog(props: { ref?: DialogRef }) {
       <Row class={styles.title}>{"Login"}</Row>
       <Column class={styles.content}>
         <Input
+          width={"full"}
           label={"E-mail"}
           type={"email"}
           placeholder={"... user-email@dtu.dk ..."}
-          class={"w-full"}
           icon={Email}
           value={email()}
           onInput={(ev) => {
@@ -68,10 +68,10 @@ export default function LoginDialog(props: { ref?: DialogRef }) {
           }}
         />
         <Input
+          width={"full"}
           label={"Password"}
           type={"password"}
           placeholder={"... A strong password ..."}
-          class={"w-full"}
           icon={Password}
           value={password()}
           onInput={(ev) => {
@@ -79,7 +79,7 @@ export default function LoginDialog(props: { ref?: DialogRef }) {
           }}
         />
 
-        <Row class={"w-full"}>
+        <Row width={"full"}>
           <Button
             class={styles.green}
             rectangle
@@ -108,7 +108,7 @@ export default function LoginDialog(props: { ref?: DialogRef }) {
           </Button>
         </Row>
 
-        <Row class={"gap-1"}>
+        <Row gap={"1"}>
           <p>{"Don't have an account? "}</p>
           <p
             style={{

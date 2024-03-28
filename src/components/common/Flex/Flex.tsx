@@ -4,18 +4,56 @@ import { JSX, splitProps } from "solid-js";
 export type FlexProps = JSX.HTMLAttributes<HTMLDivElement> & {
   children?: JSX.Element | JSX.Element[];
   direction: "row" | "row-reverse" | "column" | "column-reverse";
-  alignItems?: AlignItemsOptions;
-  alignContent?: AlignContentOptions;
-  alignSelf?: AlignSelfOptions;
-  justifyItems?: JustifyItemsOptions;
-  justifyContent?: JustifyContentOptions;
-  justifySelf?: JustifySelfOptions;
+  wrap?: "nowrap" | "wrap" | "wrap-reverse";
+  alignItems?: "center" | "start" | "end" | "stretch" | "unset";
+  alignContent?:
+    | "center"
+    | "start"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+    | "unset";
+  alignSelf?: "center" | "start" | "end" | "stretch" | "unset";
+  justifyItems?:
+    | "center"
+    | "start"
+    | "end"
+    | "stretch"
+    | "left"
+    | "right"
+    | "unset";
+  justifyContent?:
+    | "center"
+    | "start"
+    | "end"
+    | "stretch"
+    | "left"
+    | "right"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+    | "unset";
+  justifySelf?:
+    | "center"
+    | "start"
+    | "end"
+    | "stretch"
+    | "left"
+    | "right"
+    | "unset";
+  gap?: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  width?: "auto" | "full" | "half" | "third" | "quarter" | "screen";
+  height?: "auto" | "full" | "half" | "third" | "quarter" | "screen";
+  flex?: "1" | "2" | "3" | "4" | "5";
 };
 
 export default function Flex(props: FlexProps) {
   const [local, rest] = splitProps(props, [
     "children",
     "direction",
+    "wrap",
     "class",
     "classList",
     "alignItems",
@@ -24,6 +62,10 @@ export default function Flex(props: FlexProps) {
     "justifyItems",
     "justifyContent",
     "justifySelf",
+    "gap",
+    "width",
+    "height",
+    "flex",
   ]);
 
   // noinspection HtmlUnknownAttribute
@@ -32,6 +74,7 @@ export default function Flex(props: FlexProps) {
       classList={{
         [styles.Flex]: true,
         [styles[local.direction]]: true,
+        [styles[local.wrap || ""]]: local.wrap !== undefined,
         [styles[`ai-${local.alignItems}`]]: local.alignItems !== undefined,
         [styles[`ac-${local.alignContent}`]]: local.alignContent !== undefined,
         [styles[`as-${local.alignSelf}`]]: local.alignSelf !== undefined,
@@ -39,6 +82,10 @@ export default function Flex(props: FlexProps) {
         [styles[`jc-${local.justifyContent}`]]:
           local.justifyContent !== undefined,
         [styles[`js-${local.justifySelf}`]]: local.justifySelf !== undefined,
+        [styles[`gap-${local.gap}`]]: local.gap !== undefined,
+        [styles[`w-${local.width}`]]: local.width !== undefined,
+        [styles[`h-${local.height}`]]: local.height !== undefined,
+        [styles[`flex-${local.flex}`]]: local.flex !== undefined,
         [local.class || ""]: true,
         ...local.classList,
       }}
@@ -48,108 +95,3 @@ export default function Flex(props: FlexProps) {
     </div>
   );
 }
-
-type AlignItemsOptions =
-  | "normal"
-  | "stretch"
-  | "center"
-  | "start"
-  | "end"
-  | "flex-start"
-  | "flex-end"
-  | "self-start"
-  | "self-end"
-  | "baseline"
-  | "inherit"
-  | "initial"
-  | "revert"
-  | "unset";
-
-type AlignContentOptions =
-  | "center"
-  | "start"
-  | "end"
-  | "flex-start"
-  | "flex-end"
-  | "normal"
-  | "baseline"
-  | "space-between"
-  | "space-around"
-  | "space-evenly"
-  | "stretch"
-  | "inherit"
-  | "initial"
-  | "revert"
-  | "unset";
-
-type AlignSelfOptions =
-  | "auto"
-  | "normal"
-  | "center"
-  | "start"
-  | "end"
-  | "flex-start"
-  | "flex-end"
-  | "self-start"
-  | "self-end"
-  | "baseline"
-  | "stretch"
-  | "inherit"
-  | "initial"
-  | "revert"
-  | "unset";
-
-type JustifyItemsOptions =
-  | "normal"
-  | "stretch"
-  | "center"
-  | "start"
-  | "end"
-  | "flex-start"
-  | "flex-end"
-  | "self-start"
-  | "self-end"
-  | "left"
-  | "right"
-  | "baseline"
-  | "inherit"
-  | "initial"
-  | "revert"
-  | "unset";
-
-type JustifyContentOptions =
-  | "center"
-  | "start"
-  | "end"
-  | "flex-start"
-  | "flex-end"
-  | "left"
-  | "right"
-  | "normal"
-  | "space-between"
-  | "space-around"
-  | "space-evenly"
-  | "stretch"
-  | "inherit"
-  | "initial"
-  | "revert"
-  | "unset";
-
-type JustifySelfOptions =
-  | "auto"
-  | "normal"
-  | "stretch"
-  | "center"
-  | "start"
-  | "end"
-  | "flex-start"
-  | "flex-end"
-  | "self-start"
-  | "self-end"
-  | "left"
-  | "right"
-  | "baseline"
-  | "inherit"
-  | "initial"
-  | "revert"
-  | "unset";

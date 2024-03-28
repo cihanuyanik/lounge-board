@@ -69,34 +69,34 @@ function _Signup() {
             class={styles.avatar}
           />
           <Input
+            width={"full"}
             label={"Full Name"}
             type={"text"}
             placeholder={"... Your full name ..."}
-            class={"w-full"}
             value={name()}
             onInput={(e) => setName(e.currentTarget.value)}
           />
 
           <Input
+            width={"full"}
             label={"E-mail"}
             type={"email"}
             placeholder={"... user-email@dtu.dk ..."}
-            class={"w-full"}
             icon={Email}
             value={email()}
             onInput={(e) => setEmail(e.currentTarget.value)}
           />
           <Input
+            width={"full"}
             label={"Password"}
             type={"password"}
             placeholder={"... A strong password ..."}
-            class={"w-full"}
             icon={Password}
             value={password()}
             onInput={(e) => setPassword(e.currentTarget.value)}
           />
 
-          <Row class={"w-full"}>
+          <Row width={"full"}>
             <Button
               class={styles.green}
               rectangle

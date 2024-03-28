@@ -74,14 +74,22 @@ export default function Dropdown(props: Props) {
   // noinspection HtmlUnknownAttribute
   return (
     <div
-      class={`${styles.Dropdown}${props.class ? " " + props.class : ""}`}
-      onClick={() => setOpen((prev) => !prev)}
+      classList={{
+        [styles.Dropdown]: true,
+        [props.class || ""]: true,
+      }}
       style={props.rootStyle}
+      onClick={() => setOpen((prev) => !prev)}
       // @ts-ignore
       use:clickOutside={() => setOpen(false)}
     >
       <div class={styles.toggle}>{valueVisual()}</div>
-      <div class={styles.arrow} classList={{ [styles.rotate]: open() }}>
+      <div
+        classList={{
+          [styles.arrow]: true,
+          [styles.rotate]: open(),
+        }}
+      >
         <p>▼</p>
       </div>
       <div
@@ -101,8 +109,10 @@ export default function Dropdown(props: Props) {
             );
           }
         }}
-        class={styles.menu}
-        classList={{ [styles.open]: open() }}
+        classList={{
+          [styles.menu]: true,
+          [styles.open]: open(),
+        }}
       >
         {props.children}
       </div>

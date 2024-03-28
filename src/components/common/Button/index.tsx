@@ -53,8 +53,8 @@ export default function Button(props: ButtonProps) {
   return (
     <button
       onPointerEnter={local.popupContent ? popupPointerEnter : undefined}
-      class={styles.Button}
       classList={{
+        [styles.Button]: true,
         [styles.rectangle]: local.rectangle || false,
         [local.class!]: local.class !== undefined,
       }}

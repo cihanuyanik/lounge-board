@@ -18,8 +18,8 @@ export default function MemberItem(props: MemberItemProps) {
   return (
     <Row
       id={props.id}
-      class={styles.memberItem}
       classList={{
+        [styles.memberItem]: true,
         "drag-item": isAdmin(),
         [styles.pointer]: isAdmin(),
         [styles.selected]: members.entities[props.id]?.isSelected,

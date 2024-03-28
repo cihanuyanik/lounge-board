@@ -1,31 +1,31 @@
-@use "../../../style/mixins" as *;
-.Flex {
-  display: flex;
-
+@mixin generateDirectionClasses() {
   // Flex Direction
-  &.row {
-    flex-direction: row;
+  $flexDirectionOptions: "row", "row-reverse", "column", "column-reverse";
+  @each $option in $flexDirectionOptions {
+    &.#{$option} {
+      flex-direction: #{$option};
+    }
   }
-  &.row-reverse {
-    flex-direction: row-reverse;
-  }
-  &.column {
-    flex-direction: column;
-  }
-  &.column-reverse {
-    flex-direction: column-reverse;
-  }
+}
 
+@mixin generateWrapClasses() {
   // Flex Wrap
   flex-wrap: nowrap;
 
+  $flexWrapOptions: "nowrap", "wrap", "wrap-reverse";
+  @each $option in $flexWrapOptions {
+    &.#{$option} {
+      flex-wrap: #{$option};
+    }
+  }
+}
+
+@mixin generateAlignJustClasses() {
   // Alignments and Justifications
   align-items: center;
   justify-content: center;
 
-  $alignItemsOptions: "normal", "stretch", "center", "start", "end",
-    "flex-start", "flex-end", "self-start", "self-end", "baseline", "inherit",
-    "initial", "revert", "unset";
+  $alignItemsOptions: "center", "start", "end", "stretch", "unset";
 
   @each $option in $alignItemsOptions {
     &.ai-#{$option} {
@@ -33,9 +33,8 @@
     }
   }
 
-  $alignContentOptions: "center", "start", "end", "flex-start", "flex-end",
-    "normal", "baseline", "space-between", "space-around", "space-evenly",
-    "stretch", "inherit", "initial", "revert", "unset";
+  $alignContentOptions: "center", "start", "end", "stretch", "space-between",
+    "space-around", "space-evenly", "unset";
 
   @each $option in $alignContentOptions {
     &.ac-#{$option} {
@@ -43,9 +42,7 @@
     }
   }
 
-  $alignSelfOptions: "auto", "normal", "center", "start", "end", "flex-start",
-    "flex-end", "self-start", "self-end", "baseline", "stretch", "inherit",
-    "initial", "revert", "unset";
+  $alignSelfOptions: "center", "start", "end", "stretch", "unset";
 
   @each $option in $alignSelfOptions {
     &.as-#{$option} {
@@ -53,9 +50,8 @@
     }
   }
 
-  $justifyItemsOptions: "normal", "stretch", "center", "start", "end",
-    "flex-start", "flex-end", "self-start", "self-end", "left", "right",
-    "baseline", "inherit", "initial", "revert", "unset";
+  $justifyItemsOptions: "center", "start", "end", "stretch", "left", "right",
+    "unset";
 
   @each $option in $justifyItemsOptions {
     &.ji-#{$option} {
@@ -63,9 +59,8 @@
     }
   }
 
-  $justifyContentOptions: "center", "start", "end", "flex-start", "flex-end",
-    "left", "right", "normal", "space-between", "space-around", "space-evenly",
-    "stretch", "inherit", "initial", "revert", "unset";
+  $justifyContentOptions: "center", "start", "end", "stretch", "left", "right",
+    "space-between", "space-around", "space-evenly", "unset";
 
   @each $option in $justifyContentOptions {
     &.jc-#{$option} {
@@ -73,13 +68,81 @@
     }
   }
 
-  $justifySelfOptions: "auto", "normal", "stretch", "center", "start", "end",
-    "flex-start", "flex-end", "self-start", "self-end", "left", "right",
-    "baseline", "inherit", "initial", "revert", "unset";
+  $justifySelfOptions: "center", "start", "end", "stretch", "left", "right",
+    "unset";
 
   @each $option in $justifySelfOptions {
     &.js-#{$option} {
       justify-self: #{$option};
     }
   }
+}
+
+@mixin generateGapClasses() {
+  // Generate gap classes
+  @for $i from 1 through 5 {
+    &.gap-#{$i} {
+      gap: var(--space-#{$i});
+    }
+  }
+}
+
+@mixin generateWidthHeightClasses() {
+  &.w-auto {
+    width: auto;
+  }
+  &.w-full {
+    width: 100%;
+  }
+  &.w-half {
+    width: 50%;
+  }
+  &.w-third {
+    width: 33.333333%;
+  }
+  &.w-quarter {
+    width: 25%;
+  }
+  &.w-screen {
+    width: 100dvw;
+  }
+
+  &.h-auto {
+    height: auto;
+  }
+  &.h-full {
+    height: 100%;
+  }
+  &.h-half {
+    height: 50%;
+  }
+  &.h-third {
+    height: 33.333333%;
+  }
+  &.h-quarter {
+    height: 25%;
+  }
+  &.h-screen {
+    height: 100dvh;
+  }
+}
+
+@mixin generateFlexClasses() {
+  // Flex
+  @for $i from 1 through 5 {
+    &.flex-#{$i} {
+      flex: #{$i};
+    }
+  }
+}
+
+.Flex {
+  display: flex;
+
+  @include generateDirectionClasses();
+  @include generateWrapClasses();
+  @include generateAlignJustClasses();
+  @include generateGapClasses();
+  @include generateWidthHeightClasses();
+  @include generateFlexClasses();
 }

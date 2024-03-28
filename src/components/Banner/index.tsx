@@ -25,7 +25,7 @@ export default function Banner(props: BannerProps) {
       <Logo />
       <AdminUser user={props.user} />
       <BannerText title={props.title} />
-      <Row class={"flex-1"} />
+      <Row flex={"1"} />
       <ResearchGroups show={props.showResearchGroups} />
     </Row>
   );
@@ -57,7 +57,7 @@ function AdminUser(props: { user?: User }) {
         <Column>
           <p>{"Welcome"}</p>
           <p>{props.user?.displayName}</p>
-          <Row class={"gap-1"}>
+          <Row gap={"1"}>
             <Button
               popupContent={"Sign out from admin account and go to index page"}
               onClick={async () => {
@@ -117,7 +117,10 @@ function BannerText(props: { title: string }) {
   return (
     <Row
       ref={bannerTextContainer}
-      class={`${styles.bannerText} ${styles.animateLetterJump}`}
+      classList={{
+        [styles.bannerText]: true,
+        [styles.animateLetterJump]: true,
+      }}
     >
       <For each={titleAsArray()}>
         {(char, index) => (

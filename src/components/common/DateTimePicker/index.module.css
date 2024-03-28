@@ -5,6 +5,21 @@
   isolation: isolate;
   height: var(--container-height);
 }
+.Input.w-auto {
+  width: auto;
+}
+.Input.w-full {
+  width: 100%;
+}
+.Input.w-half {
+  width: 50%;
+}
+.Input.w-third {
+  width: 33.3333%;
+}
+.Input.w-quarter {
+  width: 25%;
+}
 .Input > label {
   position: absolute;
   top: 0;
@@ -72,6 +87,21 @@
   position: relative;
   isolation: isolate;
   height: var(--container-height);
+}
+.DateTimePicker.w-auto {
+  width: auto;
+}
+.DateTimePicker.w-full {
+  width: 100%;
+}
+.DateTimePicker.w-half {
+  width: 50%;
+}
+.DateTimePicker.w-third {
+  width: 33.3333%;
+}
+.DateTimePicker.w-quarter {
+  width: 25%;
 }
 .DateTimePicker > label {
   position: absolute;

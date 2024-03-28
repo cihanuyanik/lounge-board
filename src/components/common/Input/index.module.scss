@@ -6,6 +6,22 @@
   isolation: isolate;
   height: var(--container-height);
 
+  &.w-auto {
+    width: auto;
+  }
+  &.w-full {
+    width: 100%;
+  }
+  &.w-half {
+    width: 50%;
+  }
+  &.w-third {
+    width: 33.3333%;
+  }
+  &.w-quarter {
+    width: 25%;
+  }
+
   > label {
     position: absolute;
     top: 0;

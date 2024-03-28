@@ -5,14 +5,25 @@ type Props = {
   label?: string;
   icon?: (props: any) => JSX.Element;
   height?: string | number;
+  width?: "auto" | "full" | "half" | "third" | "quarter" | "screen";
 } & JSX.InputHTMLAttributes<HTMLInputElement>;
 
 export default function Input(props: Props) {
-  const [local, rest] = splitProps(props, ["label", "class", "icon", "height"]);
+  const [local, rest] = splitProps(props, [
+    "label",
+    "class",
+    "icon",
+    "height",
+    "width",
+  ]);
 
   return (
     <div
-      class={`${styles.Input}${local.class ? " " + local.class : ""}`}
+      classList={{
+        [styles.Input]: true,
+        [styles[`w-${local.width}`]]: local.width !== undefined,
+        [local.class || ""]: true,
+      }}
       style={{
         "--label-height": local.label ? "26px" : "0px",
         "--container-height": local.height ? `${local.height}px` : "70px",

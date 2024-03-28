@@ -58,24 +58,34 @@ export default function Events() {
           hideScrollbar={!isAdmin()}
           class={styles.scrollable}
         >
-          <Show when={!isAdmin()}>
-            <div class={`${styles.eventItem} ${styles.placeholder}`} />
-          </Show>
+          <EventItemPlaceholder visible={!isAdmin()} />
 
           <For each={events.ids}>
             {(id, index) => (
               <EventItem id={id} index={index} editDialog={editDialog} />
             )}
           </For>
-          <Show when={!isAdmin()}>
-            <div class={`${styles.eventItem} ${styles.placeholder}`} />
-          </Show>
+
+          <EventItemPlaceholder visible={!isAdmin()} />
         </Scrollable>
       </div>
       <Show when={isAdmin()}>
         <CreateEditEvent ref={editDialog} />
       </Show>
     </BlockContainer>
+  );
+}
+
+function EventItemPlaceholder(props: { visible: boolean }) {
+  return (
+    <Show when={props.visible}>
+      <div
+        classList={{
+          [styles.eventItem]: true,
+          [styles.placeholder]: true,
+        }}
+      />
+    </Show>
   );
 }
 

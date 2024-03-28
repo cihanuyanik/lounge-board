@@ -82,10 +82,9 @@ export default function Dialog(props: DialogProps) {
             local.ref = el;
           }
         }}
-        // class={`dialog${local.class ? " " + local.class : ""}`}
-        class={styles.Dialog}
         classList={{
-          [local.class!]: local.class !== undefined,
+          [styles.Dialog]: true,
+          [local.class || ""]: true,
         }}
         {...rest}
       >

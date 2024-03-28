@@ -21,8 +21,8 @@ export default function NewsItem(props: NewsItemProps) {
 
   return (
     <Row
-      class={styles.newsItem}
       classList={{
+        [styles.newsItem]: true,
         [styles.selected]: news.entities[props.id].isSelected,
         [styles.pointer]: isAdmin(),
       }}

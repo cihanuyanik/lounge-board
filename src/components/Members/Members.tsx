@@ -144,7 +144,6 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
   return (
     <Scrollable
       ref={membersScrollableContainer}
-      direction={"vertical"}
       hideScrollbar={true}
       class={styles.scrollable}
     >

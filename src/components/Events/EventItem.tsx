@@ -23,8 +23,8 @@ export default function EventItem(props: Props) {
 
   return (
     <Column
-      class={styles.eventItem}
       classList={{
+        [styles.eventItem]: true,
         [styles.isPast]: events.entities[props.id]?.isPast,
         [styles.selected]: events.entities[props.id]?.isSelected,
         [styles.pointer]: isAdmin(),
@@ -60,7 +60,7 @@ export default function EventItem(props: Props) {
       <Row class={styles.datetimeInfo}>
         <Row class={styles.date}>
           <CalendarDate />
-          <Column class={"flex-1"}>
+          <Column flex={"1"}>
             <Row>
               {moment(events.entities[props.id].startsAt.toDate()).format("DD")}
             </Row>
@@ -73,7 +73,7 @@ export default function EventItem(props: Props) {
         </Row>
         <Row class={styles.time}>
           <Clock />
-          <Column class={"flex-1"}>
+          <Column flex={"1"}>
             <Row>
               {moment(events.entities[props.id].startsAt.toDate()).format("HH")}
             </Row>
@@ -84,7 +84,7 @@ export default function EventItem(props: Props) {
         </Row>
         <Row class={styles.duration}>
           <Duration />
-          <Column class={"flex-1"}>
+          <Column flex={"1"}>
             {buildDurationString(
               events.entities[props.id].startsAt,
               events.entities[props.id].endsAt,

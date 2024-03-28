@@ -67,7 +67,6 @@ export default function News() {
     >
       <Scrollable
         ref={newsScrollableContainer}
-        direction={"vertical"}
         hideScrollbar={true}
         class={styles.scrollable}
       >

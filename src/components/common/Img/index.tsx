@@ -6,7 +6,10 @@ export default function Img(props: JSX.ImgHTMLAttributes<HTMLImageElement>) {
 
   return (
     <img
-      class={`${styles.Img}${local.class ? " " + local.class : ""}`}
+      classList={{
+        [styles.Img]: true,
+        [local.class || ""]: true,
+      }}
       alt={local.alt}
       {...rest}
     />

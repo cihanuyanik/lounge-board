@@ -16,11 +16,14 @@
 .Flex.column-reverse {
   flex-direction: column-reverse;
 }
-.Flex.ai-normal {
-  align-items: normal;
+.Flex.nowrap {
+  flex-wrap: nowrap;
 }
-.Flex.ai-stretch {
-  align-items: stretch;
+.Flex.wrap {
+  flex-wrap: wrap;
+}
+.Flex.wrap-reverse {
+  flex-wrap: wrap-reverse;
 }
 .Flex.ai-center {
   align-items: center;
@@ -31,29 +34,8 @@
 .Flex.ai-end {
   align-items: end;
 }
-.Flex.ai-flex-start {
-  align-items: flex-start;
-}
-.Flex.ai-flex-end {
-  align-items: flex-end;
-}
-.Flex.ai-self-start {
-  align-items: self-start;
-}
-.Flex.ai-self-end {
-  align-items: self-end;
-}
-.Flex.ai-baseline {
-  align-items: baseline;
-}
-.Flex.ai-inherit {
-  align-items: inherit;
-}
-.Flex.ai-initial {
-  align-items: initial;
-}
-.Flex.ai-revert {
-  align-items: revert;
+.Flex.ai-stretch {
+  align-items: stretch;
 }
 .Flex.ai-unset {
   align-items: unset;
@@ -67,17 +49,8 @@
 .Flex.ac-end {
   align-content: end;
 }
-.Flex.ac-flex-start {
-  align-content: flex-start;
-}
-.Flex.ac-flex-end {
-  align-content: flex-end;
-}
-.Flex.ac-normal {
-  align-content: normal;
-}
-.Flex.ac-baseline {
-  align-content: baseline;
+.Flex.ac-stretch {
+  align-content: stretch;
 }
 .Flex.ac-space-between {
   align-content: space-between;
@@ -88,26 +61,8 @@
 .Flex.ac-space-evenly {
   align-content: space-evenly;
 }
-.Flex.ac-stretch {
-  align-content: stretch;
-}
-.Flex.ac-inherit {
-  align-content: inherit;
-}
-.Flex.ac-initial {
-  align-content: initial;
-}
-.Flex.ac-revert {
-  align-content: revert;
-}
 .Flex.ac-unset {
   align-content: unset;
-}
-.Flex.as-auto {
-  align-self: auto;
-}
-.Flex.as-normal {
-  align-self: normal;
 }
 .Flex.as-center {
   align-self: center;
@@ -118,41 +73,11 @@
 .Flex.as-end {
   align-self: end;
 }
-.Flex.as-flex-start {
-  align-self: flex-start;
-}
-.Flex.as-flex-end {
-  align-self: flex-end;
-}
-.Flex.as-self-start {
-  align-self: self-start;
-}
-.Flex.as-self-end {
-  align-self: self-end;
-}
-.Flex.as-baseline {
-  align-self: baseline;
-}
 .Flex.as-stretch {
   align-self: stretch;
 }
-.Flex.as-inherit {
-  align-self: inherit;
-}
-.Flex.as-initial {
-  align-self: initial;
-}
-.Flex.as-revert {
-  align-self: revert;
-}
 .Flex.as-unset {
   align-self: unset;
-}
-.Flex.ji-normal {
-  justify-items: normal;
-}
-.Flex.ji-stretch {
-  justify-items: stretch;
 }
 .Flex.ji-center {
   justify-items: center;
@@ -163,35 +88,14 @@
 .Flex.ji-end {
   justify-items: end;
 }
-.Flex.ji-flex-start {
-  justify-items: flex-start;
-}
-.Flex.ji-flex-end {
-  justify-items: flex-end;
-}
-.Flex.ji-self-start {
-  justify-items: self-start;
-}
-.Flex.ji-self-end {
-  justify-items: self-end;
+.Flex.ji-stretch {
+  justify-items: stretch;
 }
 .Flex.ji-left {
   justify-items: left;
 }
 .Flex.ji-right {
   justify-items: right;
-}
-.Flex.ji-baseline {
-  justify-items: baseline;
-}
-.Flex.ji-inherit {
-  justify-items: inherit;
-}
-.Flex.ji-initial {
-  justify-items: initial;
-}
-.Flex.ji-revert {
-  justify-items: revert;
 }
 .Flex.ji-unset {
   justify-items: unset;
@@ -205,20 +109,14 @@
 .Flex.jc-end {
   justify-content: end;
 }
-.Flex.jc-flex-start {
-  justify-content: flex-start;
-}
-.Flex.jc-flex-end {
-  justify-content: flex-end;
+.Flex.jc-stretch {
+  justify-content: stretch;
 }
 .Flex.jc-left {
   justify-content: left;
 }
 .Flex.jc-right {
   justify-content: right;
-}
-.Flex.jc-normal {
-  justify-content: normal;
 }
 .Flex.jc-space-between {
   justify-content: space-between;
@@ -229,29 +127,8 @@
 .Flex.jc-space-evenly {
   justify-content: space-evenly;
 }
-.Flex.jc-stretch {
-  justify-content: stretch;
-}
-.Flex.jc-inherit {
-  justify-content: inherit;
-}
-.Flex.jc-initial {
-  justify-content: initial;
-}
-.Flex.jc-revert {
-  justify-content: revert;
-}
 .Flex.jc-unset {
   justify-content: unset;
-}
-.Flex.js-auto {
-  justify-self: auto;
-}
-.Flex.js-normal {
-  justify-self: normal;
-}
-.Flex.js-stretch {
-  justify-self: stretch;
 }
 .Flex.js-center {
   justify-self: center;
@@ -262,17 +139,8 @@
 .Flex.js-end {
   justify-self: end;
 }
-.Flex.js-flex-start {
-  justify-self: flex-start;
-}
-.Flex.js-flex-end {
-  justify-self: flex-end;
-}
-.Flex.js-self-start {
-  justify-self: self-start;
-}
-.Flex.js-self-end {
-  justify-self: self-end;
+.Flex.js-stretch {
+  justify-self: stretch;
 }
 .Flex.js-left {
   justify-self: left;
@@ -280,20 +148,74 @@
 .Flex.js-right {
   justify-self: right;
 }
-.Flex.js-baseline {
-  justify-self: baseline;
-}
-.Flex.js-inherit {
-  justify-self: inherit;
-}
-.Flex.js-initial {
-  justify-self: initial;
-}
-.Flex.js-revert {
-  justify-self: revert;
-}
 .Flex.js-unset {
   justify-self: unset;
+}
+.Flex.gap-1 {
+  gap: var(--space-1);
+}
+.Flex.gap-2 {
+  gap: var(--space-2);
+}
+.Flex.gap-3 {
+  gap: var(--space-3);
+}
+.Flex.gap-4 {
+  gap: var(--space-4);
+}
+.Flex.gap-5 {
+  gap: var(--space-5);
+}
+.Flex.w-auto {
+  width: auto;
+}
+.Flex.w-full {
+  width: 100%;
+}
+.Flex.w-half {
+  width: 50%;
+}
+.Flex.w-third {
+  width: 33.333333%;
+}
+.Flex.w-quarter {
+  width: 25%;
+}
+.Flex.w-screen {
+  width: 100dvw;
+}
+.Flex.h-auto {
+  height: auto;
+}
+.Flex.h-full {
+  height: 100%;
+}
+.Flex.h-half {
+  height: 50%;
+}
+.Flex.h-third {
+  height: 33.333333%;
+}
+.Flex.h-quarter {
+  height: 25%;
+}
+.Flex.h-screen {
+  height: 100dvh;
+}
+.Flex.flex-1 {
+  flex: 1;
+}
+.Flex.flex-2 {
+  flex: 2;
+}
+.Flex.flex-3 {
+  flex: 3;
+}
+.Flex.flex-4 {
+  flex: 4;
+}
+.Flex.flex-5 {
+  flex: 5;
 }
 
 /*# sourceMappingURL=index.module.css.map */

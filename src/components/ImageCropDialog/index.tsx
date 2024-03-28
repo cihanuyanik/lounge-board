@@ -200,7 +200,10 @@ function DialogControls(props: DialogControlsProps) {
   return (
     <>
       <Button
-        class={`${styles.controlButton} ${styles.accept}`}
+        classList={{
+          [styles.controlButton]: true,
+          [styles.accept]: true,
+        }}
         onClick={props.onAccept}
         disabled={props.disabled}
       >
@@ -208,7 +211,10 @@ function DialogControls(props: DialogControlsProps) {
       </Button>
 
       <Button
-        class={`${styles.controlButton} ${styles.cancel}`}
+        classList={{
+          [styles.controlButton]: true,
+          [styles.cancel]: true,
+        }}
         onClick={props.onCancel}
       >
         <Cross />

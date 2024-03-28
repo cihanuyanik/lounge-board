@@ -128,16 +128,16 @@ function _Profile() {
           />
 
           <Input
+            width={"full"}
             label={"Full Name"}
             type={"text"}
             placeholder={"... Your full name ..."}
-            class={"w-full"}
             value={name()}
             onInput={(e) => setName(e.currentTarget.value)}
             disabled={!isProviderUpdatable()}
           />
 
-          <Row class={"w-full"}>
+          <Row width={"full"}>
             <Button
               class={styles.green}
               rectangle

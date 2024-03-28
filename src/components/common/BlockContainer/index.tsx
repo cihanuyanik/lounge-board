@@ -1,4 +1,3 @@
-// import "./index.css";
 import styles from "./index.module.scss";
 import { createEffect, JSX, Match, on, Show, Switch } from "solid-js";
 import Button from "~/components/common/Button";
@@ -38,10 +37,12 @@ export default function BlockContainer(props: BlockContainerProps) {
   return (
     <Column
       ref={props.ref}
-      class={styles.BlockContainer + (props.class ? " " + props.class : "")}
+      classList={{
+        [styles.BlockContainer]: true,
+        [props.class || ""]: true,
+      }}
       style={props.style}
     >
-      {/*<Row class={"title-container"}>*/}
       <Row class={styles.titleContainer}>
         <Row class={styles.title} ref={titleRef!}>
           {""}
@@ -56,12 +57,12 @@ export default function BlockContainer(props: BlockContainerProps) {
             </Match>
           </Switch>
         </Show>
-        <Row class={"flex-1"}>{""}</Row>
+        <Row flex={"1"}>{""}</Row>
         <Show when={props.onDeleteSelectedItems}>
           <Button
+            class={styles.actionBtn}
             popupContent={"Delete selected items from this block"}
             popupDirection={props.popupDirection}
-            style={{ height: "40px", width: "40px", padding: "0.25rem" }}
             onClick={props.onDeleteSelectedItems}
           >
             <Delete />
@@ -69,9 +70,9 @@ export default function BlockContainer(props: BlockContainerProps) {
         </Show>
         <Show when={props.onAddNewItem}>
           <Button
+            class={styles.actionBtn}
             popupContent={"Add new item to this block"}
             popupDirection={props.popupDirection}
-            style={{ height: "40px", width: "40px", padding: "0.25rem" }}
             onClick={props.onAddNewItem}
           >
             <Add />
