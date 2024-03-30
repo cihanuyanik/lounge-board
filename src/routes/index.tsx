@@ -44,9 +44,14 @@ function _Home() {
       <Title>Lounge Board</Title>
       <div class={`App ${colorPalette()}`}>
         <Banner title={"Digital Health"} showResearchGroups={true} />
-        <Row flex={"1"} width={"full"} gap={"2"}>
+        <Row as={"central-panel"} flex={"1"} width={"full"} gap={"2"}>
           <Members />
-          <Column flex={"1"} height={"full"} gap={"2"}>
+          <Column
+            as={"research-groups-events"}
+            flex={"1"}
+            height={"full"}
+            gap={"2"}
+          >
             <ResearchGroups />
             <Events />
           </Column>

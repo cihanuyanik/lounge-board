@@ -8,7 +8,7 @@ type SelectedMarkerProps = { visible: boolean };
 export default function SelectedMarker(props: SelectedMarkerProps) {
   return (
     <Show when={props.visible}>
-      <Row class={styles.SelectedMarker}>
+      <Row as={"selected-marker"} class={styles.SelectedMarker}>
         <Tick />
       </Row>
     </Show>

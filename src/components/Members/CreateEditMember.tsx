@@ -126,7 +126,7 @@ function _CreateEditMember(props: { ref: DialogRef }) {
         }
       }}
     >
-      <Row class={styles.memberItem}>
+      <Row as={"member-item"} class={styles.memberItem}>
         <Avatar
           imgSrc={state.member.image}
           enableImageSelect={true}
@@ -185,7 +185,7 @@ function TextInfo() {
 
   return (
     <Show when={state !== undefined}>
-      <Column class={styles.nrContainer}>
+      <Column as={"member-info"} class={styles.nrContainer}>
         <input
           value={state.member.name}
           onInput={(e) =>

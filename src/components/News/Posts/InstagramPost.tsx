@@ -5,12 +5,16 @@ import IFramePost, {
 import Row from "~/components/common/Flex/Row";
 import Img from "~/components/common/Img";
 import InstagramPostImage from "~/assets/images/instagram.png";
+import { Dynamic } from "solid-js/web";
 
 type InstagramPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 
 export default function InstagramPost(props: InstagramPostProps) {
   return (
-    <div class={`${styles.postContainer} ${styles.instagram}`}>
+    <Dynamic
+      component={"instagram-post"}
+      class={`${styles.postContainer} ${styles.instagram}`}
+    >
       <IFramePost
         baseUrl={"instagram.com"}
         expInternalType={"blockquote"}
@@ -19,6 +23,6 @@ export default function InstagramPost(props: InstagramPostProps) {
       <Row class={styles.logo}>
         <Img src={InstagramPostImage}></Img>
       </Row>
-    </div>
+    </Dynamic>
   );
 }

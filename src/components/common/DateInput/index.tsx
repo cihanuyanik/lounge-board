@@ -23,6 +23,7 @@ export default function DateInput(props: Props) {
 
   return (
     <Row
+      as={"date-input"}
       class={styles.DateInput}
       style={{
         background: props.background,

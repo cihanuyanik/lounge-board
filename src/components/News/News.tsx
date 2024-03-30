@@ -44,6 +44,7 @@ export default function News() {
 
   return (
     <BlockContainer
+      as={"news-block"}
       title={"News"}
       titleIcon={NewsHeader}
       class={styles.blockContainer}
@@ -66,6 +67,7 @@ export default function News() {
       }
     >
       <Scrollable
+        as={"scrollable"}
         ref={newsScrollableContainer}
         hideScrollbar={true}
         class={styles.scrollable}

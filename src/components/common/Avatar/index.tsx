@@ -21,6 +21,7 @@ export default function Avatar(props: AvatarProps) {
 
   return (
     <Row
+      as={"avatar"}
       classList={{
         [styles.Avatar]: true,
         [props.class || ""]: true,

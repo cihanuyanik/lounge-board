@@ -19,6 +19,7 @@ export default function ResearchGroups() {
 
   return (
     <BlockContainer
+      as={"research-groups-block"}
       title={researchGroups.active ? researchGroups.active.name : ""}
       class={styles.researchGroupsContainer}
       titleIcon={researchGroups.active ? researchGroups.active.bannerImage : ""}
@@ -168,7 +169,7 @@ function Carousel() {
   );
 
   return (
-    <Row class={styles.imageContainer}>
+    <Row as={"carousel"} class={styles.imageContainer}>
       <Img ref={(el) => (resGroupImageRef = el)} />
       <Show when={isAdmin()}>
         <ImageShiftControls />
@@ -182,7 +183,7 @@ function ImageShiftControls() {
   const { researchGroups } = useAppContext();
 
   return (
-    <Row class={styles.carouselControls}>
+    <Row as={"carousel-controls"} class={styles.carouselControls}>
       <Button onClick={() => researchGroups.prev()}>
         <Left />
       </Button>
@@ -197,7 +198,7 @@ function CarouselBullets(props: { resetInterval: () => void }) {
   const { researchGroups, isAdmin } = useAppContext();
 
   return (
-    <Row class={styles.carouselBullets}>
+    <Row as={"carousel-bullets"} class={styles.carouselBullets}>
       <For each={researchGroups.ids}>
         {(id) => (
           <div

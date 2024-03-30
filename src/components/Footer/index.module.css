@@ -1,9 +1,4 @@
 .Footer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
   background-color: var(--color-primary);
   color: var(--color-text);
   width: 100%;

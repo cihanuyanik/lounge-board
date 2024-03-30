@@ -9,6 +9,7 @@ import Img from "~/components/common/Img";
 import { Direction } from "~/components/common/HoverPopup";
 
 type BlockContainerProps = {
+  as?: string;
   ref?: HTMLDivElement | ((el: HTMLDivElement) => void);
   title: string;
   titleIcon?: string | JSX.Element;
@@ -37,14 +38,15 @@ export default function BlockContainer(props: BlockContainerProps) {
   return (
     <Column
       ref={props.ref}
+      as={props.as || "block-container"}
       classList={{
         [styles.BlockContainer]: true,
         [props.class || ""]: true,
       }}
       style={props.style}
     >
-      <Row class={styles.titleContainer}>
-        <Row class={styles.title} ref={titleRef!}>
+      <Row as={"title-block"} class={styles.titleContainer}>
+        <Row as={"title-text"} class={styles.title} ref={titleRef!}>
           {""}
         </Row>
         <Show when={props.titleIcon}>
@@ -57,7 +59,7 @@ export default function BlockContainer(props: BlockContainerProps) {
             </Match>
           </Switch>
         </Show>
-        <Row flex={"1"}>{""}</Row>
+        <Row as={"spacer"} flex={"1"} />
         <Show when={props.onDeleteSelectedItems}>
           <Button
             class={styles.actionBtn}

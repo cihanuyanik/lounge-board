@@ -8,6 +8,7 @@ import {
   onCleanup,
 } from "solid-js";
 import { waitUntil } from "~/utils/utils";
+import Row from "~/components/common/Flex/Row";
 
 type DropDownItemProps = {
   value: string;
@@ -73,7 +74,8 @@ export default function Dropdown(props: Props) {
 
   // noinspection HtmlUnknownAttribute
   return (
-    <div
+    <Row
+      as={"drop-down"}
       classList={{
         [styles.Dropdown]: true,
         [props.class || ""]: true,
@@ -116,7 +118,7 @@ export default function Dropdown(props: Props) {
       >
         {props.children}
       </div>
-    </div>
+    </Row>
   );
 }
 
@@ -125,7 +127,7 @@ export function DropdownItem(props: DropDownItemProps) {
     <div
       id={props.value}
       class={styles.item}
-      onClick={(e) => {
+      onClick={(e: any) => {
         // Access parent menu div
         const menuNode = e.target.parentNode as HTMLDivElement;
         if (menuNode.classList.contains(styles.menu)) {

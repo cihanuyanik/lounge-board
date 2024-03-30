@@ -84,8 +84,12 @@ export default function DateTimePicker(props: Props) {
 
   return (
     <Column
+      as={"date-time-picker"}
       id={props.id}
-      class={styles.DateTimePicker + (props.class ? " " + props.class : "")}
+      classList={{
+        [styles.DateTimePicker]: true,
+        [props.class || ""]: true,
+      }}
       style={{
         "--label-height": props.label ? "26px" : "0px",
         "--container-height": props.height ? `${props.height}px` : "70px",
@@ -95,7 +99,7 @@ export default function DateTimePicker(props: Props) {
       <Show when={props.label}>
         <label>{props.label}</label>
       </Show>
-      <Row class={styles.container}>
+      <Row as={"date-time-inputs"} class={styles.container}>
         <DateInput
           ref={dateRef}
           format={props.dateFormat || "DD MMM YYYY"}

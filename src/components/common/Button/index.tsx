@@ -16,6 +16,7 @@ export default function Button(props: ButtonProps) {
   // Split props into local and rest
   const [local, rest] = splitProps(props, [
     "class",
+    "classList",
     "popupContent",
     "popupDelay",
     "popupDirection",
@@ -57,6 +58,7 @@ export default function Button(props: ButtonProps) {
         [styles.Button]: true,
         [styles.rectangle]: local.rectangle || false,
         [local.class!]: local.class !== undefined,
+        ...local.classList,
       }}
       {...rest}
     >

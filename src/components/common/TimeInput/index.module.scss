@@ -2,14 +2,9 @@
   --container-height: 40px;
   height: var(--container-height);
 
-  > .icon {
-    height: 100%;
-
-    > svg {
-      padding-right: 0;
-      height: 20px;
-      width: 20px;
-    }
+  > svg {
+    width: 20px;
+    height: 20px;
   }
 
   > .hour,
@@ -28,8 +23,6 @@
       display: none;
     }
   }
-
-
 
   > .hour {
     text-align: right;

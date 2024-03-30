@@ -72,10 +72,8 @@ export default function TimeInput(props: Props) {
   });
 
   return (
-    <Row class={styles.TimeInput}>
-      <Row class={styles.icon}>
-        <Clock />
-      </Row>
+    <Row as={"time-input"} class={styles.TimeInput}>
+      <Clock />
       <input
         class={styles.hour}
         type={"number"}

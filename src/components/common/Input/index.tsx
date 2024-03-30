@@ -1,5 +1,6 @@
 import styles from "./index.module.scss";
 import { JSX, Show, splitProps } from "solid-js";
+import { Dynamic } from "solid-js/web";
 
 type Props = {
   label?: string;
@@ -18,7 +19,8 @@ export default function Input(props: Props) {
   ]);
 
   return (
-    <div
+    <Dynamic
+      component={"input-container"}
       classList={{
         [styles.Input]: true,
         [styles[`w-${local.width}`]]: local.width !== undefined,
@@ -34,6 +36,6 @@ export default function Input(props: Props) {
         <label>{local.label}</label>
       </Show>
       <Show when={local.icon}>{local.icon}</Show>
-    </div>
+    </Dynamic>
   );
 }

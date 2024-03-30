@@ -2,13 +2,9 @@
   --container-height: 40px;
   height: var(--container-height);
 }
-.TimeInput > .icon {
-  height: 100%;
-}
-.TimeInput > .icon > svg {
-  padding-right: 0;
-  height: 20px;
+.TimeInput > svg {
   width: 20px;
+  height: 20px;
 }
 .TimeInput > .hour,
 .TimeInput > .minute {

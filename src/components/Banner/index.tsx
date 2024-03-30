@@ -21,11 +21,11 @@ type BannerProps = {
 
 export default function Banner(props: BannerProps) {
   return (
-    <Row class={styles.Banner}>
+    <Row as={"banner"} class={styles.Banner}>
       <Logo />
       <AdminUser user={props.user} />
       <BannerText title={props.title} />
-      <Row flex={"1"} />
+      <Row as={"spacer"} flex={"1"} />
       <ResearchGroups show={props.showResearchGroups} />
     </Row>
   );
@@ -52,12 +52,12 @@ function AdminUser(props: { user?: User }) {
 
   return (
     <Show when={props.user}>
-      <Row class={styles.user}>
+      <Row as={"admin-user"} class={styles.user}>
         <Avatar imgSrc={props.user?.photoURL!} class={styles.avatar} />
-        <Column>
+        <Column as={"user-info"}>
           <p>{"Welcome"}</p>
           <p>{props.user?.displayName}</p>
-          <Row gap={"1"}>
+          <Row as={"action-buttons"} gap={"1"}>
             <Button
               popupContent={"Sign out from admin account and go to index page"}
               onClick={async () => {
@@ -116,6 +116,7 @@ function BannerText(props: { title: string }) {
 
   return (
     <Row
+      as={"banner-text"}
       ref={bannerTextContainer}
       classList={{
         [styles.bannerText]: true,
@@ -142,7 +143,7 @@ function ResearchGroups(props: { show?: boolean }) {
 
   return (
     <Show when={props.show}>
-      <Row class={styles.researchGroupImages}>
+      <Row as={"research-groups"} class={styles.researchGroupImages}>
         <For each={researchGroups.ids}>
           {(id) => (
             <Img

@@ -1,7 +1,9 @@
 import styles from "./index.module.scss";
 import { JSX, splitProps } from "solid-js";
+import { Dynamic } from "solid-js/web";
 
 export type FlexProps = JSX.HTMLAttributes<HTMLDivElement> & {
+  as?: string;
   children?: JSX.Element | JSX.Element[];
   direction: "row" | "row-reverse" | "column" | "column-reverse";
   wrap?: "nowrap" | "wrap" | "wrap-reverse";
@@ -51,6 +53,7 @@ export type FlexProps = JSX.HTMLAttributes<HTMLDivElement> & {
 
 export default function Flex(props: FlexProps) {
   const [local, rest] = splitProps(props, [
+    "as",
     "children",
     "direction",
     "wrap",
@@ -70,7 +73,8 @@ export default function Flex(props: FlexProps) {
 
   // noinspection HtmlUnknownAttribute
   return (
-    <div
+    <Dynamic
+      component={local.as || "div"}
       classList={{
         [styles.Flex]: true,
         [styles[local.direction]]: true,
@@ -92,6 +96,6 @@ export default function Flex(props: FlexProps) {
       {...rest}
     >
       {local.children}
-    </div>
+    </Dynamic>
   );
 }

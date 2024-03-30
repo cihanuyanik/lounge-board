@@ -30,7 +30,7 @@ export default function MessageBox() {
       id={"message-box"}
       ref={(el) => mutateMessageBox((state) => (state.dialogRef = el))}
     >
-      <Column class={styles.MessageBox}>
+      <Column as={"message-box"} class={styles.MessageBox}>
         <Row class={styles.title}>{messageBox.title}</Row>
         <Row class={styles.content}>
           <img

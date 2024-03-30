@@ -5,12 +5,16 @@ import IFramePost, {
 import Row from "~/components/common/Flex/Row";
 import Img from "~/components/common/Img";
 import FacebookPostImage from "~/assets/images/facebook.png";
+import { Dynamic } from "solid-js/web";
 
 type FacebookPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 
 export default function FacebookPost(props: FacebookPostProps) {
   return (
-    <div class={`${styles.postContainer} ${styles.facebook}`}>
+    <Dynamic
+      component={"facebook-post"}
+      class={`${styles.postContainer} ${styles.facebook}`}
+    >
       <IFramePost
         baseUrl={"facebook.com"}
         expInternalType={"iframe"}
@@ -19,6 +23,6 @@ export default function FacebookPost(props: FacebookPostProps) {
       <Row class={styles.logo}>
         <Img src={FacebookPostImage}></Img>
       </Row>
-    </div>
+    </Dynamic>
   );
 }

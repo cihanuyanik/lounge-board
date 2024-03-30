@@ -50,7 +50,11 @@ export default function CustomPost(props: CustomPostProps) {
   }
 
   return (
-    <Column class={styles.customPost} style={{ width: `${props.width}px` }}>
+    <Column
+      as={"custom-post"}
+      class={styles.customPost}
+      style={{ width: `${props.width}px` }}
+    >
       <Row class={styles.title}>
         <Img src={props.avatarUrl || DefaultAvatar} />
         <Column flex={"1"}>

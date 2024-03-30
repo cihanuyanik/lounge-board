@@ -54,8 +54,10 @@ export default function LoginDialog(props: { ref?: DialogRef }) {
       }}
       onClose={(ev) => (ev.target as HTMLDialogElement)?.Resolve(loggedInUser)}
     >
-      <Row class={styles.title}>{"Login"}</Row>
-      <Column class={styles.content}>
+      <Row as={"dialog-title"} class={styles.title}>
+        {"Login"}
+      </Row>
+      <Column as={"dialog-content"} class={styles.content}>
         <Input
           width={"full"}
           label={"E-mail"}
@@ -108,7 +110,7 @@ export default function LoginDialog(props: { ref?: DialogRef }) {
           </Button>
         </Row>
 
-        <Row gap={"1"}>
+        <Row as={"no-account"} gap={"1"}>
           <p>{"Don't have an account? "}</p>
           <p
             style={{
@@ -124,7 +126,7 @@ export default function LoginDialog(props: { ref?: DialogRef }) {
           </p>
         </Row>
 
-        <Column class={styles.externalProviderLogin}>
+        <Column as={"external-provider"} class={styles.externalProviderLogin}>
           <p>Or you can login with:</p>
           <Button
             rectangle

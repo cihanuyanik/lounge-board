@@ -5,12 +5,16 @@ import IFramePost, {
 import Row from "~/components/common/Flex/Row";
 import Img from "~/components/common/Img";
 import TwitterPostImage from "~/assets/images/twitter.png";
+import { Dynamic } from "solid-js/web";
 
 type TwitterPostProps = Omit<IFramePostProps, "baseUrl" | "expInternalType">;
 
 export default function TwitterPost(props: TwitterPostProps) {
   return (
-    <div class={`${styles.postContainer} ${styles.twitter}`}>
+    <Dynamic
+      component={"twitter-post"}
+      class={`${styles.postContainer} ${styles.twitter}`}
+    >
       <IFramePost
         baseUrl={"twitter.com"}
         expInternalType={"blockquote"}
@@ -19,6 +23,6 @@ export default function TwitterPost(props: TwitterPostProps) {
       <Row class={styles.logo}>
         <Img src={TwitterPostImage}></Img>
       </Row>
-    </div>
+    </Dynamic>
   );
 }

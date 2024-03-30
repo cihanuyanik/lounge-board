@@ -162,11 +162,11 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
       onBeforeShow={onBeforeShow}
       onClose={onClose}
     >
-      <Row class={styles.dheader}>
+      <Row as={"dialog-header"} class={styles.dheader}>
         Create/Edit Event
         <Img src={EventsHeaderImage} />
       </Row>
-      <Column class={styles.container}>
+      <Column as={"edit-container"} class={styles.container}>
         <Input
           width={"full"}
           label={"Name"}
@@ -232,7 +232,7 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
           }}
         />
       </Column>
-      <Row class={styles.separator} />
+      <Row as={"spacer"} class={styles.separator} />
       <Preview />
       <DialogControls
         // Disabled when: name, details, startDateTime, endDateTime any one of them is empty and endDateTime is before startDateTime
@@ -297,14 +297,15 @@ function Preview() {
 
   return (
     <Show when={state !== undefined}>
-      <Row class={styles.preview}>
+      <Row as={"preview"} class={styles.preview}>
         <Column
+          as={"event-item"}
           class={styles.eventItem}
           classList={{
             [styles.isPast]: state.event.isPast,
           }}
         >
-          <Column class={styles.header}>
+          <Column as={"event-header"} class={styles.header}>
             <Row class={styles.icon}>
               <Img src={EventsHeaderImage} />
             </Row>
@@ -314,7 +315,7 @@ function Preview() {
             </Row>
           </Column>
 
-          <Row class={styles.datetimeInfo}>
+          <Row as={"event-time"} class={styles.datetimeInfo}>
             <Row class={styles.date}>
               <CalendarDate />
               <Column flex={"1"}>

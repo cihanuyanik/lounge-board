@@ -32,6 +32,7 @@ export default function Dialog(props: DialogProps) {
     "onAfterShow",
     "onClose",
     "class",
+    "classList",
     "children",
     "ref",
   ]);
@@ -85,6 +86,7 @@ export default function Dialog(props: DialogProps) {
         classList={{
           [styles.Dialog]: true,
           [local.class || ""]: true,
+          ...local.classList,
         }}
         {...rest}
       >

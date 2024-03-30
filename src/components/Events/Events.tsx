@@ -28,6 +28,7 @@ export default function Events() {
 
   return (
     <BlockContainer
+      as={"events-block"}
       title={"Events"}
       titleIcon={EventsHeader}
       class={styles.blockContainer}
@@ -53,6 +54,7 @@ export default function Events() {
     >
       <div class={styles.wrapper}>
         <Scrollable
+          as={"scrollable"}
           ref={eventsScrollableContainer}
           direction={"horizontal"}
           hideScrollbar={!isAdmin()}

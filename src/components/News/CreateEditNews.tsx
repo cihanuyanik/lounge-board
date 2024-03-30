@@ -153,12 +153,12 @@ function _CreateEditNews(props: { ref: DialogRef }) {
           }
         }}
       >
-        <Row class={styles.title}>
+        <Row as={"edit-news-title"} class={styles.title}>
           Create/Edit News
           <Img src={NewsHeader}></Img>
         </Row>
 
-        <Column class={styles.content}>
+        <Column as={"edit-news-content"} class={styles.content}>
           <NewsTypeSelection />
           <Switch>
             <Match when={state.news.type === "custom"}>
@@ -237,7 +237,7 @@ function CustomPostInfo() {
   if (state === undefined) return null;
 
   return (
-    <Column width={"full"} gap={"3"}>
+    <Column as={"custom-post-info"} width={"full"} gap={"3"}>
       <Input
         width={"full"}
         placeholder={"Post title"}
@@ -269,7 +269,7 @@ function SocialMediaPostEmbedCode() {
   if (state === undefined) return null;
 
   return (
-    <Column width={"full"} gap={"3"}>
+    <Column as={"social-media-post-embed-code"} width={"full"} gap={"3"}>
       <textarea
         class={styles.htmlCode}
         spellcheck={false}
@@ -291,6 +291,7 @@ function Preview() {
 
   return (
     <Scrollable
+      as={"preview"}
       ref={(el) => {
         mutate((state) => {
           state.previewContainer = el;
@@ -350,7 +351,7 @@ function SizeAdjuster() {
   if (state === undefined) return null;
 
   return (
-    <Column class={styles.sizeAdjustor}>
+    <Column as={"size-adjuster"} class={styles.sizeAdjustor}>
       <Button
         popupContent={"Decrease frame height"}
         onPointerDown={(e) => {

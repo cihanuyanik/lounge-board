@@ -160,7 +160,7 @@ function _EditResearchGroups(props: { ref: DialogRef }) {
         );
       }}
     >
-      <Column class={styles.content}>
+      <Column as={"edit-research-groups"} class={styles.content}>
         <Row class={styles.title}>{"Edit Research Groups"}</Row>
         <ResearchGroupSelector />
         <Row class={styles.selectedGroup}>
@@ -288,7 +288,7 @@ function ResearchGroupSelector() {
   if (state === undefined) return;
 
   return (
-    <Row class={styles.rgselector}>
+    <Row as={"rg-selector"} class={styles.rgselector}>
       <Dropdown
         rootStyle={{ flex: "1", height: "40px" }}
         value={state.selectedId}

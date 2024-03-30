@@ -118,7 +118,7 @@ function _Profile() {
       <Column class={`App ${styles.container}`}>
         <Banner title={"Update Profile"} user={user()} />
 
-        <Column class={styles.form}>
+        <Column as={"central-panel"} class={styles.form}>
           <Avatar
             imgSrc={avatar()}
             enableImageSelect={isProviderUpdatable()}

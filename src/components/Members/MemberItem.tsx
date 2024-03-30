@@ -17,6 +17,7 @@ export default function MemberItem(props: MemberItemProps) {
 
   return (
     <Row
+      as={"member-item"}
       id={props.id}
       classList={{
         [styles.memberItem]: true,
@@ -41,9 +42,13 @@ export default function MemberItem(props: MemberItemProps) {
     >
       <Avatar imgSrc={members.entities[props.id]?.image} />
 
-      <Column class={styles.nrContainer}>
-        <Row class={styles.name}>{members.entities[props.id]?.name}</Row>
-        <Row class={styles.role}>{members.entities[props.id]?.role}</Row>
+      <Column as={"member-info"} class={styles.nrContainer}>
+        <Row as={"member-name"} class={styles.name}>
+          {members.entities[props.id]?.name}
+        </Row>
+        <Row as={"member-role"} class={styles.role}>
+          {members.entities[props.id]?.role}
+        </Row>
       </Column>
 
       <Show when={isAdmin()}>

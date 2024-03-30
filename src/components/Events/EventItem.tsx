@@ -23,6 +23,7 @@ export default function EventItem(props: Props) {
 
   return (
     <Column
+      as={"event-item"}
       classList={{
         [styles.eventItem]: true,
         [styles.isPast]: events.entities[props.id]?.isPast,
@@ -45,7 +46,7 @@ export default function EventItem(props: Props) {
           : () => props.editDialog.ShowModal(events.entities[props.id])
       }
     >
-      <Column class={styles.header}>
+      <Column as={"event-header"} class={styles.header}>
         <Row class={styles.icon}>
           <Img src={EventsHeaderImage} />
         </Row>
@@ -57,7 +58,7 @@ export default function EventItem(props: Props) {
         </Row>
       </Column>
 
-      <Row class={styles.datetimeInfo}>
+      <Row as={"event-time"} class={styles.datetimeInfo}>
         <Row class={styles.date}>
           <CalendarDate />
           <Column flex={"1"}>

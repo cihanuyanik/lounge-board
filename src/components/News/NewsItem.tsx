@@ -21,6 +21,7 @@ export default function NewsItem(props: NewsItemProps) {
 
   return (
     <Row
+      as={"news-item"}
       classList={{
         [styles.newsItem]: true,
         [styles.selected]: news.entities[props.id].isSelected,

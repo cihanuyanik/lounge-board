@@ -18,6 +18,7 @@ export default function Members() {
 
   return (
     <BlockContainer
+      as={"members-block"}
       title={"Members"}
       titleIcon={MembersHeader}
       class={styles.blockContainer}
@@ -143,6 +144,7 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
 
   return (
     <Scrollable
+      as={"scrollable"}
       ref={membersScrollableContainer}
       hideScrollbar={true}
       class={styles.scrollable}
