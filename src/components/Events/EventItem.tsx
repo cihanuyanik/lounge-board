@@ -47,19 +47,19 @@ export default function EventItem(props: Props) {
       }
     >
       <Column as={"event-header"} class={styles.header}>
-        <Row class={styles.icon}>
+        <Row as={"event-icon"} class={styles.icon}>
           <Img src={EventsHeaderImage} />
         </Row>
-        <Row class={styles.name}>
+        <Row as={"event-name"} class={styles.name}>
           {events.entities[props.id].name || "Event Name"}
         </Row>
-        <Row class={styles.details}>
+        <Row as={"event-details"} class={styles.details}>
           {events.entities[props.id].details || "Event Details"}
         </Row>
       </Column>
 
-      <Row as={"event-time"} class={styles.datetimeInfo}>
-        <Row class={styles.date}>
+      <Row as={"date-time-info"} class={styles.datetimeInfo}>
+        <Row as={"event-date"} class={styles.date}>
           <CalendarDate />
           <Column flex={"1"}>
             <Row>
@@ -72,7 +72,7 @@ export default function EventItem(props: Props) {
             </Row>
           </Column>
         </Row>
-        <Row class={styles.time}>
+        <Row as={"event-time"} class={styles.time}>
           <Clock />
           <Column flex={"1"}>
             <Row>
@@ -83,7 +83,7 @@ export default function EventItem(props: Props) {
             </Row>
           </Column>
         </Row>
-        <Row class={styles.duration}>
+        <Row as={"event-duration"} class={styles.duration}>
           <Duration />
           <Column flex={"1"}>
             {buildDurationString(

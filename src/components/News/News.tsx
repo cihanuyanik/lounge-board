@@ -72,13 +72,15 @@ export default function News() {
         hideScrollbar={true}
         class={styles.scrollable}
       >
-        <div ref={newsAnimationContainer} class={styles.wrapper}>
+        {/*@ts-ignore*/}
+        <scroll-wrapper ref={newsAnimationContainer} class={styles.wrapper}>
           <For each={news.ids}>
             {(id, index) => (
               <NewsItem id={id} index={index} editDialog={newsDialog} />
             )}
           </For>
-        </div>
+          {/*@ts-ignore*/}
+        </scroll-wrapper>
       </Scrollable>
       <Show when={isAdmin()}>
         <CreateEditNews ref={newsDialog} />

@@ -306,31 +306,33 @@ function Preview() {
           }}
         >
           <Column as={"event-header"} class={styles.header}>
-            <Row class={styles.icon}>
+            <Row as={"event-icon"} class={styles.icon}>
               <Img src={EventsHeaderImage} />
             </Row>
-            <Row class={styles.name}>{state.event.name || "Event Name"}</Row>
-            <Row class={styles.details}>
+            <Row as={"event-name"} class={styles.name}>
+              {state.event.name || "Event Name"}
+            </Row>
+            <Row as={"event-details"} class={styles.details}>
               {state.event.details || "Event Details"}
             </Row>
           </Column>
 
-          <Row as={"event-time"} class={styles.datetimeInfo}>
-            <Row class={styles.date}>
+          <Row as={"date-time-info"} class={styles.datetimeInfo}>
+            <Row as={"event-date"} class={styles.date}>
               <CalendarDate />
               <Column flex={"1"}>
                 <Row>{moment(state.event.startsAt).format("DD")}</Row>
                 <Row>{moment(state.event.startsAt).format("MMM")}</Row>
               </Column>
             </Row>
-            <Row class={styles.time}>
+            <Row as={"event-time"} class={styles.time}>
               <Clock />
               <Column flex={"1"}>
                 <Row>{moment(state.event.startsAt).format("HH")}</Row>
                 <Row>{moment(state.event.startsAt).format("mm")}</Row>
               </Column>
             </Row>
-            <Row class={styles.duration}>
+            <Row as={"event-duration"} class={styles.duration}>
               <Duration />
               <Column flex={"1"}>
                 {buildDurationString(state.event.startsAt, state.event.endsAt)}

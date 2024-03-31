@@ -55,14 +55,16 @@ export default function CustomPost(props: CustomPostProps) {
       class={styles.customPost}
       style={{ width: `${props.width}px` }}
     >
-      <Row class={styles.title}>
+      <Row as={"post-title"} class={styles.title}>
         <Img src={props.avatarUrl || DefaultAvatar} />
         <Column flex={"1"}>
           <div class={styles.text}>{props.title}</div>
           <div class={styles.duration}>{timePassed()}</div>
         </Column>
       </Row>
-      <Row class={styles.content}>{contentBody()}</Row>
+      <Row as={"post-content"} class={styles.content}>
+        {contentBody()}
+      </Row>
     </Column>
   );
 }

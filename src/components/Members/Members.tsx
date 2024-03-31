@@ -149,11 +149,13 @@ function MemberContainer(props: { editDialog: () => HTMLDialogElement }) {
       hideScrollbar={true}
       class={styles.scrollable}
     >
-      <div ref={membersAnimationContainer} class={styles.wrapper}>
+      {/*@ts-ignore*/}
+      <scroll-wrapper ref={membersAnimationContainer} class={styles.wrapper}>
         <For each={meta.membersDisplayOrder}>
           {(id) => <MemberItem id={id} editDialog={props.editDialog()} />}
         </For>
-      </div>
+        {/*@ts-ignore*/}
+      </scroll-wrapper>
     </Scrollable>
   );
 }

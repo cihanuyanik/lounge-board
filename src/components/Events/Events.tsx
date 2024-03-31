@@ -52,7 +52,8 @@ export default function Events() {
             }
       }
     >
-      <div class={styles.wrapper}>
+      {/*@ts-ignore*/}
+      <scroll-wrapper class={styles.wrapper}>
         <Scrollable
           as={"scrollable"}
           ref={eventsScrollableContainer}
@@ -70,7 +71,8 @@ export default function Events() {
 
           <EventItemPlaceholder visible={!isAdmin()} />
         </Scrollable>
-      </div>
+        {/*@ts-ignore*/}
+      </scroll-wrapper>
       <Show when={isAdmin()}>
         <CreateEditEvent ref={editDialog} />
       </Show>
@@ -81,7 +83,8 @@ export default function Events() {
 function EventItemPlaceholder(props: { visible: boolean }) {
   return (
     <Show when={props.visible}>
-      <div
+      {/*@ts-ignore*/}
+      <event-item-placeholder
         classList={{
           [styles.eventItem]: true,
           [styles.placeholder]: true,
