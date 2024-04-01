@@ -49,6 +49,19 @@ export type FlexProps = JSX.HTMLAttributes<HTMLDivElement> & {
   width?: "auto" | "full" | "half" | "third" | "quarter" | "screen";
   height?: "auto" | "full" | "half" | "third" | "quarter" | "screen";
   flex?: "1" | "2" | "3" | "4" | "5";
+
+  verAlign?: "top" | "center" | "bottom";
+  horAlign?: "left" | "center" | "right";
+  align?:
+    | "top-left"
+    | "top-center"
+    | "top-right"
+    | "center-left"
+    | "center"
+    | "center-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "bottom-right";
 };
 
 export default function Flex(props: FlexProps) {
@@ -69,6 +82,9 @@ export default function Flex(props: FlexProps) {
     "width",
     "height",
     "flex",
+    "verAlign",
+    "horAlign",
+    "align",
   ]);
 
   // noinspection HtmlUnknownAttribute
@@ -90,6 +106,9 @@ export default function Flex(props: FlexProps) {
         [styles[`w-${local.width}`]]: local.width !== undefined,
         [styles[`h-${local.height}`]]: local.height !== undefined,
         [styles[`flex-${local.flex}`]]: local.flex !== undefined,
+        [styles[`va-${local.verAlign}`]]: local.verAlign !== undefined,
+        [styles[`ha-${local.horAlign}`]]: local.horAlign !== undefined,
+        [styles[`ai-${local.align}`]]: local.align !== undefined,
         [local.class || ""]: true,
         ...local.classList,
       }}

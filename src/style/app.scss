@@ -1,6 +1,7 @@
 @import "reset.scss";
 @import "constants.scss";
 @import "scrollBar.scss";
+@import "mixins.scss";
 
 .App {
   height: var(--screen-height);
@@ -14,4 +15,8 @@
   justify-content: center;
   flex-wrap: nowrap;
   position: relative;
+}
+
+.debug {
+  @include debug(red);
 }

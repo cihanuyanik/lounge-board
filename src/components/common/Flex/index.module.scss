@@ -76,6 +76,88 @@
       justify-self: #{$option};
     }
   }
+
+  &.row {
+    $vertOptions: (
+      "top": "start",
+      "center": "center",
+      "bottom": "end",
+    );
+    @each $name, $style in $vertOptions {
+      &.va-#{$name} {
+        align-items: #{$style};
+      }
+    }
+
+    $horzOptions: (
+      "left": "start",
+      "center": "center",
+      "right": "end",
+    );
+    @each $name, $style in $horzOptions {
+      &.ha-#{$name} {
+        justify-content: #{$style};
+      }
+    }
+
+    @each $vName, $vStyle in $vertOptions {
+      @each $hName, $hStyle in $horzOptions {
+        // if center center
+        @if $vName == "center" and $hName == "center" {
+          &.ai-#{$vName} {
+            align-items: #{$vStyle};
+            justify-content: #{$hStyle};
+          }
+        } @else {
+          &.ai-#{$vName}-#{$hName} {
+            align-items: #{$vStyle};
+            justify-content: #{$hStyle};
+          }
+        }
+      }
+    }
+  }
+
+  &.column {
+    $vertOptions: (
+      "top": "start",
+      "center": "center",
+      "bottom": "end",
+    );
+    @each $name, $style in $vertOptions {
+      &.va-#{$name} {
+        justify-content: #{$style};
+      }
+    }
+
+    $horzOptions: (
+      "left": "start",
+      "center": "center",
+      "right": "end",
+    );
+    @each $name, $style in $horzOptions {
+      &.ha-#{$name} {
+        align-items: #{$style};
+      }
+    }
+
+    @each $vName, $vStyle in $vertOptions {
+      @each $hName, $hStyle in $horzOptions {
+        // if center center
+        @if $vName == "center" and $hName == "center" {
+          &.ai-#{$vName} {
+            align-items: #{$vStyle};
+            justify-content: #{$hStyle};
+          }
+        } @else {
+          &.ai-#{$vName}-#{$hName} {
+            justify-content: #{$vStyle};
+            align-items: #{$hStyle};
+          }
+        }
+      }
+    }
+  }
 }
 
 @mixin generateGapClasses() {

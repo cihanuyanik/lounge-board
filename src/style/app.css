@@ -161,4 +161,8 @@ object {
   position: relative;
 }
 
+.debug {
+  outline: 2px solid red;
+}
+
 /*# sourceMappingURL=app.css.map */

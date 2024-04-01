@@ -151,6 +151,114 @@
 .Flex.js-unset {
   justify-self: unset;
 }
+.Flex.row.va-top {
+  align-items: start;
+}
+.Flex.row.va-center {
+  align-items: center;
+}
+.Flex.row.va-bottom {
+  align-items: end;
+}
+.Flex.row.ha-left {
+  justify-content: start;
+}
+.Flex.row.ha-center {
+  justify-content: center;
+}
+.Flex.row.ha-right {
+  justify-content: end;
+}
+.Flex.row.ai-top-left {
+  align-items: start;
+  justify-content: start;
+}
+.Flex.row.ai-top-center {
+  align-items: start;
+  justify-content: center;
+}
+.Flex.row.ai-top-right {
+  align-items: start;
+  justify-content: end;
+}
+.Flex.row.ai-center-left {
+  align-items: center;
+  justify-content: start;
+}
+.Flex.row.ai-center {
+  align-items: center;
+  justify-content: center;
+}
+.Flex.row.ai-center-right {
+  align-items: center;
+  justify-content: end;
+}
+.Flex.row.ai-bottom-left {
+  align-items: end;
+  justify-content: start;
+}
+.Flex.row.ai-bottom-center {
+  align-items: end;
+  justify-content: center;
+}
+.Flex.row.ai-bottom-right {
+  align-items: end;
+  justify-content: end;
+}
+.Flex.column.va-top {
+  justify-content: start;
+}
+.Flex.column.va-center {
+  justify-content: center;
+}
+.Flex.column.va-bottom {
+  justify-content: end;
+}
+.Flex.column.ha-left {
+  align-items: start;
+}
+.Flex.column.ha-center {
+  align-items: center;
+}
+.Flex.column.ha-right {
+  align-items: end;
+}
+.Flex.column.ai-top-left {
+  justify-content: start;
+  align-items: start;
+}
+.Flex.column.ai-top-center {
+  justify-content: start;
+  align-items: center;
+}
+.Flex.column.ai-top-right {
+  justify-content: start;
+  align-items: end;
+}
+.Flex.column.ai-center-left {
+  justify-content: center;
+  align-items: start;
+}
+.Flex.column.ai-center {
+  align-items: center;
+  justify-content: center;
+}
+.Flex.column.ai-center-right {
+  justify-content: center;
+  align-items: end;
+}
+.Flex.column.ai-bottom-left {
+  justify-content: end;
+  align-items: start;
+}
+.Flex.column.ai-bottom-center {
+  justify-content: end;
+  align-items: center;
+}
+.Flex.column.ai-bottom-right {
+  justify-content: end;
+  align-items: end;
+}
 .Flex.gap-1 {
   gap: var(--space-1);
 }
