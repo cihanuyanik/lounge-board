@@ -232,7 +232,6 @@ function _CreateEditEvent(props: { ref: DialogRef }) {
           }}
         />
       </Column>
-      <Row as={"spacer"} class={styles.separator} />
       <Preview />
       <DialogControls
         // Disabled when: name, details, startDateTime, endDateTime any one of them is empty and endDateTime is before startDateTime

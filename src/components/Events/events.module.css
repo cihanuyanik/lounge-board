@@ -179,16 +179,11 @@
   padding: var(--space-5) var(--space-10);
   gap: var(--space-3);
 }
-.editDialog .separator {
-  height: 20px;
-  width: 100%;
-  border-top: solid 3px var(--color-primary-darker);
-}
 .editDialog .preview {
   width: 400px;
   height: 170px;
   align-items: stretch;
-  margin: auto auto var(--space-4);
+  margin: var(--space-2) auto var(--space-4);
 }
 
 /*# sourceMappingURL=events.module.css.map */

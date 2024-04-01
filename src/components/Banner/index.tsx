@@ -21,11 +21,10 @@ type BannerProps = {
 
 export default function Banner(props: BannerProps) {
   return (
-    <Row as={"banner"} class={styles.Banner}>
+    <Row as={"banner"} class={styles.Banner} justifyContent={"space-between"}>
       <Logo />
       <AdminUser user={props.user} />
       <BannerText title={props.title} />
-      <Row as={"spacer"} flex={"1"} />
       <ResearchGroups show={props.showResearchGroups} />
     </Row>
   );
@@ -118,6 +117,7 @@ function BannerText(props: { title: string }) {
     <Row
       as={"banner-text"}
       ref={bannerTextContainer}
+      flex={"1"}
       classList={{
         [styles.bannerText]: true,
         [styles.animateLetterJump]: true,

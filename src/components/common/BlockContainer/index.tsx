@@ -22,19 +22,6 @@ type BlockContainerProps = {
 };
 
 export default function BlockContainer(props: BlockContainerProps) {
-  let titleRef: HTMLDivElement = null!;
-
-  createEffect(
-    on(
-      () => props.title,
-      async (title) => {
-        await titleRef.animate({ opacity: [1, 0] }, { duration: 500 }).finished;
-        titleRef.innerText = title;
-        titleRef.animate({ opacity: [0, 1] }, { duration: 500 });
-      },
-    ),
-  );
-
   return (
     <Column
       ref={props.ref}
@@ -46,42 +33,80 @@ export default function BlockContainer(props: BlockContainerProps) {
       style={props.style}
     >
       <Row as={"title-block"} class={styles.titleContainer}>
-        <Row as={"title-text"} class={styles.title} ref={titleRef!}>
-          {""}
-        </Row>
-        <Show when={props.titleIcon}>
-          <Switch>
-            <Match when={typeof props.titleIcon === "string"}>
-              <Img src={props.titleIcon as string} />
-            </Match>
-            <Match when={typeof props.titleIcon === "function"}>
-              {props.titleIcon}
-            </Match>
-          </Switch>
-        </Show>
-        <Row as={"spacer"} flex={"1"} />
-        <Show when={props.onDeleteSelectedItems}>
-          <Button
-            class={styles.actionBtn}
-            popupContent={"Delete selected items from this block"}
-            popupDirection={props.popupDirection}
-            onClick={props.onDeleteSelectedItems}
-          >
-            <Delete />
-          </Button>
-        </Show>
-        <Show when={props.onAddNewItem}>
-          <Button
-            class={styles.actionBtn}
-            popupContent={"Add new item to this block"}
-            popupDirection={props.popupDirection}
-            onClick={props.onAddNewItem}
-          >
-            <Add />
-          </Button>
-        </Show>
+        <TitleText title={props.title} />
+        <TitleIcon titleIcon={props.titleIcon} />
+        <Actions
+          onAddNewItem={props.onAddNewItem}
+          onDeleteSelectedItems={props.onDeleteSelectedItems}
+          popupDirection={props.popupDirection}
+        />
       </Row>
       {props.children}
     </Column>
+  );
+}
+
+function TitleText(props: { title: string }) {
+  createEffect(
+    on(
+      () => props.title,
+      async (title) => {
+        await titleRef.animate({ opacity: [1, 0] }, { duration: 500 }).finished;
+        titleRef.innerText = title;
+        titleRef.animate({ opacity: [0, 1] }, { duration: 500 });
+      },
+    ),
+  );
+
+  let titleRef: HTMLDivElement = null!;
+
+  return (
+    <Row as={"title-text"} class={styles.title} ref={titleRef!}>
+      {""}
+    </Row>
+  );
+}
+
+function TitleIcon(props: { titleIcon?: string | JSX.Element }) {
+  return (
+    <Show when={props.titleIcon}>
+      <Switch>
+        <Match when={typeof props.titleIcon === "string"}>
+          <Img src={props.titleIcon as string} />
+        </Match>
+        <Match when={typeof props.titleIcon === "function"}>
+          {props.titleIcon}
+        </Match>
+      </Switch>
+    </Show>
+  );
+}
+
+function Actions(props: {
+  onAddNewItem?: () => void;
+  onDeleteSelectedItems?: () => void;
+  popupDirection?: Direction;
+}) {
+  return (
+    <Show when={props.onAddNewItem || props.onDeleteSelectedItems}>
+      <Row as={"action-buttons"} flex={"1"} justifyContent={"end"} gap={"2"}>
+        <Button
+          class={styles.actionBtn}
+          popupContent={"Delete selected items from this block"}
+          popupDirection={props.popupDirection}
+          onClick={props.onDeleteSelectedItems}
+        >
+          <Delete />
+        </Button>
+        <Button
+          class={styles.actionBtn}
+          popupContent={"Add new item to this block"}
+          popupDirection={props.popupDirection}
+          onClick={props.onAddNewItem}
+        >
+          <Add />
+        </Button>
+      </Row>
+    </Show>
   );
 }
