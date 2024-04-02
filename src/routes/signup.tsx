@@ -1,6 +1,7 @@
 import styles from "./signup.module.scss";
-import { AppContextProvider, useAppContext } from "~/AppContext";
 import { Title } from "@solidjs/meta";
+import { useNavigate } from "@solidjs/router";
+import { AppContextProvider, useAppContext } from "~/AppContext";
 import Row from "~/components/common/Flex/Row";
 import Column from "~/components/common/Flex/Column";
 import Input from "~/components/common/Input";
@@ -13,7 +14,7 @@ import MessageBox from "~/components/MessageBox";
 import DefaultAvatar from "~/assets/images/member-placeholder.png";
 import { createMemo, createSignal } from "solid-js";
 import Footer from "~/components/Footer";
-import { useNavigate } from "@solidjs/router";
+
 import Banner from "~/components/Banner";
 import Avatar from "~/components/common/Avatar";
 

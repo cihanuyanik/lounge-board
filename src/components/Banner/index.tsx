@@ -62,7 +62,7 @@ function AdminUser(props: { user?: User }) {
               onClick={async () => {
                 await Executor.run(() => API.AuthService.signOut(), {
                   busyDialogMessage: "Signing out...",
-                  postAction: () => navigate("/", {}),
+                  postAction: () => navigate("/"),
                 });
               }}
             >
